@@ -1,0 +1,7 @@
+<!-- A chip for each holiday page, in calendar order -->
+<ul class="chips">
+  {% assign holidays = site.holidays | sort: "order" %}
+  {% for holiday in holidays %}
+  <li><a class="chip" href="{{ holiday.url | relative_url }}">{{ holiday.name }}</a></li>
+  {% endfor %}
+</ul>

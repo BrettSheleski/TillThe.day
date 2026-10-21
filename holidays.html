@@ -1,0 +1,22 @@
+---
+layout: default
+title: Holiday countdowns
+description: How many days until the next holiday? Live countdowns to Christmas, Halloween, Thanksgiving, Easter and more.
+permalink: /holidays/
+# Loads assets/js/holidays.js, compiled from src/pages/holidays.ts
+script: holidays
+---
+<h1>Holiday countdowns</h1>
+<p class="sub">How many days until the next holiday?</p>
+
+<!-- The page script fills in each date and the days to go, soonest first -->
+<ul id="holiday-list" class="holiday-list">
+  {% assign holidays = site.holidays | sort: "order" %}
+  {% for holiday in holidays %}
+  <li data-rule="{{ holiday.rule | jsonify | escape }}">
+    <a href="{{ holiday.url | relative_url }}">{{ holiday.name }}</a>
+    <span class="date"></span>
+    <span class="days"></span>
+  </li>
+  {% endfor %}
+</ul>

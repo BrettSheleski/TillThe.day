@@ -19,3 +19,23 @@ exclude:
 
 sass:
   style: compressed
+
+# Holiday countdown pages: one Markdown file each in _holidays/, published at
+# /<file name>/ and laid out by _layouts/holiday.html
+collections:
+  holidays:
+    output: true
+    permalink: /:name/
+
+defaults:
+  - scope:
+      type: holidays
+    values:
+      layout: holiday
+      # Loads assets/js/holiday.js, compiled from src/pages/holiday.ts
+      script: holiday
+
+# Generates sitemap.xml listing every page, for search engines. Supported by
+# GitHub Pages (part of the github-pages gem).
+plugins:
+  - jekyll-sitemap

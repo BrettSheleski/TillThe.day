@@ -9,35 +9,18 @@ script: index
   <p class="sub">Pick a date and get a shareable countdown link.</p>
 </div>
 
-<!-- The countdown itself: the shared link's view, and the live preview in create mode -->
-<section id="countdown" hidden>
-  <div class="clock" aria-live="polite">
-    <div class="unit"><span id="days">0</span><label>days</label></div>
-    <div class="unit"><span id="hours">00</span><label>hours</label></div>
-    <div class="unit"><span id="minutes">00</span><label>minutes</label></div>
-    <div class="unit"><span id="seconds">00</span><label>seconds</label></div>
-  </div>
-  <p class="status"><span id="status"></span> <span id="message"></span></p>
-  <p id="target-label" class="target"></p>
-</section>
-
-<!-- View mode only -->
-<div id="view-actions" class="actions" hidden>
-  <button id="copy-link" type="button">Copy link</button>
-  <details id="calendar-menu" class="calendar-menu">
-    <summary class="button secondary">Add to calendar</summary>
-    <div class="menu">
-      <a id="calendar-google" target="_blank" rel="noopener">Google Calendar</a>
-      <a id="calendar-outlook" target="_blank" rel="noopener">Outlook.com</a>
-      <a id="calendar-ics">Apple / Outlook / other (.ics)</a>
-    </div>
-  </details>
-  <a href="{{ '/' | relative_url }}" class="button secondary">Make your own</a>
-</div>
+<!-- The shared link's view, and the live preview in create mode -->
+{% include countdown.html %}
 
 <!-- Create mode only -->
 <div id="create-view" hidden>
   <form id="create-form">
+    <fieldset class="mode-toggle">
+      <legend>Type</legend>
+      <label><input type="radio" name="mode" value="down" checked> Count down to</label>
+      <label><input type="radio" name="mode" value="up"> Count up from</label>
+    </fieldset>
+
     <label for="date">Date</label>
     <input id="date" type="date" required>
 
@@ -59,6 +42,11 @@ script: index
 
     <button type="submit">Create countdown</button>
   </form>
+
+  <nav class="holiday-links" aria-labelledby="holiday-links-title">
+    <h2 id="holiday-links-title">Or count down to a holiday</h2>
+    {% include holiday-links.html %}
+  </nav>
 </div>
 
 <section id="error-view" hidden>
@@ -66,7 +54,3 @@ script: index
   <p class="sub">This countdown link doesn't contain a valid date.</p>
   <a href="{{ '/' | relative_url }}" class="button">Make a new one</a>
 </section>
-
-<!-- Particles for the themes' end animations, shown once a countdown has
-     ended (see _sass/themes/*/_elapsed.scss). Count matches $fx-particles. -->
-<div class="fx" aria-hidden="true">{% for i in (1..24) %}<i></i>{% endfor %}</div>

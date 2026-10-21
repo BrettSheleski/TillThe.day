@@ -1,9 +1,11 @@
 // A countdown is packed into a single URL parameter: ?c=<token>
 //
-// token   = <when>[<theme>][<message>]
+// token   = <when>[<letters>][<message>]
 // when    = <minutes since epoch, base36>     exact moment (a time was picked)
 //         | _<days since epoch, base36>       date only: midnight in each viewer's own time zone
-// theme   = one uppercase letter (see _data/themes.json); omitted for the default theme
+// letters = uppercase letters, in any order:
+//           the theme's code (see _data/themes.json); omitted for the default theme
+//           U for count-up mode (time since the date); reserved, never a theme code
 // message = .<base64url UTF-8 message>        plain
 //         | ~<base64url deflated message>     compressed, used when shorter
 //
@@ -19,16 +21,19 @@ export interface Countdown {
   dateOnly: boolean;
   msg: string;
   theme: Theme;
+  /** Count up from the date (time since) instead of down to it. */
+  countUp: boolean;
 }
 
 const MINUTE = 60_000;
+const COUNT_UP = "U";
 const DAY = 86_400_000;
 
-export async function encodeToken({ target, dateOnly, msg, theme }: Countdown): Promise<string> {
+export async function encodeToken({ target, dateOnly, msg, theme, countUp }: Countdown): Promise<string> {
   const when = dateOnly
     ? "_" + (Date.UTC(target.getFullYear(), target.getMonth(), target.getDate()) / DAY).toString(36)
     : Math.round(target.getTime() / MINUTE).toString(36);
-  const prefix = when + theme.code;
+  const prefix = when + theme.code + (countUp ? COUNT_UP : "");
   if (!msg) return prefix;
 
   const bytes = new TextEncoder().encode(msg);
@@ -40,14 +45,20 @@ export async function encodeToken({ target, dateOnly, msg, theme }: Countdown): 
   return prefix + best;
 }
 
-const TOKEN = /^(_?)(-?[0-9a-z]+)([A-Z]?)(?:([.~])([A-Za-z0-9_-]*))?$/;
+const TOKEN = /^(_?)(-?[0-9a-z]+)([A-Z]*)(?:([.~])([A-Za-z0-9_-]*))?$/;
+
+/** The theme among a token's letters; the default if none (or none known). */
+function themeFromLetters(letters: string): Theme {
+  const code = [...letters].find((l) => l !== COUNT_UP) ?? "";
+  return themeByCode(code);
+}
 
 /**
  * Read just the theme, synchronously, so the page can apply it before the
  * (possibly async) message decode and avoid flashing the default theme.
  */
 export function peekTheme(token: string): Theme {
-  return themeByCode(token.match(TOKEN)?.[3] ?? "");
+  return themeFromLetters(token.match(TOKEN)?.[3] ?? "");
 }
 
 /** Returns null if the token is malformed. */
@@ -76,7 +87,7 @@ export async function decodeToken(token: string): Promise<Countdown | null> {
       return null;
     }
   }
-  return { target, dateOnly, msg, theme: themeByCode(m[3]) };
+  return { target, dateOnly, msg, theme: themeFromLetters(m[3]), countUp: m[3].includes(COUNT_UP) };
 }
 
 async function transform(bytes: Uint8Array, stream: GenericTransformStream): Promise<Uint8Array> {

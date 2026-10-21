@@ -1,0 +1,21 @@
+---
+layout: default
+---
+<!-- A holiday page (_holidays/*.md). The page script counts down to the next
+     date from the rule in front matter; the Markdown body is the "about" text. -->
+<div id="holiday" data-name="{{ page.name }}" data-theme="{{ page.theme }}" data-rule="{{ page.rule | jsonify | escape }}">
+  <h1>Days until {{ page.name }} <span id="holiday-year"></span></h1>
+</div>
+
+{% include countdown.html %}
+
+<section class="about">
+  {{ content }}
+  <h2>Upcoming dates</h2>
+  <ul id="upcoming" class="upcoming"></ul>
+</section>
+
+<nav class="holiday-links" aria-labelledby="holiday-links-title">
+  <h2 id="holiday-links-title">More holiday countdowns</h2>
+  {% include holiday-links.html %}
+</nav>

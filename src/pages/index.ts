@@ -1,7 +1,7 @@
-// Script for index.html: create a countdown (with a live preview),
-// or show the countdown in the URL.
-import { calendarLinks } from "../lib/calendar";
-import { byId, copyToClipboard } from "../lib/dom";
+// Script for index.html: create a countdown or count-up (with a live preview),
+// or show the one in the URL.
+import { createDisplay, showActions } from "../lib/countdown-view";
+import { byId } from "../lib/dom";
 import { applyTheme, themeById } from "../lib/themes";
 import { decodeToken, encodeToken, peekTheme, type Countdown } from "../lib/token";
 
@@ -23,40 +23,7 @@ if (token) {
 function showView(countdown: Countdown): void {
   display.set(countdown, { celebrate: true });
   if (countdown.msg) document.title = `${countdown.msg} | ${document.title}`;
-  byId("view-actions").hidden = false;
-  byId("copy-link").addEventListener("click", (e) =>
-    copyToClipboard(location.href, e.currentTarget as HTMLElement)
-  );
-  setUpCalendarMenu(countdown);
-}
-
-/** The "Add to calendar" menu; hidden once the countdown has ended. */
-function setUpCalendarMenu(countdown: Countdown): void {
-  const menu = byId<HTMLDetailsElement>("calendar-menu");
-  if (countdown.target.getTime() <= Date.now()) {
-    menu.hidden = true;
-    return;
-  }
-
-  const links = calendarLinks(countdown, location.href);
-  byId<HTMLAnchorElement>("calendar-google").href = links.google;
-  byId<HTMLAnchorElement>("calendar-outlook").href = links.outlook;
-  const ics = byId<HTMLAnchorElement>("calendar-ics");
-  ics.href = URL.createObjectURL(new Blob([links.ics], { type: "text/calendar" }));
-  ics.download = `${fileName(countdown.msg || "countdown")}.ics`;
-
-  // Close after choosing an option, or when clicking anywhere else
-  menu.addEventListener("click", (e) => {
-    if ((e.target as Element).closest("a")) menu.open = false;
-  });
-  document.addEventListener("click", (e) => {
-    if (!menu.contains(e.target as Node)) menu.open = false;
-  });
-}
-
-/** A safe, readable file name from free text. */
-function fileName(text: string): string {
-  return text.replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "countdown";
+  showActions(countdown, location.href);
 }
 
 function showCreate(): void {
@@ -69,6 +36,7 @@ function showCreate(): void {
   const timeInput = byId<HTMLInputElement>("time");
   const themeSelect = byId<HTMLSelectElement>("theme");
   const clearTime = byId("clear-time");
+  const countingUp = () => (form.elements.namedItem("mode") as RadioNodeList).value === "up";
 
   function readForm(): Countdown | null {
     const date = dateInput.value;
@@ -83,20 +51,35 @@ function showCreate(): void {
       dateOnly: !time,
       msg: byId<HTMLInputElement>("msg").value.trim(),
       theme: themeById(themeSelect.value),
+      countUp: countingUp(),
     };
   }
 
-  /** No days before today, and no time that has already passed; flags the field to fix. */
+  /**
+   * Counting down: today or later, and no time that has already passed.
+   * Counting up: today or earlier, and no time that hasn't happened yet.
+   * Flags the field to fix, which also blocks submitting.
+   */
   function validate(countdown: Countdown | null): void {
     const today = localDate(new Date());
-    dateInput.min = today; // greys out past days in the picker
+    const up = countingUp();
+    // Greys out the days that can't be picked
+    dateInput.min = up ? "" : today;
+    dateInput.max = up ? today : "";
     dateInput.setCustomValidity("");
     timeInput.setCustomValidity("");
     if (!countdown) return;
 
-    if (dateInput.value < today) {
+    const timePassed = countdown.target.getTime() <= Date.now();
+    if (up) {
+      if (dateInput.value > today) {
+        dateInput.setCustomValidity("Pick today or an earlier date.");
+      } else if (!countdown.dateOnly && !timePassed) {
+        timeInput.setCustomValidity("Pick a time earlier than now.");
+      }
+    } else if (dateInput.value < today) {
       dateInput.setCustomValidity("Pick today or a later date.");
-    } else if (!countdown.dateOnly && countdown.target.getTime() <= Date.now()) {
+    } else if (!countdown.dateOnly && timePassed) {
       timeInput.setCustomValidity("Pick a time later than now.");
     }
   }
@@ -116,7 +99,7 @@ function showCreate(): void {
   });
   update(); // also picks up values the browser restores, e.g. after Back
 
-  // Go straight to the countdown; its page has the Copy link button for sharing.
+  // Go straight to the countdown; its page has the buttons for sharing.
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     update(); // time has moved on since the last edit, so check again
@@ -131,70 +114,4 @@ function showCreate(): void {
 function localDate(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-}
-
-/**
- * The ticking countdown display. `set(null)` shows an empty placeholder of the
- * same size, so the page doesn't shift when a date is first picked.
- *
- * Once the target has passed it shows zeros. With `celebrate`, it also adds the
- * "elapsed" class to <html>, which starts the current theme's end animation
- * (see _sass/themes/).
- */
-function createDisplay() {
-  const section = byId("countdown");
-  const days = byId("days");
-  const hours = byId("hours");
-  const minutes = byId("minutes");
-  const seconds = byId("seconds");
-  const status = byId("status");
-  const message = byId("message");
-  const targetLabel = byId("target-label");
-  const pad = (n: number) => String(n).padStart(2, "0");
-
-  let current: Countdown | null = null;
-  let celebrate = false;
-
-  function tick(): void {
-    if (!current) return;
-    const diff = current.target.getTime() - Date.now();
-    const elapsed = diff <= 0;
-    const s = elapsed ? 0 : Math.floor(diff / 1000);
-    days.textContent = Math.floor(s / 86400).toLocaleString();
-    days.classList.toggle("long", days.textContent.length > 3);
-    hours.textContent = pad(Math.floor((s % 86400) / 3600));
-    minutes.textContent = pad(Math.floor((s % 3600) / 60));
-    seconds.textContent = pad(s % 60);
-    status.textContent = "until" + (current.msg ? ":" : "");
-    document.documentElement.classList.toggle("elapsed", celebrate && elapsed);
-  }
-  setInterval(tick, 1000);
-
-  return {
-    set(countdown: Countdown | null, options: { celebrate?: boolean } = {}): void {
-      current = countdown;
-      celebrate = options.celebrate ?? false;
-      section.hidden = false;
-      if (!countdown) {
-        for (const unit of [days, hours, minutes, seconds]) unit.textContent = "--";
-        status.textContent = "Pick a date";
-        message.textContent = "";
-        targetLabel.textContent = " "; // keeps the line's height
-        return;
-      }
-      message.textContent = countdown.msg;
-      targetLabel.textContent = countdown.dateOnly
-        ? countdown.target.toLocaleDateString(undefined, { dateStyle: "full" })
-        : countdown.target.toLocaleString(undefined, {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-            timeZoneName: "short",
-          });
-      tick();
-    },
-  };
 }

@@ -3,12 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run typecheck && esbuild \"src/pages/*.ts\" --bundle --format=esm --target=es2022 --minify --sourcemap --outdir=assets/js",
-    "watch": "esbuild \"src/pages/*.ts\" --bundle --format=esm --target=es2022 --sourcemap --outdir=assets/js --watch",
+    "build": "npm run typecheck && esbuild \"src/pages/*.ts\" --bundle --splitting --chunk-names=chunks/[name]-[hash] --format=esm --target=es2022 --minify --sourcemap --outdir=assets/js",
+    "watch": "esbuild \"src/pages/*.ts\" --bundle --splitting --chunk-names=chunks/[name]-[hash] --format=esm --target=es2022 --sourcemap --outdir=assets/js --watch",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "esbuild": "0.24.2",
     "typescript": "5.6.3"
+  },
+  "dependencies": {
+    "qrcode-generator": "1.4.4"
   }
 }

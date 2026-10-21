@@ -4,6 +4,7 @@
     "module": "ES2022",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "strict": true,
     "noUnusedLocals": true,
