@@ -1,12 +1,14 @@
 // Script for index.html: create a countdown (with a live preview),
 // or show the countdown in the URL.
 import { byId, copyToClipboard } from "../lib/dom";
-import { decodeToken, encodeToken, type Countdown } from "../lib/token";
+import { applyTheme, themeById } from "../lib/themes";
+import { decodeToken, encodeToken, peekTheme, type Countdown } from "../lib/token";
 
 const display = createDisplay();
 const token = new URLSearchParams(location.search).get("c");
 
 if (token) {
+  applyTheme(peekTheme(token));
   const countdown = await decodeToken(token);
   if (countdown) {
     showView(countdown);
@@ -33,6 +35,7 @@ function showCreate(): void {
 
   const form = byId<HTMLFormElement>("create-form");
   const timeInput = byId<HTMLInputElement>("time");
+  const themeSelect = byId<HTMLSelectElement>("theme");
   const clearTime = byId("clear-time");
 
   function readForm(): Countdown | null {
@@ -43,10 +46,16 @@ function showCreate(): void {
     // countdown is to the start of the date wherever the viewer is.
     const target = new Date(`${date}T${time || "00:00"}`);
     if (isNaN(target.getTime())) return null;
-    return { target, dateOnly: !time, msg: byId<HTMLInputElement>("msg").value.trim() };
+    return {
+      target,
+      dateOnly: !time,
+      msg: byId<HTMLInputElement>("msg").value.trim(),
+      theme: themeById(themeSelect.value),
+    };
   }
 
   function update(): void {
+    applyTheme(themeById(themeSelect.value));
     clearTime.hidden = !timeInput.value;
     display.set(readForm());
   }

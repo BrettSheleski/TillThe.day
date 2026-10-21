@@ -1,13 +1,16 @@
 // A countdown is packed into a single URL parameter: ?c=<token>
 //
-// token   = <when>[<message>]
+// token   = <when>[<theme>][<message>]
 // when    = <minutes since epoch, base36>     exact moment (a time was picked)
 //         | _<days since epoch, base36>       date only: midnight in each viewer's own time zone
+// theme   = one uppercase letter (see _data/themes.json); omitted for the default theme
 // message = .<base64url UTF-8 message>        plain
 //         | ~<base64url deflated message>     compressed, used when shorter
 //
 // An exact moment is stored in UTC, so everyone counts down to the same
 // instant, shown in their own local time zone.
+
+import { type Theme, themeByCode } from "./themes";
 
 export interface Countdown {
   /** For date-only countdowns, local midnight at the start of the day. */
@@ -15,16 +18,18 @@ export interface Countdown {
   /** True when no time was picked. */
   dateOnly: boolean;
   msg: string;
+  theme: Theme;
 }
 
 const MINUTE = 60_000;
 const DAY = 86_400_000;
 
-export async function encodeToken({ target, dateOnly, msg }: Countdown): Promise<string> {
+export async function encodeToken({ target, dateOnly, msg, theme }: Countdown): Promise<string> {
   const when = dateOnly
     ? "_" + (Date.UTC(target.getFullYear(), target.getMonth(), target.getDate()) / DAY).toString(36)
     : Math.round(target.getTime() / MINUTE).toString(36);
-  if (!msg) return when;
+  const prefix = when + theme.code;
+  if (!msg) return prefix;
 
   const bytes = new TextEncoder().encode(msg);
   let best = "." + toBase64Url(bytes);
@@ -32,12 +37,22 @@ export async function encodeToken({ target, dateOnly, msg }: Countdown): Promise
     const packed = "~" + toBase64Url(await transform(bytes, new CompressionStream("deflate-raw")));
     if (packed.length < best.length) best = packed;
   }
-  return when + best;
+  return prefix + best;
+}
+
+const TOKEN = /^(_?)(-?[0-9a-z]+)([A-Z]?)(?:([.~])([A-Za-z0-9_-]*))?$/;
+
+/**
+ * Read just the theme, synchronously, so the page can apply it before the
+ * (possibly async) message decode and avoid flashing the default theme.
+ */
+export function peekTheme(token: string): Theme {
+  return themeByCode(token.match(TOKEN)?.[3] ?? "");
 }
 
 /** Returns null if the token is malformed. */
 export async function decodeToken(token: string): Promise<Countdown | null> {
-  const m = token.match(/^(_?)(-?[0-9a-z]+)(?:([.~])([A-Za-z0-9_-]*))?$/);
+  const m = token.match(TOKEN);
   if (!m) return null;
   const dateOnly = m[1] === "_";
   const n = parseInt(m[2], 36);
@@ -52,16 +67,16 @@ export async function decodeToken(token: string): Promise<Countdown | null> {
   if (isNaN(target.getTime())) return null;
 
   let msg = "";
-  if (m[4]) {
+  if (m[5]) {
     try {
-      let bytes = fromBase64Url(m[4]);
-      if (m[3] === "~") bytes = await transform(bytes, new DecompressionStream("deflate-raw"));
+      let bytes = fromBase64Url(m[5]);
+      if (m[4] === "~") bytes = await transform(bytes, new DecompressionStream("deflate-raw"));
       msg = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
     } catch {
       return null;
     }
   }
-  return { target, dateOnly, msg };
+  return { target, dateOnly, msg, theme: themeByCode(m[3]) };
 }
 
 async function transform(bytes: Uint8Array, stream: GenericTransformStream): Promise<Uint8Array> {

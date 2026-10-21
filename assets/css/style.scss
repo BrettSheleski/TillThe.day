@@ -3,7 +3,8 @@
 # Partials live in _sass/.
 ---
 @import "variables";
-@import "theme";
+@import "mixins";
+@import "themes/index";
 @import "base";
 @import "layout";
 @import "forms";

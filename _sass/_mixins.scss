@@ -1,0 +1,6 @@
+// Emit a map of theme settings as CSS custom properties: (bg: #fff) → --bg: #fff;
+@mixin theme-vars($vars) {
+  @each $name, $value in $vars {
+    --#{$name}: #{$value};
+  }
+}

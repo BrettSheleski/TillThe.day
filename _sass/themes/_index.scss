@@ -1,0 +1,18 @@
+// Themes. Each theme lives in its own folder and is applied with
+// <html data-theme="<id>">, set by the page script. The list of themes shown
+// to users (names and link codes) is in _data/themes.json.
+//
+// The generic theme sets the defaults on :root. Other themes override them
+// under html[data-theme="<id>"], which outranks :root even inside the generic
+// theme's dark-mode media query, and may add their own extra rules.
+//
+// Settings every theme should define (via the theme-vars mixin):
+//   colors:  bg, card, text, muted, accent, accent-text, border, unit-bg, digit
+//   other:   bg-image, font, font-digits, radius, radius-lg, card-shadow, digit-shadow
+//
+// To add a theme: create themes/<id>/_theme.scss, import it below, and add
+// an entry to _data/themes.json with a unique one-letter uppercase code.
+
+@import "themes/generic/theme";
+@import "themes/party/theme";
+@import "themes/doomsday/theme";

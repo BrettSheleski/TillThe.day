@@ -1,0 +1,80 @@
+// Party: bright, rounded and colorful, with confetti. Always light.
+
+$party-colors: (
+  pink: #ff3d8b,
+  orange: #ff8c1a,
+  teal: #12a39a,
+  purple: #7b5cff,
+  yellow: #ffc93c
+);
+
+// One color per countdown box: days, hours, minutes, seconds
+$party-unit-colors: (
+  map-get($party-colors, pink),
+  map-get($party-colors, orange),
+  map-get($party-colors, teal),
+  map-get($party-colors, purple)
+);
+
+// Confetti dots as (color, position) pairs, tiled across the page
+$party-confetti: (
+  (map-get($party-colors, pink), 8% 12%),
+  (map-get($party-colors, yellow), 35% 60%),
+  (map-get($party-colors, teal), 62% 18%),
+  (map-get($party-colors, purple), 82% 70%),
+  (map-get($party-colors, orange), 18% 85%),
+  (map-get($party-colors, teal), 92% 35%),
+  (map-get($party-colors, pink), 50% 92%)
+);
+
+@function party-confetti-layers($dots) {
+  $layers: ();
+  @each $dot in $dots {
+    $layers: append(
+      $layers,
+      radial-gradient(circle at nth($dot, 2), nth($dot, 1) 0 4px, transparent 5px),
+      comma
+    );
+  }
+  @return $layers;
+}
+
+html[data-theme="party"] {
+  @include theme-vars((
+    bg: #fff4fa,
+    card: #ffffff,
+    text: #2b1442,
+    muted: #86699d,
+    accent: map-get($party-colors, pink),
+    accent-text: #ffffff,
+    border: #f1d3f5,
+    unit-bg: map-get($party-colors, pink),
+    digit: #ffffff,
+    bg-image: linear-gradient(160deg, #ffd6ec 0%, #fff4cc 50%, #d4f1ff 100%),
+    font: ("Fredoka", "Trebuchet MS", $font-stack),
+    font-digits: var(--font),
+    radius: 14px,
+    radius-lg: 28px,
+    card-shadow: 0 12px 40px rgba(123, 92, 255, 0.25),
+    digit-shadow: 0 2px 0 rgba(0, 0, 0, 0.15)
+  ));
+
+  body {
+    background-image: party-confetti-layers($party-confetti);
+    background-size: 220px 220px;
+  }
+
+  .unit {
+    border: none;
+
+    label { color: rgba(255, 255, 255, 0.9); }
+  }
+
+  @for $i from 1 through length($party-unit-colors) {
+    .unit:nth-child(#{$i}) { background: nth($party-unit-colors, $i); }
+  }
+
+  #message { color: var(--accent); }
+  .status::before { content: "\1F389  "; } // party popper
+  .status::after { content: "  \1F38A"; }  // confetti ball
+}

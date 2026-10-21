@@ -1,4 +1,11 @@
 * { box-sizing: border-box; }
+
+// The page background lives on <html> so themes can layer extra images on <body>.
+html {
+  background-color: var(--bg);
+  background-image: var(--bg-image);
+  background-attachment: fixed;
+}
 [hidden] { display: none !important; }
 
 body {
@@ -7,9 +14,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: var(--bg);
   color: var(--text);
-  font-family: $font-stack;
+  font-family: var(--font);
   padding: 0 $gutter;
 }
 

@@ -1,0 +1,45 @@
+// Generic: clean and neutral. Follows the system light/dark setting.
+// Also provides the defaults every other theme starts from.
+
+$generic-light: (
+  bg: #f6f7fb,
+  card: #ffffff,
+  text: #1c1f2a,
+  muted: #6b7185,
+  accent: #4f5bd5,
+  accent-text: #ffffff,
+  border: #dde0ea,
+  unit-bg: #f6f7fb,
+  digit: #1c1f2a
+);
+
+$generic-dark: (
+  bg: #12141b,
+  card: #1b1e28,
+  text: #e8eaf2,
+  muted: #9298ab,
+  accent: #7c86f0,
+  accent-text: #0e1016,
+  border: #2c3040,
+  unit-bg: #12141b,
+  digit: #e8eaf2
+);
+
+:root {
+  @include theme-vars($generic-light);
+  @include theme-vars((
+    bg-image: none,
+    font: $font-stack,
+    font-digits: var(--font),
+    radius: 8px,
+    radius-lg: 16px,
+    card-shadow: none,
+    digit-shadow: none
+  ));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include theme-vars($generic-dark);
+  }
+}

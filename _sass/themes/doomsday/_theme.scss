@@ -1,0 +1,64 @@
+// Doomsday: dark terminal, glowing red digits, hazard stripes. Always dark.
+
+$doomsday-red: #ff2a2a;
+$doomsday-hazard: #ffcc00;
+
+html[data-theme="doomsday"] {
+  @include theme-vars((
+    bg: #070000,
+    card: #120303,
+    text: #f3d6d6,
+    muted: #a86a6a,
+    accent: $doomsday-red,
+    accent-text: #0a0000,
+    border: #4a0e0e,
+    unit-bg: #1a0404,
+    digit: #ff3030,
+    bg-image: radial-gradient(ellipse at 50% 40%, rgba(160, 0, 0, 0.35), transparent 70%),
+    font: ("Share Tech Mono", ui-monospace, Consolas, monospace),
+    font-digits: var(--font),
+    radius: 2px,
+    radius-lg: 4px,
+    card-shadow: 0 0 60px rgba(255, 0, 0, 0.15),
+    digit-shadow: (0 0 10px rgba(255, 40, 40, 0.8), 0 0 30px rgba(255, 0, 0, 0.4))
+  ));
+
+  // CRT scanlines over the whole page
+  body {
+    background-image: repeating-linear-gradient(0deg, rgba(255, 0, 0, 0.04) 0 1px, transparent 1px 3px);
+  }
+
+  // Hazard stripe along the top of the card
+  .card {
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 8px;
+      background: repeating-linear-gradient(-45deg, $doomsday-hazard 0 12px, #111 12px 24px);
+    }
+  }
+
+  h1,
+  label,
+  button,
+  .button,
+  .status,
+  .site-title {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .unit span { animation: doomsday-pulse 2s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .unit span { animation: none; }
+  }
+}
+
+@keyframes doomsday-pulse {
+  50% { opacity: 0.7; }
+}

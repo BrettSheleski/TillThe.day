@@ -7,14 +7,17 @@
 }
 
 .unit {
-  background: var(--bg);
+  background: var(--unit-bg);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: calc(var(--radius-lg) - 4px);
   padding: 16px 4px;
   display: flex;
   flex-direction: column;
 
   span {
+    font-family: var(--font-digits);
+    color: var(--digit);
+    text-shadow: var(--digit-shadow);
     font-size: clamp(1.6rem, 7vw, 3rem);
     font-weight: 700;
     font-variant-numeric: tabular-nums;
@@ -37,7 +40,7 @@
 #countdown.preview {
   position: relative;
   border: 2px dashed var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   padding: 28px 12px 4px;
   margin-bottom: 8px;
 

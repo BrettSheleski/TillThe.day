@@ -1,0 +1,5 @@
+[
+  { "id": "generic", "name": "Generic", "code": "" },
+  { "id": "party", "name": "Party", "code": "P" },
+  { "id": "doomsday", "name": "Doomsday", "code": "D" }
+]

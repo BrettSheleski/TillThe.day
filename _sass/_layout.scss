@@ -32,7 +32,8 @@
   margin: auto 0;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: $radius-lg;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
   padding: 32px 24px;
   text-align: center;
 }
