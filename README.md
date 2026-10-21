@@ -111,6 +111,10 @@ The page counts down to the next date, celebrates on the day itself, and rolls o
 
 `{% seo %}` in `_includes/head.html` (the jekyll-seo-tag plugin) adds the tags that chat and social apps read for link previews, using each page's `title`, `description` and `image`. Pages without an `image` use `assets/images/og-image.png`. Shared countdown links (`?c=…`) all get the home page's preview, because preview apps don't run the script that reads the link.
 
+### Cache busting
+
+Link to CSS, JavaScript and icon files with `{% include asset-url.html path='/assets/...' %}` instead of `relative_url`. It adds `?v=<build time>`, so every deploy gives browsers new URLs and they fetch the new files instead of cached ones. Script chunks (`assets/js/chunks/`) don't need it: esbuild puts a content hash in their file names.
+
 ## Deploy to GitHub Pages
 
 1. Push this folder to a GitHub repository with `main` as the default branch.

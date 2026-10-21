@@ -11,7 +11,8 @@
   </main>
   {% include footer.html %}
   {% if page.script %}
-  <script type="module" src="{{ '/assets/js/' | append: page.script | append: '.js' | relative_url }}"></script>
+  {% assign script_path = '/assets/js/' | append: page.script | append: '.js' %}
+  <script type="module" src="{% include asset-url.html path=script_path %}"></script>
   {% endif %}
 </body>
 </html>
