@@ -1,0 +1,65 @@
+// Birthday end animation: balloons over the page. With motion allowed, they
+// float up and away and the boxes pop one after another.
+
+$birthday-balloon-colors: map-values($birthday-colors);
+
+html[data-theme="birthday"].elapsed {
+  .fx i {
+    width: 30px;
+    height: 38px;
+    border-radius: 50% 50% 50% 50% / 55% 55% 45% 45%;
+    box-shadow: inset -5px -6px 0 rgba(0, 0, 0, 0.08);
+    animation: birthday-fade-in 0.8s ease-out both;
+
+    // The string
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: 1px;
+      height: 40px;
+      background: rgba(74, 44, 79, 0.35);
+    }
+  }
+
+  @include fx-scatter(41, 59);
+
+  @for $i from 1 through $fx-particles {
+    .fx i:nth-child(#{$i}) {
+      background: nth($birthday-balloon-colors, $i % length($birthday-balloon-colors) + 1);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .unit { animation: birthday-pop 0.5s ease-out both; }
+
+    @for $i from 1 through 4 {
+      .unit:nth-child(#{$i}) { animation-delay: ($i - 1) * 0.12s; }
+    }
+
+    .fx i { animation: birthday-float 10s ease-in-out infinite both; }
+    @include fx-timing(9s, 5s, 8s);
+
+    @for $i from 1 through $fx-particles {
+      .fx i:nth-child(#{$i}) { top: 100%; }
+    }
+  }
+}
+
+@keyframes birthday-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes birthday-pop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes birthday-float {
+  0% { transform: translate(0, 0) rotate(-4deg); }
+  25% { transform: translate(18px, -30vh) rotate(4deg); }
+  50% { transform: translate(-12px, -60vh) rotate(-4deg); }
+  75% { transform: translate(14px, -90vh) rotate(3deg); }
+  100% { transform: translate(0, -125vh) rotate(-2deg); }
+}

@@ -1,0 +1,46 @@
+// Vacation: sky, sea and sand behind the card, a sun in the corner, turquoise
+// boxes and a coral accent. Always light.
+
+$vacation-turquoise: #2ab7ca;
+$vacation-coral: #ff6f59;
+
+html[data-theme="vacation"] {
+  @include theme-vars((
+    bg: #e0f7fa,
+    card: rgba(255, 255, 255, 0.9),
+    text: #0b3c49,
+    muted: #4f7f8a,
+    accent: $vacation-coral,
+    accent-text: #ffffff,
+    border: #b2ebf2,
+    unit-bg: $vacation-turquoise,
+    digit: #ffffff,
+    // The sun, then sky / sea / sand
+    bg-image: (
+      radial-gradient(circle at 85% 12%, #ffe082 0 56px, rgba(255, 224, 130, 0.35) 57px 90px, transparent 91px),
+      linear-gradient(180deg, #8fd3f4 0%, #c9f0ff 45%, #4dd0e1 45%, #26a6b8 72%, #f6d6a8 72%, #f3c98b 100%)
+    ),
+    font: ("Quicksand", $font-stack),
+    font-digits: var(--font),
+    radius: 12px,
+    radius-lg: 24px,
+    card-shadow: 0 12px 36px rgba(11, 60, 73, 0.18),
+    digit-shadow: 0 2px 0 rgba(0, 0, 0, 0.12)
+  ));
+
+  .unit { border: none; }
+  .unit label { color: rgba(255, 255, 255, 0.9); }
+  .unit span { font-weight: 700; }
+
+  h1,
+  #message {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+  }
+  #message { color: var(--accent); }
+
+  .status::before { content: "\1F334  "; } // palm tree
+  .status::after { content: "  \2600\FE0F"; } // sun
+}
+
+@import "elapsed";

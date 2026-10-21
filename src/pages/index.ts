@@ -130,6 +130,7 @@ function createDisplay() {
     const elapsed = diff <= 0;
     const s = elapsed ? 0 : Math.floor(diff / 1000);
     days.textContent = Math.floor(s / 86400).toLocaleString();
+    days.classList.toggle("long", days.textContent.length > 3);
     hours.textContent = pad(Math.floor((s % 86400) / 3600));
     minutes.textContent = pad(Math.floor((s % 3600) / 60));
     seconds.textContent = pad(s % 60);

@@ -2,7 +2,8 @@
 
 .clock {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  // Equal widths that never grow past the card, however long the numbers
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -21,6 +22,9 @@
     font-size: clamp(1.6rem, 7vw, 3rem);
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+
+    // A day count of 4+ characters, e.g. "1,234", set by the page script
+    &.long { font-size: clamp(1rem, 4.5vw, 2rem); }
   }
 
   label { margin: 0; font-weight: 500; color: var(--muted); }

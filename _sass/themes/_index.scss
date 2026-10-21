@@ -10,9 +10,18 @@
 //   colors:  bg, card, text, muted, accent, accent-text, border, unit-bg, digit
 //   other:   bg-image, font, font-digits, radius, radius-lg, card-shadow, digit-shadow
 //
+// Helpers for end animations (.fx particles) are in _mixins.scss.
+//
 // To add a theme: create themes/<id>/_theme.scss, import it below, and add
 // an entry to _data/themes.json with a unique one-letter uppercase code.
 
 @import "themes/generic/theme";
 @import "themes/party/theme";
+@import "themes/birthday/theme";
+@import "themes/romantic/theme";
+@import "themes/holiday/theme";
+@import "themes/vacation/theme";
+@import "themes/space/theme";
+@import "themes/arcade/theme";
+@import "themes/zen/theme";
 @import "themes/doomsday/theme";

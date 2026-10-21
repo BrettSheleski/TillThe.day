@@ -30,7 +30,7 @@ _includes/footer.html    Site footer
 index.html               Countdown page content
 assets/css/style.scss    Stylesheet entry: imports the _sass partials (Jekyll compiles it to style.css)
 _data/themes.json        Theme list: id, name shown in the picker, link code
-_sass/themes/<id>/       One folder per theme (generic, party, doomsday)
+_sass/themes/<id>/       One folder per theme: _theme.scss (look) and _elapsed.scss (end animation)
 _sass/themes/_index.scss Imports the themes; documents the settings each theme defines
 _sass/_variables.scss    Layout sizes and the base font stack
 _sass/_mixins.scss       theme-vars mixin: turns a map into CSS custom properties
@@ -72,7 +72,7 @@ Use `{{ '/path' | relative_url }}` for internal links so they work under the rep
 2. Import it in `_sass/themes/_index.scss`.
 3. Add `{ "id": "<id>", "name": "<Name>", "code": "<X>" }` to `_data/themes.json`. The code is a single uppercase letter used in share links. It must be unique and must never change, or existing links will show the wrong theme.
 
-The theme then shows up in the picker automatically.
+The theme then shows up in the picker automatically. If it uses a new web font, add the font to the Google Fonts link in `_includes/head.html`.
 
 ## Deploy to GitHub Pages
 

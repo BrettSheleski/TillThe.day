@@ -16,3 +16,6 @@ exclude:
   - package.json
   - package-lock.json
   - tsconfig.json
+
+sass:
+  style: compressed

@@ -1,0 +1,52 @@
+// Vacation end animation: bubbles over the page. With motion allowed, they
+// rise and wobble, and the boxes bob like they're floating.
+
+html[data-theme="vacation"].elapsed {
+  .fx i {
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1) 60%);
+    animation: vacation-fade-in 0.8s ease-out both;
+  }
+
+  @include fx-scatter(29, 47);
+
+  @for $i from 1 through $fx-particles {
+    .fx i:nth-child(#{$i}) {
+      width: 10px + ($i % 5) * 4px;
+      height: 10px + ($i % 5) * 4px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .unit { animation: vacation-bob 2.4s ease-in-out infinite; }
+
+    @for $i from 1 through 4 {
+      .unit:nth-child(#{$i}) { animation-delay: ($i - 1) * -0.6s; }
+    }
+
+    .fx i { animation: vacation-rise 8s ease-in infinite both; }
+    @include fx-timing(6s, 4s, 6s);
+
+    @for $i from 1 through $fx-particles {
+      .fx i:nth-child(#{$i}) { top: 100%; }
+    }
+  }
+}
+
+@keyframes vacation-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes vacation-bob {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-8px) rotate(1.5deg); }
+}
+
+@keyframes vacation-rise {
+  0% { transform: translate(0, 0); opacity: 0; }
+  10% { opacity: 1; }
+  33% { transform: translate(-12px, -38vh); }
+  66% { transform: translate(12px, -76vh); }
+  100% { transform: translate(0, -115vh); opacity: 0.4; }
+}

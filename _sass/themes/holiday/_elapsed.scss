@@ -1,0 +1,48 @@
+// Holiday end animation: the zeros twinkle gold, and snowflakes cover the
+// page. With motion allowed, the snow falls.
+
+html[data-theme="holiday"].elapsed {
+  .unit span { animation: holiday-twinkle 1.8s ease-in-out infinite; }
+
+  .fx i {
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+    animation: holiday-fade-in 1s ease-out both;
+  }
+
+  @include fx-scatter(43, 61);
+
+  @for $i from 1 through $fx-particles {
+    .fx i:nth-child(#{$i}) {
+      width: 4px + ($i % 4) * 2px;
+      height: 4px + ($i % 4) * 2px;
+      opacity: 0.6 + ($i % 3) * 0.15;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fx i { animation: holiday-snowfall 10s linear infinite both; }
+    @include fx-timing(8s, 6s, 8s);
+
+    @for $i from 1 through $fx-particles {
+      .fx i:nth-child(#{$i}) { top: -12px; }
+    }
+  }
+}
+
+@keyframes holiday-twinkle {
+  50% { text-shadow: 0 0 14px rgba(255, 213, 79, 0.95), 0 2px 0 rgba(0, 0, 0, 0.2); }
+}
+
+@keyframes holiday-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes holiday-snowfall {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(15px, 27vh); }
+  50% { transform: translate(-10px, 55vh); }
+  75% { transform: translate(12px, 82vh); }
+  100% { transform: translate(0, 110vh); }
+}

@@ -1,0 +1,38 @@
+// Zen end animation: the zeros settle into the sage accent. With motion
+// allowed, soft ripples also spread out slowly from the middle of the page.
+
+html[data-theme="zen"].elapsed {
+  .unit span { animation: zen-settle 3s ease forwards; }
+  .unit { animation: zen-underline 3s ease forwards; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fx::before,
+    .fx::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 240px;
+      height: 240px;
+      margin: -120px 0 0 -120px;
+      border: 1px solid $zen-sage;
+      border-radius: 50%;
+      animation: zen-ripple 6s ease-out infinite both;
+    }
+
+    .fx::after { animation-delay: 3s; }
+  }
+}
+
+@keyframes zen-settle {
+  to { color: $zen-sage; }
+}
+
+@keyframes zen-underline {
+  to { border-bottom-color: $zen-sage; }
+}
+
+@keyframes zen-ripple {
+  from { transform: scale(0.2); opacity: 0.6; }
+  to { transform: scale(4); opacity: 0; }
+}

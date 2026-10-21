@@ -1,0 +1,72 @@
+// Holiday: evergreen and cranberry with a gold-trimmed card, festive lettering,
+// and a dusting of snow on the page. Light card on a dark background.
+
+$holiday-green: #1b5e45;
+$holiday-red: #c62828;
+$holiday-gold: #d4af37;
+
+// Snow dots as (size, position), tiled across the page
+$holiday-snow: (
+  (2px, 10% 15%), (3px, 30% 70%), (1.5px, 55% 25%), (2.5px, 75% 60%),
+  (2px, 90% 10%), (3px, 15% 85%), (1.5px, 45% 50%), (2px, 65% 90%)
+);
+
+@function holiday-snow-layers($dots) {
+  $layers: ();
+  @each $dot in $dots {
+    $size: nth($dot, 1);
+    $layers: append(
+      $layers,
+      radial-gradient(circle at nth($dot, 2), rgba(255, 255, 255, 0.55) 0 $size, transparent $size + 0.5px),
+      comma
+    );
+  }
+  @return $layers;
+}
+
+html[data-theme="holiday"] {
+  @include theme-vars((
+    bg: #0d3b2e,
+    card: #fffaf2,
+    text: #2b1d14,
+    muted: #7c6a58,
+    accent: $holiday-red,
+    accent-text: #ffffff,
+    border: #e9dcc6,
+    unit-bg: $holiday-red,
+    digit: #ffffff,
+    bg-image: radial-gradient(ellipse at 50% 0%, #1f6b50 0%, #0d3b2e 70%),
+    font: ("Lora", Georgia, serif),
+    font-digits: ("Mountains of Christmas", "Lora", Georgia, serif),
+    radius: 8px,
+    radius-lg: 18px,
+    card-shadow: (0 0 0 4px $holiday-gold, 0 16px 40px rgba(0, 0, 0, 0.35)),
+    digit-shadow: 0 2px 0 rgba(0, 0, 0, 0.2)
+  ));
+
+  body {
+    background-image: holiday-snow-layers($holiday-snow);
+    background-size: 140px 140px;
+  }
+
+  // The header and footer sit on the dark background, outside the card
+  .site-header a { color: #f5e6c8; }
+  .site-footer { color: rgba(255, 255, 255, 0.65); }
+
+  h1,
+  #message {
+    font-family: "Mountains of Christmas", "Lora", Georgia, serif;
+    font-weight: 700;
+  }
+  h1 { font-size: 2.2rem; }
+  #message { color: $holiday-red; }
+
+  // Alternate red and green boxes
+  .unit { border: none; }
+  .unit:nth-child(even) { background: $holiday-green; }
+  .unit label { color: rgba(255, 255, 255, 0.85); }
+
+  .status::before { content: "\2744  "; color: $holiday-green; } // snowflake
+}
+
+@import "elapsed";

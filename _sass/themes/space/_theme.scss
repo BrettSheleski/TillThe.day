@@ -1,0 +1,68 @@
+// Space: a starfield with faint nebulae, mission-control type, and glowing
+// cyan digits. Always dark.
+
+$space-cyan: #4fd1ff;
+$space-violet: #7b5cff;
+
+// Stars as (size, alpha, position), tiled across the page
+$space-stars: (
+  (1px, 0.9, 12% 18%), (1.5px, 0.7, 38% 72%), (1px, 0.6, 64% 30%), (2px, 0.9, 82% 64%),
+  (1px, 0.5, 22% 90%), (1.5px, 0.8, 90% 12%), (1px, 0.7, 52% 48%), (1px, 0.5, 72% 92%)
+);
+
+@function space-star-layers($stars) {
+  $layers: ();
+  @each $star in $stars {
+    $size: nth($star, 1);
+    $layers: append(
+      $layers,
+      radial-gradient(circle at nth($star, 3), rgba(255, 255, 255, nth($star, 2)) 0 $size, transparent $size + 0.5px),
+      comma
+    );
+  }
+  @return $layers;
+}
+
+html[data-theme="space"] {
+  @include theme-vars((
+    bg: #05060f,
+    card: rgba(12, 14, 36, 0.85),
+    text: #dfe6ff,
+    muted: #8a93c0,
+    accent: $space-cyan,
+    accent-text: #05060f,
+    border: #2a2f5a,
+    unit-bg: #0a0c22,
+    digit: #e6f7ff,
+    bg-image: (
+      radial-gradient(ellipse at 20% 20%, rgba(123, 92, 255, 0.25), transparent 50%),
+      radial-gradient(ellipse at 80% 75%, rgba(79, 209, 255, 0.15), transparent 50%)
+    ),
+    font: ("Share Tech Mono", ui-monospace, Consolas, monospace),
+    font-digits: ("Orbitron", "Share Tech Mono", monospace),
+    radius: 6px,
+    radius-lg: 12px,
+    card-shadow: 0 0 40px rgba(79, 209, 255, 0.15),
+    digit-shadow: 0 0 12px rgba(79, 209, 255, 0.6)
+  ));
+
+  body {
+    background-image: space-star-layers($space-stars);
+    background-size: 180px 180px;
+  }
+
+  h1 { font-family: var(--font-digits); }
+
+  h1,
+  label,
+  button,
+  .button,
+  .site-title {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  #message { color: var(--accent); }
+}
+
+@import "elapsed";

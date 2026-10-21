@@ -1,5 +1,12 @@
 [
   { "id": "generic", "name": "Generic", "code": "" },
   { "id": "party", "name": "Party", "code": "P" },
+  { "id": "birthday", "name": "Birthday", "code": "B" },
+  { "id": "romantic", "name": "Romantic", "code": "R" },
+  { "id": "holiday", "name": "Holiday", "code": "H" },
+  { "id": "vacation", "name": "Vacation", "code": "V" },
+  { "id": "space", "name": "Space", "code": "S" },
+  { "id": "arcade", "name": "Arcade", "code": "A" },
+  { "id": "zen", "name": "Zen", "code": "Z" },
   { "id": "doomsday", "name": "Doomsday", "code": "D" }
 ]

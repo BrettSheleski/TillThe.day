@@ -1,0 +1,50 @@
+// Romantic end animation: hearts over the page. With motion allowed, they
+// float up and the boxes pulse like a heartbeat.
+
+$romantic-heart-colors: ($romantic-rose, $romantic-pink, $romantic-gold);
+
+html[data-theme="romantic"].elapsed {
+  .fx i {
+    line-height: 1;
+    animation: romantic-fade-in 0.8s ease-out both;
+
+    &::before { content: "\2665"; }
+  }
+
+  @include fx-scatter(37, 53);
+
+  @for $i from 1 through $fx-particles {
+    .fx i:nth-child(#{$i}) {
+      font-size: 14px + ($i % 4) * 8px;
+      color: nth($romantic-heart-colors, $i % length($romantic-heart-colors) + 1);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .unit { animation: romantic-heartbeat 1.4s ease-in-out infinite; }
+
+    .fx i { animation: romantic-float 7s ease-in infinite both; }
+    @include fx-timing(6s, 4s, 6s);
+
+    @for $i from 1 through $fx-particles {
+      .fx i:nth-child(#{$i}) { top: 100%; }
+    }
+  }
+}
+
+@keyframes romantic-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes romantic-heartbeat {
+  0%, 45%, 100% { transform: scale(1); }
+  15% { transform: scale(1.06); }
+  30% { transform: scale(1.03); }
+}
+
+@keyframes romantic-float {
+  0% { transform: translate(0, 0); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translate(20px, -55vh); }
+  100% { transform: translate(-10px, -115vh); opacity: 0; }
+}

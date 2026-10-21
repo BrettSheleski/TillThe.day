@@ -1,6 +1,53 @@
 // Emit a map of theme settings as CSS custom properties: (bg: #fff) → --bg: #fff;
 @mixin theme-vars($vars) {
   @each $name, $value in $vars {
+    @if ($name == font or $name == font-digits) and type-of($value) == list {
+      $value: quoted-fonts($value);
+    }
     --#{$name}: #{$value};
+  }
+}
+
+// Interpolating a font list into a custom property drops the quotes around
+// names, which breaks names like "Baloo 2" or "Press Start 2P". This quotes
+// every name except the generic families, which must stay unquoted.
+@function quoted-fonts($fonts) {
+  $generic: (serif, sans-serif, monospace, cursive, fantasy, system-ui, ui-serif,
+    ui-sans-serif, ui-monospace, ui-rounded, -apple-system, BlinkMacSystemFont);
+  $out: ();
+  @each $font in $fonts {
+    @if type-of($font) == list {
+      // A nested stack, e.g. ("Quicksand", $font-stack)
+      @each $inner in quoted-fonts($font) {
+        $out: append($out, $inner, comma);
+      }
+    } @else if index($generic, $font) {
+      $out: append($out, unquote("#{$font}"), comma);
+    } @else {
+      $out: append($out, unquote('"#{$font}"'), comma);
+    }
+  }
+  @return $out;
+}
+
+// Scatter the .fx particles over the page. Positions come from simple
+// formulas, so they look random but are the same every time.
+@mixin fx-scatter($x-step: 37, $y-step: 53) {
+  @for $i from 1 through $fx-particles {
+    .fx i:nth-child(#{$i}) {
+      left: ($i * $x-step % 100) * 1%;
+      top: ($i * $y-step % 100) * 1%;
+    }
+  }
+}
+
+// Vary the .fx particles' animation timing: durations from $duration up to
+// $duration + $spread, and delays from 0 up to $max-delay.
+@mixin fx-timing($duration, $spread, $max-delay) {
+  @for $i from 1 through $fx-particles {
+    .fx i:nth-child(#{$i}) {
+      animation-duration: $duration + ($i * 7 % 10) * 0.1 * $spread;
+      animation-delay: ($i * 13 % 20) * 0.05 * $max-delay;
+    }
   }
 }

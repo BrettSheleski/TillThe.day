@@ -1,0 +1,45 @@
+// Romantic: blush and rose, an elegant serif with a script message, and a
+// faint pattern of hearts. Always light.
+
+$romantic-rose: #c2185b;
+$romantic-pink: #f06292;
+$romantic-gold: #b76e79; // rose gold
+
+// A faint heart, tiled across the page
+$romantic-hearts: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cpath d='M36 52s-12-7.6-16-15.2A9 9 0 0 1 36 28a9 9 0 0 1 16 8.8C48 44.4 36 52 36 52z' fill='%23e91e63' fill-opacity='0.08'/%3E%3C/svg%3E";
+
+html[data-theme="romantic"] {
+  @include theme-vars((
+    bg: #fff5f7,
+    card: rgba(255, 255, 255, 0.92),
+    text: #4a2333,
+    muted: #9b6b7c,
+    accent: $romantic-rose,
+    accent-text: #ffffff,
+    border: #f3c9d5,
+    unit-bg: #fff0f4,
+    digit: #b0174f,
+    bg-image: linear-gradient(160deg, #ffe4ec 0%, #fff5f7 50%, #fde2e4 100%),
+    font: ("Cormorant Garamond", Georgia, serif),
+    font-digits: var(--font),
+    radius: 10px,
+    radius-lg: 22px,
+    card-shadow: 0 10px 40px rgba(194, 24, 91, 0.12),
+    digit-shadow: none
+  ));
+
+  body { background-image: url($romantic-hearts); }
+
+  h1,
+  #message {
+    font-family: "Great Vibes", cursive;
+    font-weight: 400;
+  }
+  h1 { font-size: 2.6rem; }
+  #message { font-size: 1.5em; color: var(--accent); }
+
+  .unit span { font-weight: 600; }
+  .status::before { content: "\2665  "; color: $romantic-pink; } // heart
+}
+
+@import "elapsed";
