@@ -58,6 +58,14 @@ html[data-theme="arcade"] {
     label { font-size: 0.55rem; margin-top: 8px; }
   }
 
+  // Full screen: the pixel font is about twice as wide as most, so it's
+  // scaled down to keep each box's digits inside it
+  &.presenting .unit {
+    span { font-size: clamp(1.5rem, 7vw, 18vh); }
+    span.long { font-size: clamp(1rem, 4vw, 10vh); }
+    label { font-size: clamp(0.5rem, 1.1vw, 1.2rem); }
+  }
+
   // The embed widget can be narrower than any page, so its labels are smaller
   .embed-card .unit label {
     font-size: clamp(0.4rem, 1.9vw, 0.55rem);

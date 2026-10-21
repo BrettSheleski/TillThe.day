@@ -24,8 +24,12 @@
       <a id="calendar-ics">Apple / Outlook / other (.ics)</a>
     </div>
   </details>
+  <button id="present" type="button" class="secondary" title="Full screen (F)" hidden>Full screen</button>
   <a href="{{ '/' | relative_url }}" class="button secondary">Make your own</a>
 </div>
+
+<!-- Shown only in full-screen mode; fades out with the cursor when idle -->
+<button id="exit-present" type="button" class="exit-present secondary" hidden>Exit full screen</button>
 
 <dialog id="qr-dialog" class="dialog qr-dialog" aria-labelledby="qr-title">
   <h2 id="qr-title">Scan to open</h2>

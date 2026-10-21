@@ -3,6 +3,7 @@
 import { calendarLinks } from "./calendar";
 import { byId, copyToClipboard } from "./dom";
 import { EMBED_HEIGHT, embedSnippet, embedUrl, type EmbedSource } from "./embed";
+import { setUpPresenting } from "./present";
 import { canShareNatively, shareLinks, shareNatively, type ShareInfo } from "./share";
 import type { Countdown } from "./token";
 import { ordinal, upcoming, yearsSince } from "./yearly";
@@ -99,6 +100,7 @@ export function showActions(countdown: Countdown, url: string, embed: EmbedSourc
   setUpShareMenu(info);
   setUpEmbedDialog(info.title, embedUrl(new URL(actions.dataset.embed!, location.href).href, embed));
   setUpCalendarMenu(countdown, url);
+  setUpPresenting(byId("present"), byId("exit-present"));
 }
 
 /** The "Embed on a website" pop-up: a live preview and the code to copy. */

@@ -1,0 +1,55 @@
+// Full-screen presentation mode (src/lib/present.ts): just the countdown, as
+// big as the screen. Sizes use both vw and vh so it fits wide TVs and tall
+// phones alike.
+
+html.presenting {
+  // Everything but the countdown
+  .site-header,
+  .site-footer,
+  #view-actions,
+  #holiday,
+  .about,
+  .holiday-links { display: none; }
+
+  body {
+    justify-content: center;
+    padding: 3vh 3vw;
+  }
+
+  .card {
+    max-width: none;
+    margin: auto 0;
+    padding: 5vh 3vw 3vh;
+  }
+
+  .clock { gap: 2vw; }
+
+  .unit {
+    padding: 3vh 0.5vw;
+
+    span { font-size: clamp(2.5rem, 13vw, 24vh); line-height: 1.1; }
+    span.long { font-size: clamp(1.5rem, 8vw, 15vh); }
+    label { font-size: clamp(0.8rem, 1.6vw, 1.8rem); }
+  }
+
+  .status { margin: 4vh 0 1vh; font-size: clamp(1.4rem, 4vw, 4.5rem); }
+  .target { margin: 0; font-size: clamp(0.9rem, 1.8vw, 2rem); }
+
+  // Hide the cursor while the mouse is idle; the Exit button fades out with it
+  &.idle,
+  &.idle * { cursor: none !important; }
+}
+
+.exit-present {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
+  transition: opacity 0.3s;
+
+  html.idle & { opacity: 0; pointer-events: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exit-present { transition: none; }
+}
