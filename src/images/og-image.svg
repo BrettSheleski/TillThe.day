@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Source for assets/images/og-image.png, the link-preview image (1200x630).
+       After editing, export it to that PNG at the same size. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef0fb"/>
+      <stop offset="1" stop-color="#f8f9fd"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#1c1f2a" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Card -->
+  <rect x="90" y="70" width="1020" height="490" rx="36" fill="#ffffff" stroke="#dde0ea" stroke-width="2" filter="url(#shadow)"/>
+
+  <text x="600" y="168" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="68" font-weight="700" fill="#1c1f2a">Time Until</text>
+  <text x="600" y="222" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="30" fill="#6b7185">Count down to any date and share the link</text>
+
+  <!-- Sample clock: four boxes -->
+  <g font-family="Segoe UI, system-ui, sans-serif" text-anchor="middle">
+    <g transform="translate(170 270)">
+      <rect width="190" height="170" rx="22" fill="#f6f7fb" stroke="#dde0ea" stroke-width="2"/>
+      <text x="95" y="102" font-size="78" font-weight="700" fill="#1c1f2a">12</text>
+      <text x="95" y="145" font-size="26" fill="#6b7185">days</text>
+    </g>
+    <g transform="translate(390 270)">
+      <rect width="190" height="170" rx="22" fill="#f6f7fb" stroke="#dde0ea" stroke-width="2"/>
+      <text x="95" y="102" font-size="78" font-weight="700" fill="#1c1f2a">08</text>
+      <text x="95" y="145" font-size="26" fill="#6b7185">hours</text>
+    </g>
+    <g transform="translate(610 270)">
+      <rect width="190" height="170" rx="22" fill="#f6f7fb" stroke="#dde0ea" stroke-width="2"/>
+      <text x="95" y="102" font-size="78" font-weight="700" fill="#1c1f2a">45</text>
+      <text x="95" y="145" font-size="26" fill="#6b7185">minutes</text>
+    </g>
+    <g transform="translate(830 270)">
+      <rect width="190" height="170" rx="22" fill="#4f5bd5"/>
+      <text x="95" y="102" font-size="78" font-weight="700" fill="#ffffff">30</text>
+      <text x="95" y="145" font-size="26" fill="#dfe2ff">seconds</text>
+    </g>
+  </g>
+
+  <text x="600" y="512" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="28" fill="#4f5bd5" font-weight="600">Birthdays · holidays · trips · launches · anything</text>
+</svg>

@@ -1,7 +1,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
-<meta name="description" content="{{ page.description | default: site.description }}">
+<!-- <title>, description, canonical URL and link-preview tags, from the page's
+     title, description and image (see jekyll-seo-tag in _config.yml) -->
+{% seo %}
+<!-- Site icons: SVG for modern browsers, PNG for the rest, and a full-square
+     icon for iPhone home screens. Source: assets/images/favicon.svg -->
+<link rel="icon" href="{{ '/assets/images/favicon.svg' | relative_url }}" type="image/svg+xml">
+<link rel="icon" href="{{ '/assets/images/favicon-32.png' | relative_url }}" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
 <!-- Fonts used by the themes (_sass/themes/). Browsers only download the ones
      the current theme actually uses. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Site icon: a stopwatch with a quarter of its face gone, on the generic
+       theme's accent color. The PNG icons are exported from this file. -->
+  <rect width="64" height="64" rx="14" fill="#4f5bd5"/>
+  <rect x="27" y="7" width="10" height="7" rx="2" fill="#ffffff"/>
+  <circle cx="32" cy="36" r="19" fill="#ffffff"/>
+  <path d="M32 36 L32 21 A15 15 0 0 1 47 36 Z" fill="#4f5bd5"/>
+</svg>

@@ -33,6 +33,8 @@ index.html               Home page: create a countdown, or view one from a link
 holidays.html            Holiday list page, soonest first (/holidays/)
 _holidays/<name>.md      One holiday countdown page each (/<name>/), laid out by _layouts/holiday.html
 _includes/countdown.html The countdown and its buttons, shared by the home and holiday pages
+assets/images/og-image.png  Link-preview image (1200x630); its source is src/images/og-image.svg
+assets/images/favicon.svg   Site icon; favicon-32.png and apple-touch-icon.png are exported from it
 assets/css/style.scss    Stylesheet entry: imports the _sass partials (Jekyll compiles it to style.css)
 _data/themes.json        Theme list: id, name shown in the picker, link code
 _sass/themes/<id>/       One folder per theme: _theme.scss (look) and _elapsed.scss (end animation)
@@ -104,6 +106,10 @@ The `rule` sets the date each year:
 - `{ type: easter }`: Western Easter Sunday.
 
 The page counts down to the next date, celebrates on the day itself, and rolls over to next year the day after. It also appears in the holiday links and on `/holidays/` automatically.
+
+### Link previews
+
+`{% seo %}` in `_includes/head.html` (the jekyll-seo-tag plugin) adds the tags that chat and social apps read for link previews, using each page's `title`, `description` and `image`. Pages without an `image` use `assets/images/og-image.png`. Shared countdown links (`?c=…`) all get the home page's preview, because preview apps don't run the script that reads the link.
 
 ## Deploy to GitHub Pages
 

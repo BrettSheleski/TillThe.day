@@ -28,6 +28,11 @@ collections:
     permalink: /:name/
 
 defaults:
+  # The image shown in link previews, unless a page sets its own
+  - scope:
+      path: ""
+    values:
+      image: /assets/images/og-image.png
   - scope:
       type: holidays
     values:
@@ -35,7 +40,10 @@ defaults:
       # Loads assets/js/holiday.js, compiled from src/pages/holiday.ts
       script: holiday
 
-# Generates sitemap.xml listing every page, for search engines. Supported by
-# GitHub Pages (part of the github-pages gem).
+# Both are supported by GitHub Pages (part of the github-pages gem):
+# - jekyll-sitemap generates sitemap.xml listing every page, for search engines
+# - jekyll-seo-tag generates the {% seo %} tags in _includes/head.html: title,
+#   description, canonical URL, and link-preview (Open Graph / Twitter) tags
 plugins:
   - jekyll-sitemap
+  - jekyll-seo-tag
