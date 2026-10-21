@@ -1,39 +1,64 @@
-// Generic: clean and neutral. Follows the system light/dark setting.
-// Also provides the defaults every other theme starts from.
+// Generic: modern and clean, with a frosted-glass card floating over soft
+// color glows. Follows the system light/dark setting.
+//
+// Its colors and settings on :root are also the defaults every other theme
+// starts from. The glass look itself is extra rules scoped to this theme
+// (see $generic below), so it doesn't leak into the others.
+
+// This theme, including the moment before the page script sets data-theme
+$generic: 'html:not([data-theme]), html[data-theme="generic"]';
+
+$generic-indigo: #6366f1;
+$generic-violet: #8b5cf6;
+$generic-gradient: linear-gradient(135deg, $generic-indigo 0%, $generic-violet 100%);
 
 $generic-light: (
-  bg: #f6f7fb,
-  card: #ffffff,
-  text: #1c1f2a,
-  muted: #6b7185,
-  accent: #4f5bd5,
+  bg: #f5f6fb,
+  card: rgba(255, 255, 255, 0.68),
+  text: #0f1222,
+  muted: #5f6680,
+  accent: #5b5ef0,
   accent-text: #ffffff,
-  border: #dde0ea,
-  unit-bg: #f6f7fb,
-  digit: #1c1f2a
+  border: rgba(15, 18, 34, 0.09),
+  unit-bg: rgba(255, 255, 255, 0.7),
+  digit: #0f1222,
+  // Glass edges, used by the scoped rules below
+  glass-edge: rgba(255, 255, 255, 0.75),
+  glass-shadow: rgba(15, 18, 34, 0.16)
 );
 
 $generic-dark: (
-  bg: #12141b,
-  card: #1b1e28,
-  text: #e8eaf2,
-  muted: #9298ab,
-  accent: #7c86f0,
-  accent-text: #0e1016,
-  border: #2c3040,
-  unit-bg: #12141b,
-  digit: #e8eaf2
+  bg: #080a13,
+  card: rgba(22, 25, 42, 0.62),
+  text: #eef0ff,
+  muted: #9aa0bd,
+  accent: #8b8ff8,
+  accent-text: #ffffff,
+  border: rgba(255, 255, 255, 0.09),
+  unit-bg: rgba(255, 255, 255, 0.045),
+  digit: #f5f6ff,
+  glass-edge: rgba(255, 255, 255, 0.1),
+  glass-shadow: rgba(0, 0, 0, 0.55)
 );
+
+// Soft glows behind the card: indigo top left, pink top right, teal bottom
+@function generic-glows($strength) {
+  @return (
+    radial-gradient(45% 55% at 12% 8%, rgba(99, 102, 241, 0.3 * $strength), transparent 70%),
+    radial-gradient(40% 50% at 90% 15%, rgba(236, 72, 153, 0.2 * $strength), transparent 70%),
+    radial-gradient(50% 60% at 60% 100%, rgba(20, 184, 166, 0.2 * $strength), transparent 70%)
+  );
+}
 
 :root {
   @include theme-vars($generic-light);
   @include theme-vars((
-    bg-image: none,
-    font: $font-stack,
+    bg-image: generic-glows(1),
+    font: ("Inter", $font-stack),
     font-digits: var(--font),
-    radius: 8px,
-    radius-lg: 16px,
-    card-shadow: none,
+    radius: 12px,
+    radius-lg: 24px,
+    card-shadow: (inset 0 1px 0 var(--glass-edge), 0 24px 60px -16px var(--glass-shadow)),
     digit-shadow: none
   ));
 }
@@ -41,6 +66,88 @@ $generic-dark: (
 @media (prefers-color-scheme: dark) {
   :root {
     @include theme-vars($generic-dark);
+    --bg-image: #{generic-glows(1.6)};
+  }
+}
+
+#{$generic} {
+  .card {
+    border-color: var(--glass-edge);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
+  }
+
+  h1 {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: $generic-gradient;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .site-title { font-weight: 800; letter-spacing: -0.02em; }
+
+  .unit {
+    border-color: var(--glass-edge);
+    box-shadow: 0 2px 10px -4px var(--glass-shadow);
+
+    span { font-weight: 700; letter-spacing: -0.03em; }
+
+    label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+  }
+
+  .status { letter-spacing: -0.01em; }
+  #message { font-weight: 700; }
+
+  input,
+  select {
+    background: var(--unit-bg);
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent);
+    }
+  }
+
+  button,
+  .button {
+    background: $generic-gradient;
+    box-shadow: 0 8px 20px -8px rgba(99, 102, 241, 0.7);
+    transition: transform 0.15s, box-shadow 0.15s;
+
+    &:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(99, 102, 241, 0.75); }
+
+    &.secondary {
+      background: var(--unit-bg);
+      color: var(--text);
+      border-color: var(--border);
+      box-shadow: none;
+
+      &:hover { border-color: var(--accent); color: var(--accent); }
+    }
+  }
+
+  // Small text buttons and menu items stay plain
+  .link-button,
+  .dropdown .menu button {
+    background: none;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .mode-toggle label:has(input:checked) { background: $generic-gradient; }
+
+  @media (prefers-reduced-motion: reduce) {
+    button,
+    .button { transition: none; &:hover { transform: none; } }
   }
 }
 

@@ -1,8 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <!-- Site icon: a stopwatch with a quarter of its face gone, on the generic
-       theme's accent color. The PNG icons are exported from this file. -->
-  <rect width="64" height="64" rx="14" fill="#4f5bd5"/>
+       theme's indigo-to-violet gradient. The PNG icons are exported from this
+       file. -->
+  <defs>
+    <!-- One gradient across the whole icon, so the cut-out quarter shows the
+         background seamlessly -->
+    <linearGradient id="accent" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#accent)"/>
   <rect x="27" y="7" width="10" height="7" rx="2" fill="#ffffff"/>
   <circle cx="32" cy="36" r="19" fill="#ffffff"/>
-  <path d="M32 36 L32 21 A15 15 0 0 1 47 36 Z" fill="#4f5bd5"/>
+  <path d="M32 36 L32 21 A15 15 0 0 1 47 36 Z" fill="url(#accent)"/>
 </svg>
