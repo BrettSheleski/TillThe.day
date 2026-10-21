@@ -16,6 +16,8 @@ exclude:
   - package.json
   - package-lock.json
   - tsconfig.json
+  - tests
+  - vitest.config.ts
 
 sass:
   style: compressed

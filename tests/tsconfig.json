@@ -1,0 +1,20 @@
+{
+  "//": "Type checking for the tests, which run in Node rather than the browser",
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable",
+      "ESNext.Disposable"
+    ],
+    "skipLibCheck": true
+  },
+  "include": [
+    "../src",
+    "."
+  ]
+}

@@ -115,6 +115,21 @@ The page counts down to the next date, celebrates on the day itself, and rolls o
 
 Link to CSS, JavaScript and icon files with `{% include asset-url.html path='/assets/...' %}` instead of `relative_url`. It adds `?v=<build time>`, so every deploy gives browsers new URLs and they fetch the new files instead of cached ones. Script chunks (`assets/js/chunks/`) don't need it: esbuild puts a content hash in their file names.
 
+## Tests
+
+```
+npm test
+```
+
+The tests in `tests/` cover the parts where a silent break would hurt most:
+
+- `token.test.ts`: the link format. It includes real links that were already shared, which must always open the same countdown. **Never change those expectations to make a test pass:** fix the code instead, or old links break.
+- `holidays.test.ts`: holiday date rules, against known dates.
+- `calendar.test.ts`: the .ics file (checked with a real iCalendar parser) and the Google/Outlook links.
+- `site-data.test.ts`: that themes, Sass and holiday pages agree, e.g. unique theme letters, no theme using `U`, every holiday using a real theme.
+
+The deploy workflow runs the tests first, so a failing test stops the deploy.
+
 ## Deploy to GitHub Pages
 
 1. Push this folder to a GitHub repository with `main` as the default branch.
