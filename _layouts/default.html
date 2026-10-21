@@ -10,6 +10,7 @@
     {{ content }}
   </main>
   {% include footer.html %}
+  {% include analytics.html %}
   {% if page.script %}
   {% assign script_path = '/assets/js/' | append: page.script | append: '.js' %}
   <script type="module" src="{% include asset-url.html path=script_path %}"></script>

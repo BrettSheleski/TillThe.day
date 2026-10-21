@@ -115,6 +115,10 @@ The page counts down to the next date, celebrates on the day itself, and rolls o
 
 Link to CSS, JavaScript and icon files with `{% include asset-url.html path='/assets/...' %}` instead of `relative_url`. It adds `?v=<build time>`, so every deploy gives browsers new URLs and they fetch the new files instead of cached ones. Script chunks (`assets/js/chunks/`) don't need it: esbuild puts a content hash in their file names.
 
+### Analytics
+
+Visits are counted with [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/): free, no cookies, and it doesn't record query strings, so the messages in shared links never reach it. To turn it on, add a site in the Cloudflare dashboard under **Analytics & Logs > Web Analytics** (the hostname must match the live site), choose the manual JavaScript setup, and put the token from its snippet in `cloudflare_analytics_token` in `_config.yml`. Leave it empty to turn analytics off. The footer mentions analytics only while it's on.
+
 ## Tests
 
 ```

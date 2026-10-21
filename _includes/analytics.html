@@ -1,0 +1,10 @@
+{%- comment -%}
+  Cloudflare Web Analytics: anonymous visit counts, no cookies. It doesn't
+  record query strings, so the messages in shared countdown links (?c=...)
+  never reach it. Only loads once a token is set in _config.yml, and only
+  counts visits on the site address registered with Cloudflare, so local
+  previews aren't counted.
+{%- endcomment -%}
+{%- if site.cloudflare_analytics_token != "" and site.cloudflare_analytics_token -%}
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "{{ site.cloudflare_analytics_token }}"}'></script>
+{%- endif -%}

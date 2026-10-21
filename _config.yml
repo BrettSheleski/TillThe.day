@@ -1,6 +1,11 @@
 title: Time Until
 description: Count down to any date and share the link.
 
+# Cloudflare Web Analytics token (from the Cloudflare dashboard: Analytics &
+# Logs > Web Analytics). Leave empty to turn analytics off. See
+# _includes/analytics.html.
+cloudflare_analytics_token: "a0ec4b95c7c4443bb65ed232ff329f00"
+
 # GitHub Pages fills in `url` and `baseurl` automatically from the repo name.
 # Only set baseurl if you need to override it, e.g. for a custom domain:
 # baseurl: ""
