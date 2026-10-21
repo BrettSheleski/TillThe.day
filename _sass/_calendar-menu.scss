@@ -1,0 +1,40 @@
+// "Add to calendar" dropdown: a <details> whose summary looks like a button,
+// with the options in a small panel below it.
+
+.calendar-menu {
+  position: relative;
+
+  summary {
+    list-style: none;
+
+    &::-webkit-details-marker { display: none; }
+  }
+
+  .menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    text-align: left;
+
+    a {
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      color: var(--text);
+      text-decoration: none;
+      white-space: nowrap;
+
+      &:hover,
+      &:focus-visible { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+    }
+  }
+}

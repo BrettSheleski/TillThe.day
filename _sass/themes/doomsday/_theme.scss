@@ -31,13 +31,13 @@ html[data-theme="doomsday"] {
   // Hazard stripe along the top of the card
   .card {
     position: relative;
-    overflow: hidden;
 
     &::before {
       content: "";
       position: absolute;
       inset: 0 0 auto;
       height: 8px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
       background: repeating-linear-gradient(-45deg, $doomsday-hazard 0 12px, #111 12px 24px);
     }
   }

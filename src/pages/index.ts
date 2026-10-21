@@ -1,5 +1,6 @@
 // Script for index.html: create a countdown (with a live preview),
 // or show the countdown in the URL.
+import { calendarLinks } from "../lib/calendar";
 import { byId, copyToClipboard } from "../lib/dom";
 import { applyTheme, themeById } from "../lib/themes";
 import { decodeToken, encodeToken, peekTheme, type Countdown } from "../lib/token";
@@ -26,6 +27,36 @@ function showView(countdown: Countdown): void {
   byId("copy-link").addEventListener("click", (e) =>
     copyToClipboard(location.href, e.currentTarget as HTMLElement)
   );
+  setUpCalendarMenu(countdown);
+}
+
+/** The "Add to calendar" menu; hidden once the countdown has ended. */
+function setUpCalendarMenu(countdown: Countdown): void {
+  const menu = byId<HTMLDetailsElement>("calendar-menu");
+  if (countdown.target.getTime() <= Date.now()) {
+    menu.hidden = true;
+    return;
+  }
+
+  const links = calendarLinks(countdown, location.href);
+  byId<HTMLAnchorElement>("calendar-google").href = links.google;
+  byId<HTMLAnchorElement>("calendar-outlook").href = links.outlook;
+  const ics = byId<HTMLAnchorElement>("calendar-ics");
+  ics.href = URL.createObjectURL(new Blob([links.ics], { type: "text/calendar" }));
+  ics.download = `${fileName(countdown.msg || "countdown")}.ics`;
+
+  // Close after choosing an option, or when clicking anywhere else
+  menu.addEventListener("click", (e) => {
+    if ((e.target as Element).closest("a")) menu.open = false;
+  });
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target as Node)) menu.open = false;
+  });
+}
+
+/** A safe, readable file name from free text. */
+function fileName(text: string): string {
+  return text.replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "countdown";
 }
 
 function showCreate(): void {

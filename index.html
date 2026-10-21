@@ -24,6 +24,14 @@ script: index
 <!-- View mode only -->
 <div id="view-actions" class="actions" hidden>
   <button id="copy-link" type="button">Copy link</button>
+  <details id="calendar-menu" class="calendar-menu">
+    <summary class="button secondary">Add to calendar</summary>
+    <div class="menu">
+      <a id="calendar-google" target="_blank" rel="noopener">Google Calendar</a>
+      <a id="calendar-outlook" target="_blank" rel="noopener">Outlook.com</a>
+      <a id="calendar-ics">Apple / Outlook / other (.ics)</a>
+    </div>
+  </details>
   <a href="{{ '/' | relative_url }}" class="button secondary">Make your own</a>
 </div>
 
