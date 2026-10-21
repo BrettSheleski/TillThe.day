@@ -1,0 +1,12 @@
+---
+layout: default
+---
+<!-- A plain text page (e.g. privacy.md): the Markdown content as readable,
+     left-aligned prose. -->
+<article class="prose">
+  <h1>{{ page.heading | default: page.title }}</h1>
+  {% if page.last_updated %}
+  <p class="sub">Last updated {{ page.last_updated | date: "%B %-d, %Y" }}</p>
+  {% endif %}
+  {{ content }}
+</article>

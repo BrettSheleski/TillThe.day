@@ -39,3 +39,27 @@
   padding: 32px 24px;
   text-align: center;
 }
+
+.site-footer a { color: inherit; margin-left: 6px; }
+
+// Text pages (_layouts/page.html), e.g. the privacy policy
+.prose {
+  text-align: left;
+  line-height: 1.65;
+
+  h1 { text-align: center; }
+  .sub { text-align: center; }
+  h2 { margin: 28px 0 8px; font-size: 1.15rem; }
+  p,
+  ul { margin: 0 0 12px; }
+  ul { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  a { color: var(--accent); }
+
+  code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: var(--unit-bg);
+    font-size: 0.9em;
+  }
+}

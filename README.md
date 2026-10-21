@@ -121,6 +121,10 @@ Link to CSS, JavaScript and icon files with `{% include asset-url.html path='/as
 
 Countdown and holiday pages have a **Full screen** button (or press **F**) for TVs and parties: it hides everything but the countdown, sizes it to the screen, keeps the screen awake where the browser allows it, and hides the cursor when the mouse is idle. Esc, F or the Exit button leaves. The layout is in `_sass/_present.scss`; themes can adjust it under `html[data-theme="<id>"].presenting` (Arcade does, for its wide font). Where the browser won't go truly full screen (iPhone), the big layout still applies.
 
+### Privacy policy
+
+`privacy.md` (at `/privacy/`, linked from every footer) explains what the site and the services it uses collect. Keep it accurate: a test fails if the page templates load a service from another domain that the policy doesn't mention. Update `last_updated` in its front matter when it changes. Other plain text pages can use `layout: page` the same way.
+
 ### Analytics
 
 Visits are counted with [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/): free, no cookies, and it doesn't record query strings, so the messages in shared links never reach it. To turn it on, add a site in the Cloudflare dashboard under **Analytics & Logs > Web Analytics** (the hostname must match the live site), choose the manual JavaScript setup, and put the token from its snippet in `cloudflare_analytics_token` in `_config.yml`. Leave it empty to turn analytics off. The footer mentions analytics only while it's on.

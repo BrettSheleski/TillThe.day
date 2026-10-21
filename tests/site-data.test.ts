@@ -39,6 +39,39 @@ describe("themes", () => {
   }
 });
 
+describe("privacy policy", () => {
+  const policy = fs.readFileSync(path.join(root, "privacy.md"), "utf8");
+
+  // Every outside service the page templates load, and what the policy must
+  // call it. A new one fails this test until it's explained in privacy.md and
+  // added here.
+  const known: Record<string, string> = {
+    "fonts.googleapis.com": "Google Fonts",
+    "fonts.gstatic.com": "Google Fonts",
+    "static.cloudflareinsights.com": "Cloudflare Web Analytics",
+  };
+
+  const templates = ["_includes", "_layouts"].flatMap((dir) =>
+    fs.readdirSync(path.join(root, dir)).map((f) => fs.readFileSync(path.join(root, dir, f), "utf8"))
+  );
+  const hosts = new Set(templates.flatMap((t) => [...t.matchAll(/https?:\/\/([a-z0-9.-]+)/gi)].map((m) => m[1])));
+
+  it("finds the outside services the templates load", () => {
+    expect(hosts.size).toBeGreaterThan(0);
+  });
+
+  for (const host of hosts) {
+    it(`explains ${host}`, () => {
+      expect(known[host], `${host} isn't covered: explain it in privacy.md, then add it to this test`).toBeDefined();
+      expect(policy).toContain(known[host]);
+    });
+  }
+
+  it("is linked from the footer on every page", () => {
+    expect(fs.readFileSync(path.join(root, "_includes/footer.html"), "utf8")).toContain("'/privacy/' | relative_url");
+  });
+});
+
 describe("pages kept out of search results", () => {
   for (const file of ["404.html", "embed.html"]) {
     it(`${file} isn't in the sitemap`, () => {

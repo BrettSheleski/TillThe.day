@@ -1,6 +1,6 @@
 <footer class="site-footer">
-  <p>Countdowns are stored only in the link. Nothing is saved on a server.</p>
-  {%- if site.cloudflare_analytics_token != "" and site.cloudflare_analytics_token %}
-  <p>Anonymous visit counts by Cloudflare Web Analytics: no cookies, and countdown details are never included.</p>
-  {%- endif %}
+  <p>
+    Countdowns are stored only in their links. No cookies.
+    <a href="{{ '/privacy/' | relative_url }}">Privacy</a>
+  </p>
 </footer>
