@@ -99,3 +99,24 @@ button,
 }
 
 .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+// A checkbox with its label beside it
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-weight: 500;
+  cursor: pointer;
+
+  input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  &:has(input:disabled) { opacity: 0.45; cursor: default; }
+}

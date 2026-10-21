@@ -15,6 +15,8 @@ const countdown: Countdown = {
   msg: page.dataset.name!,
   theme: themeById(page.dataset.theme!),
   countUp: false,
+  // Holidays roll over by their own rule (see ../lib/holidays.ts)
+  yearly: false,
 };
 
 byId("holiday-year").textContent = String(countdown.target.getFullYear());

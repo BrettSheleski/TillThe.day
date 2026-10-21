@@ -19,8 +19,10 @@ describe("themes", () => {
     expect(new Set(codes).size).toBe(codes.length);
   });
 
-  it("never uses U, which links reserve for count-up", () => {
-    expect(themes.map((t) => t.code)).not.toContain("U");
+  it("never uses U or Y, which links reserve for count-up and yearly repeats", () => {
+    const codes = themes.map((t) => t.code);
+    expect(codes).not.toContain("U");
+    expect(codes).not.toContain("Y");
   });
 
   it("has unique ids", () => {

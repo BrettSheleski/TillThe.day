@@ -50,6 +50,7 @@ describe("links already shared", () => {
       expect(c!.msg).toBe(link.msg);
       expect(c!.theme.id).toBe(link.theme);
       expect(c!.countUp).toBe(link.countUp);
+      expect(c!.yearly).toBe(false);
     });
   }
 
@@ -81,6 +82,8 @@ describe("encode and decode", () => {
     "a theme": countdown({ theme: themeById("arcade"), msg: "Game night" }),
     "count-up": countdown({ countUp: true, target: new Date("2020-02-29T12:00:00Z") }),
     "count-up with a theme": countdown({ countUp: true, theme: themeById("zen"), msg: "Calm" }),
+    "a yearly repeat": countdown({ yearly: true, dateOnly: true, target: new Date(1990, 4, 3), msg: "Sam's birthday" }),
+    "a yearly repeat with a theme and time": countdown({ yearly: true, theme: themeById("birthday") }),
   };
 
   for (const [name, original] of Object.entries(cases)) {
@@ -165,6 +168,13 @@ describe("theme letters", () => {
   it("uses the default theme for unknown letters", async () => {
     const c = await decodeToken("hud96Q");
     expect(c!.theme.id).toBe("generic");
+  });
+
+  it("reads the yearly letter and still finds the theme", async () => {
+    const c = await decodeToken("hud96YB");
+    expect(c!.yearly).toBe(true);
+    expect(c!.theme.id).toBe("birthday");
+    expect(peekTheme("hud96YB").id).toBe("birthday");
   });
 
   it("reads theme and count-up letters in any order", async () => {

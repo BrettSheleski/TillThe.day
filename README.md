@@ -13,7 +13,9 @@ https://<user>.github.io/<repo>/?c=<when>[<letters>][.<message> | ~<compressed m
   - `_<days>`: when no time was picked. Days since 1970, in base 36. It counts down to midnight at the start of that date in each viewer's own time zone.
 - `<letters>`: uppercase letters, in any order:
   - the theme's one-letter code, from `_data/themes.json`. Left out for the default (generic) theme.
-  - `U` for a count-up (time since the date). `U` is reserved and must never be used as a theme code.
+  - `U` for a count-up (time since the date).
+  - `Y` for a yearly repeat (birthdays, anniversaries). The link keeps the original date, and the page counts down to its next anniversary, showing which one it is (e.g. "37th"). Feb 29 falls on Feb 28 in other years.
+  - `U` and `Y` are reserved and must never be used as theme codes.
 - `.<message>`: the optional message as URL-safe base64 of its UTF-8 text.
 - `~<compressed message>`: the same, but deflate-compressed first. Used instead of `.` when it's shorter, which is usually true for longer messages.
 

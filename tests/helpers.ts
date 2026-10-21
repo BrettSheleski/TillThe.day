@@ -33,6 +33,7 @@ export function countdown(overrides: Partial<Countdown> = {}): Countdown {
     msg: "",
     theme: themeById("generic"),
     countUp: false,
+    yearly: false,
     ...overrides,
   };
 }

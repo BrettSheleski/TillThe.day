@@ -4,6 +4,7 @@ import { calendarLinks } from "./calendar";
 import { byId, copyToClipboard } from "./dom";
 import { canShareNatively, shareLinks, shareNatively, type ShareInfo } from "./share";
 import type { Countdown } from "./token";
+import { ordinal, upcoming, yearsSince } from "./yearly";
 
 export type Display = ReturnType<typeof createDisplay>;
 
@@ -58,8 +59,12 @@ export function createDisplay() {
         targetLabel.textContent = " "; // keeps the line's height
         return;
       }
+      current = upcoming(countdown);
       message.textContent = countdown.msg;
-      targetLabel.textContent = formatTarget(countdown);
+      targetLabel.textContent = formatTarget(current);
+      // Which anniversary this is, e.g. "· 37th"
+      const years = countdown.yearly ? yearsSince(countdown.target, current.target) : 0;
+      if (years > 0) targetLabel.textContent += ` · ${ordinal(years)}`;
       tick();
     },
   };
@@ -90,7 +95,7 @@ export function showActions(countdown: Countdown, url: string): void {
 }
 
 function shareInfo(countdown: Countdown, url: string): ShareInfo {
-  const what = countdown.msg || formatTarget(countdown);
+  const what = countdown.msg || formatTarget(upcoming(countdown));
   return countdown.countUp
     ? { title: `Time since ${what}`, text: `See how long it's been since ${what}:`, url }
     : { title: `Countdown to ${what}`, text: `Count down to ${what} with me:`, url };
@@ -132,10 +137,10 @@ function setUpShareMenu(info: ShareInfo): void {
   });
 }
 
-/** The "Add to calendar" menu; hidden for count-ups and ended countdowns. */
+/** The "Add to calendar" menu; hidden for count-ups and ended countdowns (never for yearly ones). */
 function setUpCalendarMenu(countdown: Countdown, url: string): void {
   const menu = byId<HTMLDetailsElement>("calendar-menu");
-  if (countdown.countUp || countdown.target.getTime() <= Date.now()) {
+  if (countdown.countUp || upcoming(countdown).target.getTime() <= Date.now()) {
     menu.hidden = true;
     return;
   }

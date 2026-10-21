@@ -36,7 +36,10 @@ function showCreate(): void {
   const timeInput = byId<HTMLInputElement>("time");
   const themeSelect = byId<HTMLSelectElement>("theme");
   const clearTime = byId("clear-time");
+  const yearlyInput = byId<HTMLInputElement>("yearly");
   const countingUp = () => (form.elements.namedItem("mode") as RadioNodeList).value === "up";
+  // Repeating doesn't apply to count-ups; disabled rather than hidden so the form doesn't jump
+  const repeating = () => yearlyInput.checked && !countingUp();
 
   function readForm(): Countdown | null {
     const date = dateInput.value;
@@ -52,23 +55,27 @@ function showCreate(): void {
       msg: byId<HTMLInputElement>("msg").value.trim(),
       theme: themeById(themeSelect.value),
       countUp: countingUp(),
+      yearly: repeating(),
     };
   }
 
   /**
    * Counting down: today or later, and no time that has already passed.
    * Counting up: today or earlier, and no time that hasn't happened yet.
+   * Repeating yearly: any date, e.g. a birth date, since it counts down to
+   * the next anniversary.
    * Flags the field to fix, which also blocks submitting.
    */
   function validate(countdown: Countdown | null): void {
     const today = localDate(new Date());
     const up = countingUp();
+    const anyDate = repeating();
     // Greys out the days that can't be picked
-    dateInput.min = up ? "" : today;
+    dateInput.min = up || anyDate ? "" : today;
     dateInput.max = up ? today : "";
     dateInput.setCustomValidity("");
     timeInput.setCustomValidity("");
-    if (!countdown) return;
+    if (!countdown || anyDate) return;
 
     const timePassed = countdown.target.getTime() <= Date.now();
     if (up) {
@@ -87,6 +94,7 @@ function showCreate(): void {
   function update(): void {
     applyTheme(themeById(themeSelect.value));
     clearTime.hidden = !timeInput.value;
+    yearlyInput.disabled = countingUp();
     const countdown = readForm();
     validate(countdown);
     display.set(countdown);

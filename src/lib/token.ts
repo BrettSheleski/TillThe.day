@@ -5,7 +5,9 @@
 //         | _<days since epoch, base36>       date only: midnight in each viewer's own time zone
 // letters = uppercase letters, in any order:
 //           the theme's code (see _data/themes.json); omitted for the default theme
-//           U for count-up mode (time since the date); reserved, never a theme code
+//           U for count-up mode (time since the date)
+//           Y for a yearly repeat: counts down to the next anniversary of the date
+//           U and Y are reserved and never used as theme codes
 // message = .<base64url UTF-8 message>        plain
 //         | ~<base64url deflated message>     compressed, used when shorter
 //
@@ -23,17 +25,21 @@ export interface Countdown {
   theme: Theme;
   /** Count up from the date (time since) instead of down to it. */
   countUp: boolean;
+  /** Repeats every year; target is the original date (see ./yearly.ts). */
+  yearly: boolean;
 }
 
 const MINUTE = 60_000;
 const COUNT_UP = "U";
+const YEARLY = "Y";
+const FLAGS = [COUNT_UP, YEARLY];
 const DAY = 86_400_000;
 
-export async function encodeToken({ target, dateOnly, msg, theme, countUp }: Countdown): Promise<string> {
+export async function encodeToken({ target, dateOnly, msg, theme, countUp, yearly }: Countdown): Promise<string> {
   const when = dateOnly
     ? "_" + (Date.UTC(target.getFullYear(), target.getMonth(), target.getDate()) / DAY).toString(36)
     : Math.round(target.getTime() / MINUTE).toString(36);
-  const prefix = when + theme.code + (countUp ? COUNT_UP : "");
+  const prefix = when + theme.code + (countUp ? COUNT_UP : "") + (yearly ? YEARLY : "");
   if (!msg) return prefix;
 
   const bytes = new TextEncoder().encode(msg);
@@ -49,7 +55,7 @@ const TOKEN = /^(_?)(-?[0-9a-z]+)([A-Z]*)(?:([.~])([A-Za-z0-9_-]*))?$/;
 
 /** The theme among a token's letters; the default if none (or none known). */
 function themeFromLetters(letters: string): Theme {
-  const code = [...letters].find((l) => l !== COUNT_UP) ?? "";
+  const code = [...letters].find((l) => !FLAGS.includes(l)) ?? "";
   return themeByCode(code);
 }
 
@@ -87,7 +93,14 @@ export async function decodeToken(token: string): Promise<Countdown | null> {
       return null;
     }
   }
-  return { target, dateOnly, msg, theme: themeFromLetters(m[3]), countUp: m[3].includes(COUNT_UP) };
+  return {
+    target,
+    dateOnly,
+    msg,
+    theme: themeFromLetters(m[3]),
+    countUp: m[3].includes(COUNT_UP),
+    yearly: m[3].includes(YEARLY),
+  };
 }
 
 async function transform(bytes: Uint8Array, stream: GenericTransformStream): Promise<Uint8Array> {
