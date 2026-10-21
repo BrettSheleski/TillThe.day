@@ -17,7 +17,7 @@ Two things to know:
 - **Anyone with the link can read the message.** It's encoded to keep links short, not encrypted. Don't put anything private in a countdown you share.
 - **The link is sent to our host when the page loads.** The site is hosted on [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#data-collection), which receives every page request, including the full link and your IP address, and may keep logs of them under the [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement). We don't have access to those logs.
 
-QR codes and calendar files are created in your browser and never leave your device.
+QR codes and calendar files are created in your browser and never leave your device. Fonts and everything else the pages need are served from this site too, so loading a countdown doesn't contact any other service except the visit counter below.
 
 {% if site.cloudflare_analytics_token != "" and site.cloudflare_analytics_token %}
 ## Visit counts
@@ -30,10 +30,6 @@ We count visits with [Cloudflare Web Analytics](https://www.cloudflare.com/web-a
 
 See [Cloudflare's privacy policy](https://www.cloudflare.com/privacypolicy/) for how Cloudflare handles this data.
 {% endif %}
-
-## Fonts
-
-Some themes use fonts from [Google Fonts](https://fonts.google.com/). To deliver them, your browser connects to Google, which receives your IP address, the address of the page you're on, and browser details. Google [says](https://developers.google.com/fonts/faq/privacy) the fonts service sets no cookies and uses this information to deliver the fonts and for security. See the [Google Privacy Policy](https://policies.google.com/privacy).
 
 ## Sharing and calendars
 

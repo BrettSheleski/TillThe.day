@@ -39,6 +39,42 @@ describe("themes", () => {
   }
 });
 
+describe("fonts", () => {
+  // Fonts that come with the visitor's own computer, so they aren't self-hosted
+  const systemFonts = new Set(["Segoe UI", "Roboto", "Trebuchet MS", "Georgia", "Consolas"]);
+  const hosted = fs.readFileSync(path.join(root, "_sass/_fonts.scss"), "utf8");
+
+  const walk = (dir: string): string[] =>
+    fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]
+    );
+  const used = new Set(
+    walk(path.join(root, "_sass"))
+      .filter((f) => !f.endsWith("_fonts.scss"))
+      .flatMap((f) => fs.readFileSync(f, "utf8").split("\n"))
+      .filter((line) => /font/.test(line))
+      .flatMap((line) => [...line.matchAll(/"([^"]+)"/g)].map((m) => m[1]))
+      // Skip system fonts, paths, escaped characters and Sass placeholders like #{$font}
+      .filter((name) => !systemFonts.has(name) && !/[/\\#]/.test(name))
+  );
+
+  it("finds the fonts the themes use", () => {
+    expect(used.size).toBeGreaterThan(5);
+  });
+
+  for (const name of used) {
+    it(`serves "${name}" from this site`, () => {
+      expect(hosted, `add it to FONTS in scripts/self-host-fonts.mjs and run npm run fonts`).toContain(`font-family: "${name}";`);
+    });
+  }
+
+  it("has each font file the rules point to", () => {
+    for (const [, file] of hosted.matchAll(/url\("\.\.\/fonts\/([^"]+)"\)/g)) {
+      expect(fs.existsSync(path.join(root, "assets/fonts", file)), file).toBe(true);
+    }
+  });
+});
+
 describe("privacy policy", () => {
   const policy = fs.readFileSync(path.join(root, "privacy.md"), "utf8");
 
@@ -46,8 +82,6 @@ describe("privacy policy", () => {
   // call it. A new one fails this test until it's explained in privacy.md and
   // added here.
   const known: Record<string, string> = {
-    "fonts.googleapis.com": "Google Fonts",
-    "fonts.gstatic.com": "Google Fonts",
     "static.cloudflareinsights.com": "Cloudflare Web Analytics",
   };
 

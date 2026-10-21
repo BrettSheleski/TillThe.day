@@ -2,6 +2,7 @@
 # Empty front matter tells Jekyll to compile this file to style.css.
 # Partials live in _sass/.
 ---
+@import "fonts";
 @import "variables";
 @import "mixins";
 @import "themes/index";
