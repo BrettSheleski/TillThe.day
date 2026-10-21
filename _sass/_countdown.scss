@@ -74,3 +74,9 @@
   i { position: absolute; display: block; }
 }
 html.elapsed .fx { display: block; }
+
+// The 404 page's stopped clock
+.not-found-clock {
+  margin: 8px 0 28px;
+  opacity: 0.55;
+}

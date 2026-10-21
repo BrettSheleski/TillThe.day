@@ -1,0 +1,29 @@
+---
+layout: default
+title: Page not found
+description: This page doesn't exist. Make a countdown or pick a holiday instead.
+# GitHub Pages shows this for any missing page, at whatever address was asked
+# for, so it must not use relative links (relative_url gives absolute paths)
+permalink: /404.html
+sitemap: false
+---
+<h1>Page not found</h1>
+<p class="sub">This page has run out of time, or never existed.</p>
+
+<!-- A clock stopped at zero, styled like a real countdown -->
+<div class="clock not-found-clock" aria-hidden="true">
+  <div class="unit"><span>0</span><label>days</label></div>
+  <div class="unit"><span>00</span><label>hours</label></div>
+  <div class="unit"><span>00</span><label>minutes</label></div>
+  <div class="unit"><span>00</span><label>seconds</label></div>
+</div>
+
+<div class="actions">
+  <a href="{{ '/' | relative_url }}" class="button">Make a countdown</a>
+  <a href="{{ '/holidays/' | relative_url }}" class="button secondary">Holiday countdowns</a>
+</div>
+
+<nav class="holiday-links" aria-labelledby="holiday-links-title">
+  <h2 id="holiday-links-title">Or count down to a holiday</h2>
+  {% include holiday-links.html %}
+</nav>

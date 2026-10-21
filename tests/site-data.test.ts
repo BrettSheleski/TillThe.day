@@ -37,6 +37,17 @@ describe("themes", () => {
   }
 });
 
+describe("404 page", () => {
+  // GitHub Pages shows 404.html at whatever missing address was asked for,
+  // e.g. /TimeUntil/a/b/c, so a relative link would point somewhere wrong
+  it("only uses links that work from any address", () => {
+    const html = fs.readFileSync(path.join(root, "404.html"), "utf8");
+    const links = [...html.matchAll(/(?:href|src)="([^"]*)"/g)].map((m) => m[1]);
+    expect(links.length).toBeGreaterThan(0);
+    for (const link of links) expect(link, link).toMatch(/^(\{\{.*relative_url|\{%|https?:)/);
+  });
+});
+
 describe("holiday pages", () => {
   const dir = path.join(root, "_holidays");
   const pages = fs.readdirSync(dir).filter((f) => f.endsWith(".md")).map((file) => {
