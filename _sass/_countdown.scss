@@ -56,3 +56,17 @@
     color: var(--muted);
   }
 }
+
+// Decoration layer for theme end animations. Hidden until a viewed countdown
+// has ended; each theme decides what, if anything, its particles look like.
+.fx {
+  display: none;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10;
+
+  i { position: absolute; display: block; }
+}
+html.elapsed .fx { display: block; }

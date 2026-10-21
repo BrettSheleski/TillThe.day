@@ -43,3 +43,5 @@ $generic-dark: (
     @include theme-vars($generic-dark);
   }
 }
+
+@import "elapsed";

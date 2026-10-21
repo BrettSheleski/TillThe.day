@@ -1,0 +1,59 @@
+// Party end animation: confetti over the page. With motion allowed, it rains
+// down and the boxes bounce; with reduced motion, it's scattered and still.
+
+$party-confetti-colors: map-values($party-colors);
+
+html[data-theme="party"].elapsed {
+  // Each particle is a confetti strip. Sizes, positions and timings are spread
+  // out with simple formulas so it looks random but is the same every time.
+  .fx i {
+    height: 16px;
+    border-radius: 2px;
+    animation: party-fade-in 0.6s ease-out both;
+  }
+
+  @for $i from 1 through $fx-particles {
+    .fx i:nth-child(#{$i}) {
+      top: ($i * 53 % 100) * 1%;
+      left: ($i * 37 % 100) * 1%;
+      width: 6px + ($i % 3) * 3px;
+      transform: rotate(($i * 47 % 180) * 1deg);
+      background: nth($party-confetti-colors, $i % length($party-confetti-colors) + 1);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .unit { animation: party-bounce 0.8s ease-in-out 6; }
+
+    @for $i from 1 through 4 {
+      .unit:nth-child(#{$i}) { animation-delay: ($i - 1) * 0.1s; }
+    }
+
+    .fx i {
+      top: -24px;
+      animation: party-fall 4s linear 3 both;
+    }
+
+    @for $i from 1 through $fx-particles {
+      .fx i:nth-child(#{$i}) {
+        top: -24px;
+        animation-duration: 3s + ($i * 7 % 10) * 0.2s;
+        animation-delay: ($i * 13 % 20) * 0.1s;
+      }
+    }
+  }
+}
+
+@keyframes party-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes party-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes party-fall {
+  from { transform: translateY(0) rotate(0deg) rotateX(0deg); }
+  to { transform: translateY(110vh) rotate(540deg) rotateX(720deg); }
+}

@@ -78,3 +78,5 @@ html[data-theme="party"] {
   .status::before { content: "\1F389  "; } // party popper
   .status::after { content: "  \1F38A"; }  // confetti ball
 }
+
+@import "elapsed";

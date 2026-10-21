@@ -68,7 +68,7 @@ Use `{{ '/path' | relative_url }}` for internal links so they work under the rep
 
 ### Adding a theme
 
-1. Create `_sass/themes/<id>/_theme.scss`. Set the theme settings listed in `_sass/themes/_index.scss` under `html[data-theme="<id>"]`, plus any extra rules the theme needs.
+1. Create `_sass/themes/<id>/_theme.scss`. Set the theme settings listed in `_sass/themes/_index.scss` under `html[data-theme="<id>"]`, plus any extra rules the theme needs. Put its end animation, which plays once a viewed countdown reaches zero, in `_elapsed.scss` beside it, imported at the end of `_theme.scss`. Style it under `html[data-theme="<id>"].elapsed`, and use the `.fx i` particles if needed. Keep any movement inside `@media (prefers-reduced-motion: no-preference)`.
 2. Import it in `_sass/themes/_index.scss`.
 3. Add `{ "id": "<id>", "name": "<Name>", "code": "<X>" }` to `_data/themes.json`. The code is a single uppercase letter used in share links. It must be unique and must never change, or existing links will show the wrong theme.
 

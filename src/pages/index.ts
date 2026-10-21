@@ -20,7 +20,7 @@ if (token) {
 }
 
 function showView(countdown: Countdown): void {
-  display.set(countdown);
+  display.set(countdown, { celebrate: true });
   if (countdown.msg) document.title = `${countdown.msg} | ${document.title}`;
   byId("view-actions").hidden = false;
   byId("copy-link").addEventListener("click", (e) =>
@@ -34,12 +34,13 @@ function showCreate(): void {
   byId("countdown").classList.add("preview");
 
   const form = byId<HTMLFormElement>("create-form");
+  const dateInput = byId<HTMLInputElement>("date");
   const timeInput = byId<HTMLInputElement>("time");
   const themeSelect = byId<HTMLSelectElement>("theme");
   const clearTime = byId("clear-time");
 
   function readForm(): Countdown | null {
-    const date = byId<HTMLInputElement>("date").value;
+    const date = dateInput.value;
     if (!date) return null;
     const time = timeInput.value;
     // A picked time is in the creator's local time zone. With no time, the
@@ -54,10 +55,27 @@ function showCreate(): void {
     };
   }
 
+  /** No days before today, and no time that has already passed; flags the field to fix. */
+  function validate(countdown: Countdown | null): void {
+    const today = localDate(new Date());
+    dateInput.min = today; // greys out past days in the picker
+    dateInput.setCustomValidity("");
+    timeInput.setCustomValidity("");
+    if (!countdown) return;
+
+    if (dateInput.value < today) {
+      dateInput.setCustomValidity("Pick today or a later date.");
+    } else if (!countdown.dateOnly && countdown.target.getTime() <= Date.now()) {
+      timeInput.setCustomValidity("Pick a time later than now.");
+    }
+  }
+
   function update(): void {
     applyTheme(themeById(themeSelect.value));
     clearTime.hidden = !timeInput.value;
-    display.set(readForm());
+    const countdown = readForm();
+    validate(countdown);
+    display.set(countdown);
   }
 
   form.addEventListener("input", update);
@@ -70,15 +88,27 @@ function showCreate(): void {
   // Go straight to the countdown; its page has the Copy link button for sharing.
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    update(); // time has moved on since the last edit, so check again
+    if (!form.reportValidity()) return;
     const countdown = readForm();
     if (!countdown) return;
     location.assign(`${location.pathname}?c=${await encodeToken(countdown)}`);
   });
 }
 
+/** YYYY-MM-DD in local time, the format date inputs use. */
+function localDate(d: Date): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
 /**
  * The ticking countdown display. `set(null)` shows an empty placeholder of the
  * same size, so the page doesn't shift when a date is first picked.
+ *
+ * Once the target has passed it shows zeros. With `celebrate`, it also adds the
+ * "elapsed" class to <html>, which starts the current theme's end animation
+ * (see _sass/themes/).
  */
 function createDisplay() {
   const section = byId("countdown");
@@ -92,22 +122,26 @@ function createDisplay() {
   const pad = (n: number) => String(n).padStart(2, "0");
 
   let current: Countdown | null = null;
+  let celebrate = false;
 
   function tick(): void {
     if (!current) return;
     const diff = current.target.getTime() - Date.now();
-    const s = Math.floor(Math.abs(diff) / 1000);
+    const elapsed = diff <= 0;
+    const s = elapsed ? 0 : Math.floor(diff / 1000);
     days.textContent = Math.floor(s / 86400).toLocaleString();
     hours.textContent = pad(Math.floor((s % 86400) / 3600));
     minutes.textContent = pad(Math.floor((s % 3600) / 60));
     seconds.textContent = pad(s % 60);
-    status.textContent = (diff < 0 ? "since" : "until") + (current.msg ? ":" : "");
+    status.textContent = "until" + (current.msg ? ":" : "");
+    document.documentElement.classList.toggle("elapsed", celebrate && elapsed);
   }
   setInterval(tick, 1000);
 
   return {
-    set(countdown: Countdown | null): void {
+    set(countdown: Countdown | null, options: { celebrate?: boolean } = {}): void {
       current = countdown;
+      celebrate = options.celebrate ?? false;
       section.hidden = false;
       if (!countdown) {
         for (const unit of [days, hours, minutes, seconds]) unit.textContent = "--";

@@ -58,3 +58,7 @@ script: index
   <p class="sub">This countdown link doesn't contain a valid date.</p>
   <a href="{{ '/' | relative_url }}" class="button">Make a new one</a>
 </section>
+
+<!-- Particles for the themes' end animations, shown once a countdown has
+     ended (see _sass/themes/*/_elapsed.scss). Count matches $fx-particles. -->
+<div class="fx" aria-hidden="true">{% for i in (1..24) %}<i></i>{% endfor %}</div>

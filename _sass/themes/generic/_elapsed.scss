@@ -1,0 +1,23 @@
+// Generic end animation: the zeros blink a few times, like a kitchen timer
+// that has gone off. With motion allowed, the boxes also pop one after another.
+
+html[data-theme="generic"].elapsed {
+  .unit span { animation: generic-blink 1s steps(1) 0.8s 5; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .unit { animation: generic-pop 0.5s ease-out both; }
+
+    @for $i from 1 through 4 {
+      .unit:nth-child(#{$i}) { animation-delay: ($i - 1) * 0.12s; }
+    }
+  }
+}
+
+@keyframes generic-pop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+@keyframes generic-blink {
+  50% { opacity: 0.25; }
+}
