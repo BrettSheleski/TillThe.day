@@ -3,8 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run typecheck && esbuild \"src/pages/*.ts\" --bundle --splitting --chunk-names=chunks/[name]-[hash] --format=esm --target=es2022 --minify --sourcemap --outdir=assets/js",
-    "watch": "esbuild \"src/pages/*.ts\" --bundle --splitting --chunk-names=chunks/[name]-[hash] --format=esm --target=es2022 --sourcemap --outdir=assets/js --watch",
+    "build": "npm run typecheck && npm run build:pages && npm run build:early",
+    "build:pages": "esbuild \"src/pages/*.ts\" --bundle --splitting --chunk-names=chunks/[name]-[hash] --format=esm --target=es2022 --minify --sourcemap --outdir=assets/js",
+    "build:early": "esbuild src/head/early.ts --bundle --format=iife --target=es2022 --minify --outfile=assets/js/early.js",
+    "watch": "npm run build:early && esbuild \"src/pages/*.ts\" --bundle --splitting --chunk-names=chunks/[name]-[hash] --format=esm --target=es2022 --sourcemap --outdir=assets/js --watch",
     "test": "vitest run",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tests",
     "fonts": "node scripts/self-host-fonts.mjs"

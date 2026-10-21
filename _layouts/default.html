@@ -1,6 +1,6 @@
 <!doctype html>
 <!-- Pages with a fixed theme (e.g. holiday pages) set it here, so it applies before any script runs -->
-<html lang="en"{% if page.theme %} data-theme="{{ page.theme }}"{% endif %}>
+<html lang="en"{% if page.theme %} data-theme="{{ page.theme }}"{% endif %}{% if page.mode %} data-mode="{{ page.mode }}"{% endif %}>
 <head>
   {% include head.html %}
 </head>

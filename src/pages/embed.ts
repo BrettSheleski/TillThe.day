@@ -15,6 +15,7 @@ const shown = token ? await fromToken(token) : holiday ? fromHoliday(holiday) : 
 if (shown) {
   createDisplay().set(shown, { celebrate: true });
 } else {
+  byId("countdown").hidden = true;
   byId("embed-error").hidden = false;
 }
 

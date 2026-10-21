@@ -1,14 +1,14 @@
 // Zen: warm paper, thin type, lots of space and one muted sage accent. The
 // countdown boxes are reduced to a single line under each number. Always light.
 
-$zen-sage: #7a8b6f;
+$zen-sage: #69775f;
 
 html[data-theme="zen"] {
   @include theme-vars((
     bg: #f4f1ea,
     card: #fbfaf6,
     text: #3d3d38,
-    muted: #8c8a80,
+    muted: #6f6d65,
     accent: $zen-sage,
     accent-text: #ffffff,
     border: #e4e0d5,

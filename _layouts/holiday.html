@@ -15,7 +15,8 @@ layout: default
   {{ content }}
   <div id="upcoming-dates">
     <h2>Upcoming dates</h2>
-    <ul id="upcoming" class="upcoming"></ul>
+    <!-- Five lines reserved up front; the page script fills them in -->
+    <ul id="upcoming" class="upcoming">{% for i in (1..5) %}<li>&nbsp;</li>{% endfor %}</ul>
   </div>
 </section>
 

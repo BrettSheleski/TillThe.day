@@ -44,6 +44,9 @@ html[data-theme="holiday"] {
     digit-shadow: 0 2px 0 rgba(0, 0, 0, 0.2)
   ));
 
+  // Form fields sit on the light card, not the dark page background
+  --field-bg: #fffdf8;
+
   body {
     background-image: holiday-snow-layers($holiday-snow);
     background-size: 140px 140px;
@@ -64,7 +67,7 @@ html[data-theme="holiday"] {
   // Alternate red and green boxes
   .unit { border: none; }
   .unit:nth-child(even) { background: $holiday-green; }
-  .unit label { color: rgba(255, 255, 255, 0.85); }
+  .unit label { color: #ffffff; }
 
   .status::before { content: "\2744  "; color: $holiday-green; } // snowflake
 }

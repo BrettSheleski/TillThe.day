@@ -48,6 +48,9 @@ _sass/_layout.scss       Header, footer and content card
 _sass/_forms.scss        Inputs and buttons
 _sass/_countdown.scss    Countdown display and create-page preview
 src/pages/<page>.ts      One script per page (entry points)
+src/head/early.ts        Tiny script that runs before the first paint: sets the page's mode
+                         (create or view) and theme, and preloads the theme's fonts, so
+                         nothing jumps or flashes while loading
 src/lib/*.ts             Shared code, imported by page scripts: link format (token.ts), countdown display
                          and buttons (countdown-view.ts), holiday dates (holidays.ts), sharing (share.ts,
                          qr.ts), calendar (calendar.ts), themes (themes.ts)

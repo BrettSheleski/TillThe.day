@@ -40,8 +40,22 @@
 
 .target { margin: 0 0 24px; color: var(--muted); font-size: 0.9rem; }
 
+// What a page shows depends on its mode, set before the first paint (see
+// src/head/early.ts), so nothing appears late and pushes things around:
+// "create" is the home page form; "view" shows a countdown.
+#create-intro,
+#create-view,
+#view-actions { display: none; }
+
+html[data-mode="create"] {
+  #create-intro,
+  #create-view { display: block; }
+}
+
+html[data-mode="view"] #view-actions { display: flex; }
+
 // Live preview of the countdown while creating one
-#countdown.preview {
+html[data-mode="create"] #countdown {
   position: relative;
   border: 2px dashed var(--border);
   border-radius: var(--radius-lg);

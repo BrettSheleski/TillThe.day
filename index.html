@@ -3,8 +3,8 @@ layout: default
 # Loads assets/js/index.js, compiled from src/pages/index.ts
 script: index
 ---
-<!-- Create mode only: shown when there is no countdown in the URL -->
-<div id="create-intro" hidden>
+<!-- Create mode only (see _sass/_countdown.scss): no countdown in the URL -->
+<div id="create-intro">
   <h1>{{ site.title }}</h1>
   <p class="sub">Pick a date and get a shareable countdown link.</p>
 </div>
@@ -13,7 +13,7 @@ script: index
 {% include countdown.html %}
 
 <!-- Create mode only -->
-<div id="create-view" hidden>
+<div id="create-view">
   <form id="create-form">
     <fieldset class="mode-toggle">
       <legend>Type</legend>

@@ -45,6 +45,8 @@ defaults:
       type: holidays
     values:
       layout: holiday
+      # Always shows a countdown (see src/head/early.ts)
+      mode: view
       # Loads assets/js/holiday.js, compiled from src/pages/holiday.ts
       script: holiday
 

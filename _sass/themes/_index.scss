@@ -9,6 +9,8 @@
 // Settings every theme should define (via the theme-vars mixin):
 //   colors:  bg, card, text, muted, accent, accent-text, border, unit-bg, digit
 //   other:   bg-image, font, font-digits, radius, radius-lg, card-shadow, digit-shadow
+// Optional: field-bg, the background of form fields (default: bg), for themes
+// whose page background is very different from their card
 //
 // Helpers for end animations (.fx particles) are in _mixins.scss.
 //

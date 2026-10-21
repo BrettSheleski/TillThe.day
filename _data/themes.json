@@ -1,12 +1,12 @@
 [
-  { "id": "generic", "name": "Generic", "code": "" },
-  { "id": "party", "name": "Party", "code": "P" },
-  { "id": "birthday", "name": "Birthday", "code": "B" },
-  { "id": "romantic", "name": "Romantic", "code": "R" },
-  { "id": "holiday", "name": "Holiday", "code": "H" },
-  { "id": "vacation", "name": "Vacation", "code": "V" },
-  { "id": "space", "name": "Space", "code": "S" },
-  { "id": "arcade", "name": "Arcade", "code": "A" },
-  { "id": "zen", "name": "Zen", "code": "Z" },
-  { "id": "doomsday", "name": "Doomsday", "code": "D" }
+  { "id": "generic", "name": "Generic", "code": "", "preload": ["inter-latin-400-normal", "inter-latin-600-normal", "inter-latin-700-normal"] },
+  { "id": "party", "name": "Party", "code": "P", "preload": ["fredoka-latin-400-normal", "fredoka-latin-600-normal", "fredoka-latin-700-normal"] },
+  { "id": "birthday", "name": "Birthday", "code": "B", "preload": ["baloo-2-latin-400-normal", "baloo-2-latin-600-normal", "baloo-2-latin-700-normal"] },
+  { "id": "romantic", "name": "Romantic", "code": "R", "preload": ["cormorant-garamond-latin-400-normal", "cormorant-garamond-latin-600-normal", "great-vibes-latin-400-normal"] },
+  { "id": "holiday", "name": "Holiday", "code": "H", "preload": ["lora-latin-400-normal", "lora-latin-600-normal", "mountains-of-christmas-latin-700-normal"] },
+  { "id": "vacation", "name": "Vacation", "code": "V", "preload": ["quicksand-latin-400-normal", "quicksand-latin-700-normal", "pacifico-latin-400-normal"] },
+  { "id": "space", "name": "Space", "code": "S", "preload": ["share-tech-mono-latin-400-normal", "orbitron-latin-700-normal"] },
+  { "id": "arcade", "name": "Arcade", "code": "A", "preload": ["press-start-2p-latin-400-normal"] },
+  { "id": "zen", "name": "Zen", "code": "Z", "preload": ["jost-latin-300-normal", "jost-latin-400-normal"] },
+  { "id": "doomsday", "name": "Doomsday", "code": "D", "preload": ["share-tech-mono-latin-400-normal"] }
 ]

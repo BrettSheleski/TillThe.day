@@ -15,14 +15,17 @@ if (countdown) {
   // Share the page itself, without any query string
   showActions(countdown, `${location.origin}${location.pathname}`, { holiday: page.dataset.slug! });
 
-  const upcoming = byId("upcoming");
-  for (const date of upcomingHolidays(rule, 5)) {
-    const item = document.createElement("li");
-    item.textContent = formatTarget({ ...countdown, target: date });
-    upcoming.append(item);
-  }
+  // Fill the lines the page reserved; drop any left over
+  const items = [...byId("upcoming").children];
+  const dates = upcomingHolidays(rule, items.length);
+  items.forEach((item, i) => {
+    if (dates[i]) item.textContent = formatTarget({ ...countdown, target: dates[i] });
+    else item.remove();
+  });
 } else {
   // A date list has run out (see the rule in this page's front matter)
   byId("holiday-none").hidden = false;
+  byId("countdown").hidden = true;
+  byId("view-actions").hidden = true;
   byId("upcoming-dates").hidden = true;
 }

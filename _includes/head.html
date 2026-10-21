@@ -8,5 +8,7 @@
 <link rel="icon" href="{% include asset-url.html path='/assets/images/favicon.svg' %}" type="image/svg+xml">
 <link rel="icon" href="{% include asset-url.html path='/assets/images/favicon-32.png' %}" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="{% include asset-url.html path='/assets/images/apple-touch-icon.png' %}">
+<!-- Sets the page mode and theme before the first paint (src/head/early.ts) -->
+<script src="{% include asset-url.html path='/assets/js/early.js' %}"></script>
 <!-- Includes the theme fonts, served from this site (see _sass/_fonts.scss) -->
 <link rel="stylesheet" href="{% include asset-url.html path='/assets/css/style.css' %}">

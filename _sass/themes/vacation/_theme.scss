@@ -1,8 +1,8 @@
 // Vacation: sky, sea and sand behind the card, a sun in the corner, turquoise
 // boxes and a coral accent. Always light.
 
-$vacation-turquoise: #2ab7ca;
-$vacation-coral: #ff6f59;
+$vacation-turquoise: #1e818f;
+$vacation-coral: #c8442c;
 
 html[data-theme="vacation"] {
   @include theme-vars((
@@ -29,7 +29,7 @@ html[data-theme="vacation"] {
   ));
 
   .unit { border: none; }
-  .unit label { color: rgba(255, 255, 255, 0.9); }
+  .unit label { color: #ffffff; }
   .unit span { font-weight: 700; }
 
   h1,

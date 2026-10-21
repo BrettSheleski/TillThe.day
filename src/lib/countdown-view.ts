@@ -92,7 +92,6 @@ export function formatTarget({ target, dateOnly }: Countdown): string {
  */
 export function showActions(countdown: Countdown, url: string, embed: EmbedSource): void {
   const actions = byId("view-actions");
-  actions.hidden = false;
   byId("copy-link").addEventListener("click", (e) =>
     copyToClipboard(url, e.currentTarget as HTMLElement)
   );

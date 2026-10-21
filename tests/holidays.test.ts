@@ -9,6 +9,7 @@ import {
   type HolidayRule,
   type Season,
 } from "../src/lib/holidays";
+import { themeById } from "../src/lib/themes";
 
 const ymd = (d: Date) => [d.getFullYear(), d.getMonth() + 1, d.getDate()];
 
@@ -154,13 +155,13 @@ describe("seasons", () => {
 
 describe("holiday countdowns", () => {
   it("are whole days, except seasons", () => {
-    const theme = { id: "generic", name: "Generic", code: "" };
+    const theme = themeById("generic");
     expect(holidayCountdown({ type: "fixed", month: 12, day: 25 }, "Christmas", theme)!.dateOnly).toBe(true);
     expect(holidayCountdown({ type: "season", season: "winter" }, "Winter", theme)!.dateOnly).toBe(false);
   });
 
   it("are null when no date is known", () => {
-    const theme = { id: "generic", name: "Generic", code: "" };
+    const theme = themeById("generic");
     expect(holidayCountdown({ type: "dates", dates: ["2020-01-01"] }, "Old", theme)).toBeNull();
   });
 });

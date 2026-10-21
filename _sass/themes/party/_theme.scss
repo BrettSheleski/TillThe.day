@@ -1,10 +1,10 @@
 // Party: bright, rounded and colorful, with confetti. Always light.
 
 $party-colors: (
-  pink: #ff3d8b,
-  orange: #ff8c1a,
-  teal: #12a39a,
-  purple: #7b5cff,
+  pink: #ea005e,
+  orange: #b85c00,
+  teal: #0e837c,
+  purple: #7757ff,
   yellow: #ffc93c
 );
 
@@ -67,7 +67,7 @@ html[data-theme="party"] {
   .unit {
     border: none;
 
-    label { color: rgba(255, 255, 255, 0.9); }
+    label { color: #ffffff; }
   }
 
   @for $i from 1 through length($party-unit-colors) {

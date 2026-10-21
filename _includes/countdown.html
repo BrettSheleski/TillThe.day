@@ -1,8 +1,9 @@
 <!-- The countdown and the buttons under it. Driven by src/lib/countdown-view.ts. -->
 {% include clock.html %}
 
-<!-- data-embed: where the embed page lives, for the "Embed on a website" code -->
-<div id="view-actions" class="actions" data-embed="{{ '/embed/' | relative_url }}" hidden>
+<!-- Shown in "view" mode (see _sass/_countdown.scss). data-embed: where the
+     embed page lives, for the "Embed on a website" code -->
+<div id="view-actions" class="actions" data-embed="{{ '/embed/' | relative_url }}">
   <button id="copy-link" type="button">Copy link</button>
   <details id="share-menu" class="dropdown">
     <summary class="button secondary">Share</summary>

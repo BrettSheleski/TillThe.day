@@ -25,6 +25,15 @@ describe("themes", () => {
     expect(codes).not.toContain("Y");
   });
 
+  it("preloads font files that exist", () => {
+    for (const theme of themes) {
+      expect(theme.preload.length, theme.id).toBeGreaterThan(0);
+      for (const font of theme.preload) {
+        expect(fs.existsSync(path.join(root, "assets/fonts", `${font}.woff2`)), `${theme.id}: ${font}`).toBe(true);
+      }
+    }
+  });
+
   it("has unique ids", () => {
     expect(new Set(themes.map((t) => t.id)).size).toBe(themes.length);
   });

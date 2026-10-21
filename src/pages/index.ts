@@ -14,7 +14,7 @@ if (token) {
   if (countdown) {
     showView(countdown, token);
   } else {
-    byId("error-view").hidden = false;
+    showError();
   }
 } else {
   showCreate();
@@ -26,11 +26,14 @@ function showView(countdown: Countdown, token: string): void {
   showActions(countdown, location.href, { token });
 }
 
-function showCreate(): void {
-  byId("create-intro").hidden = false;
-  byId("create-view").hidden = false;
-  byId("countdown").classList.add("preview");
+/** A link that can't be read: the error instead of the countdown and its buttons. */
+function showError(): void {
+  byId("countdown").hidden = true;
+  byId("view-actions").hidden = true;
+  byId("error-view").hidden = false;
+}
 
+function showCreate(): void {
   const form = byId<HTMLFormElement>("create-form");
   const dateInput = byId<HTMLInputElement>("date");
   const timeInput = byId<HTMLInputElement>("time");

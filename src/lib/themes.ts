@@ -7,6 +7,8 @@ export interface Theme {
   name: string;
   /** One uppercase letter used in share links; empty for the default theme. */
   code: string;
+  /** Font files (in assets/fonts/, without .woff2) to fetch early; see src/head/early.ts */
+  preload: string[];
 }
 
 export const THEMES: readonly Theme[] = themeList;

@@ -18,7 +18,7 @@ label { font-size: 0.9rem; font-weight: 600; margin-top: 8px; }
   padding: 3px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--bg);
+  background: var(--field-bg, var(--bg));
 
   // Visually hidden, still read by screen readers
   legend {
@@ -72,7 +72,7 @@ select {
   padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--bg);
+  background: var(--field-bg, var(--bg));
   color: var(--text);
   width: 100%;
 }
