@@ -139,32 +139,63 @@ describe("holiday pages", () => {
     expect(pages.length).toBeGreaterThan(0);
   });
 
-  it("have unique positions in the holiday list", () => {
-    const orders = pages.map((p) => p.data.order);
-    expect(new Set(orders).size).toBe(orders.length);
+  it("feature a manageable number in the holiday links", () => {
+    const featured = pages.filter((p) => p.data.featured === true).length;
+    expect(featured).toBeGreaterThan(5);
+    expect(featured).toBeLessThanOrEqual(20);
   });
 
   for (const { file, data } of pages) {
     describe(file, () => {
-      it("has a name, title and description", () => {
+      const rule = data.rule as HolidayRule;
+
+      it("has a name, title, description and calendar position", () => {
         for (const key of ["name", "title", "description"]) {
           expect(typeof data[key], key).toBe("string");
         }
+        // Typical month and day as MMDD, e.g. 1225 for Christmas
+        expect(data.order).toBeGreaterThanOrEqual(101);
+        expect(data.order).toBeLessThanOrEqual(1231);
       });
 
       it("uses a theme that exists", () => {
         expect(themes.map((t) => t.id)).toContain(data.theme);
       });
 
-      it("has a rule that gives a valid date every year", () => {
-        const rule = data.rule as HolidayRule;
-        expect(["fixed", "nth-weekday", "easter"]).toContain(rule.type);
-        for (let year = 2025; year <= 2035; year++) {
-          const date = holidayDate(rule, year);
-          expect(date.getFullYear(), `${year}`).toBe(year);
-          if (rule.type !== "easter") expect(date.getMonth() + 1, `${year}`).toBe(rule.month);
-        }
+      it("has a known kind of rule", () => {
+        expect(["fixed", "nth-weekday", "easter", "dates", "season"]).toContain(rule.type);
       });
+
+      if (rule.type === "dates") {
+        it("lists dates as quoted YYYY-MM-DD text, in order", () => {
+          // Unquoted, YAML reads them as date objects, which Jekyll and the
+          // tests would turn into different text
+          for (const d of rule.dates) expect(d, String(d)).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+          expect([...rule.dates].sort()).toEqual(rule.dates);
+        });
+
+        it("lists dates at least a year ahead", () => {
+          // Fails a year before the list runs out, as a reminder to add more
+          // dates from a reliable source (the page shows "not yet published"
+          // once it does run out)
+          const yearAhead = new Date();
+          yearAhead.setFullYear(yearAhead.getFullYear() + 1);
+          const last = new Date(rule.dates[rule.dates.length - 1]);
+          expect(last > yearAhead, `last listed date is ${rule.dates.at(-1)}`).toBe(true);
+        });
+      } else {
+        it("gives a date in each year", () => {
+          for (let year = 2025; year <= 2035; year++) {
+            const date = holidayDate(rule, year);
+            expect(date, `${year}`).not.toBeNull();
+            // An offset can move it into the next month, but not the next year
+            expect(date!.getFullYear(), `${year}`).toBe(year);
+            if ((rule.type === "fixed" || rule.type === "nth-weekday") && !rule.offset) {
+              expect(date!.getMonth() + 1, `${year}`).toBe(rule.month);
+            }
+          }
+        });
+      }
     });
   }
 });

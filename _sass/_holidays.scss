@@ -63,3 +63,9 @@ h2 { font-size: 1.15rem; margin: 28px 0 10px; }
   .days { grid-row: 1 / span 2; grid-column: 2; align-self: center; font-weight: 600; }
   .date { color: var(--muted); font-size: 0.9rem; }
 }
+
+// "All holidays" at the end of the holiday links
+.chip-all {
+  border-style: dashed;
+  font-weight: 600;
+}

@@ -7,12 +7,16 @@ layout: default
   <h1>Days until {{ page.name }} <span id="holiday-year"></span></h1>
 </div>
 
+<p id="holiday-none" class="sub" hidden>The next date for {{ page.name }} hasn't been published yet. Check back soon.</p>
+
 {% include countdown.html %}
 
 <section class="about">
   {{ content }}
-  <h2>Upcoming dates</h2>
-  <ul id="upcoming" class="upcoming"></ul>
+  <div id="upcoming-dates">
+    <h2>Upcoming dates</h2>
+    <ul id="upcoming" class="upcoming"></ul>
+  </div>
 </section>
 
 <nav class="holiday-links" aria-labelledby="holiday-links-title">

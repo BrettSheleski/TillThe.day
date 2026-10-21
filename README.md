@@ -95,7 +95,8 @@ name: Christmas
 title: How many days until Christmas?
 description: Live countdown to Christmas Day, December 25. (Shown in search results.)
 theme: holiday
-order: 12            # position in the holiday links (calendar order)
+order: 1225          # typical date as MMDD, for sorting
+featured: true       # show in the quick links (optional)
 rule: { type: fixed, month: 12, day: 25 }
 ---
 A paragraph or two about the holiday, in Markdown.
@@ -106,6 +107,11 @@ The `rule` sets the date each year:
 - `{ type: fixed, month: 12, day: 25 }`: the same date every year.
 - `{ type: nth-weekday, month: 11, weekday: 4, n: 4 }`: the 4th Thursday of November. Weekdays run from 0 (Sunday) to 6 (Saturday). Use `n: -1` for the last one in the month.
 - `{ type: easter }`: Western Easter Sunday.
+- `{ type: season, season: summer }`: the exact moment of the equinox or solstice that starts `spring`, `summer`, `fall` or `winter` (Northern Hemisphere), calculated astronomically. These count down to the moment, not just the day.
+- `{ type: dates, dates: ["2026-12-05", "2027-12-25"] }`: a list of dates, for holidays on lunar calendars. Quote each date. Take them from a reliable published source, and note it in the commit. A test fails a year before the list runs out, as a reminder to add more.
+- Any rule can add `offset: <days>` to move it, e.g. `{ type: easter, offset: -47 }` for Mardi Gras, or Thanksgiving with `offset: 1` for Black Friday.
+
+Add `featured: true` to show a holiday in the quick links on the home and holiday pages; every holiday appears on `/holidays/`. `order` is the holiday's typical date as MMDD (e.g. `1225`), used to sort the quick links.
 
 The page counts down to the next date, celebrates on the day itself, and rolls over to next year the day after. It also appears in the holiday links and on `/holidays/` automatically.
 

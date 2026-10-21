@@ -2,7 +2,7 @@
 // countdown from ?c=<token> or the holiday from ?holiday=<name>.
 import { createDisplay } from "../lib/countdown-view";
 import { byId } from "../lib/dom";
-import { nextHoliday, type HolidayRule } from "../lib/holidays";
+import { holidayCountdown, type HolidayRule } from "../lib/holidays";
 import { applyTheme, themeById } from "../lib/themes";
 import { decodeToken, peekTheme, type Countdown } from "../lib/token";
 
@@ -32,12 +32,5 @@ function fromHoliday(slug: string): Countdown | null {
   const theme = themeById(item.dataset.theme!);
   applyTheme(theme);
   credit.href = new URL(item.dataset.url!, location.href).href;
-  return {
-    target: nextHoliday(JSON.parse(item.dataset.rule!) as HolidayRule),
-    dateOnly: true,
-    msg: item.dataset.name!,
-    theme,
-    countUp: false,
-    yearly: false,
-  };
+  return holidayCountdown(JSON.parse(item.dataset.rule!) as HolidayRule, item.dataset.name!, theme);
 }

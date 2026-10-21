@@ -1,7 +1,9 @@
-<!-- A chip for each holiday page, in calendar order -->
+<!-- A chip for each featured holiday page, in calendar order, then a link to
+     the full list -->
 <ul class="chips">
-  {% assign holidays = site.holidays | sort: "order" %}
+  {% assign holidays = site.holidays | where: "featured", true | sort: "order" %}
   {% for holiday in holidays %}
   <li><a class="chip" href="{{ holiday.url | relative_url }}">{{ holiday.name }}</a></li>
   {% endfor %}
+  <li><a class="chip chip-all" href="{{ '/holidays/' | relative_url }}">All {{ site.holidays | size }} holidays &rarr;</a></li>
 </ul>
