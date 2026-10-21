@@ -1,0 +1,18 @@
+title: Time Until
+description: Count down to any date and share the link.
+
+# GitHub Pages fills in `url` and `baseurl` automatically from the repo name.
+# Only set baseurl if you need to override it, e.g. for a custom domain:
+# baseurl: ""
+
+# Files that shouldn't be published to the site
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - .claude
+  - src
+  - node_modules
+  - package.json
+  - package-lock.json
+  - tsconfig.json

@@ -1,0 +1,63 @@
+// Forms, inputs and buttons.
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+
+  button[type="submit"] { margin-top: 16px; }
+}
+
+label { font-size: 0.9rem; font-weight: 600; margin-top: 8px; }
+
+// A label with a small action beside it, e.g. "Clear"
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 8px;
+
+  label { margin-top: 0; }
+}
+
+.link-button {
+  padding: 0;
+  background: none;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+input {
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: $radius;
+  background: var(--bg);
+  color: var(--text);
+  width: 100%;
+}
+
+button,
+.button {
+  font: inherit;
+  font-weight: 600;
+  padding: 10px 18px;
+  border: none;
+  border-radius: $radius;
+  background: var(--accent);
+  color: var(--accent-text);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+
+  &.secondary {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+}
+
+.actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }

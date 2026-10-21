@@ -1,0 +1,53 @@
+---
+layout: default
+# Loads assets/js/index.js, compiled from src/pages/index.ts
+script: index
+---
+<!-- Create mode only: shown when there is no countdown in the URL -->
+<div id="create-intro" hidden>
+  <h1>{{ site.title }}</h1>
+  <p class="sub">Pick a date and get a shareable countdown link.</p>
+</div>
+
+<!-- The countdown itself: the shared link's view, and the live preview in create mode -->
+<section id="countdown" hidden>
+  <div class="clock" aria-live="polite">
+    <div class="unit"><span id="days">0</span><label>days</label></div>
+    <div class="unit"><span id="hours">00</span><label>hours</label></div>
+    <div class="unit"><span id="minutes">00</span><label>minutes</label></div>
+    <div class="unit"><span id="seconds">00</span><label>seconds</label></div>
+  </div>
+  <p class="status"><span id="status"></span> <span id="message"></span></p>
+  <p id="target-label" class="target"></p>
+</section>
+
+<!-- View mode only -->
+<div id="view-actions" class="actions" hidden>
+  <button id="copy-link" type="button">Copy link</button>
+  <a href="{{ '/' | relative_url }}" class="button secondary">Make your own</a>
+</div>
+
+<!-- Create mode only -->
+<div id="create-view" hidden>
+  <form id="create-form">
+    <label for="date">Date</label>
+    <input id="date" type="date" required>
+
+    <div class="label-row">
+      <label for="time">Time <span class="hint">(optional)</span></label>
+      <button id="clear-time" type="button" class="link-button" hidden>Clear</button>
+    </div>
+    <input id="time" type="time">
+
+    <label for="msg">Message <span class="hint">(optional)</span></label>
+    <input id="msg" type="text" maxlength="200" placeholder="e.g. Until our vacation!">
+
+    <button type="submit">Create countdown</button>
+  </form>
+</div>
+
+<section id="error-view" hidden>
+  <h1>Invalid link</h1>
+  <p class="sub">This countdown link doesn't contain a valid date.</p>
+  <a href="{{ '/' | relative_url }}" class="button">Make a new one</a>
+</section>

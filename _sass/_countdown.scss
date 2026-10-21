@@ -1,0 +1,55 @@
+// The countdown display, used both for shared links and the create-page preview.
+
+.clock {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.unit {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 4px;
+  display: flex;
+  flex-direction: column;
+
+  span {
+    font-size: clamp(1.6rem, 7vw, 3rem);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  label { margin: 0; font-weight: 500; color: var(--muted); }
+}
+
+.status {
+  margin: 24px 0 6px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+#status { color: var(--muted); }
+
+.target { margin: 0 0 24px; color: var(--muted); font-size: 0.9rem; }
+
+// Live preview of the countdown while creating one
+#countdown.preview {
+  position: relative;
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  padding: 28px 12px 4px;
+  margin-bottom: 8px;
+
+  &::before {
+    content: "Preview";
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+  }
+}

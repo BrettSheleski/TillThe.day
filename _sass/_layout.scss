@@ -1,0 +1,38 @@
+// Site header, footer and the main content card.
+
+.site-header,
+.site-footer {
+  width: 100%;
+  max-width: $content-width;
+  padding: 20px 0;
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  a { color: var(--accent); text-decoration: none; }
+}
+
+.site-title { font-weight: 700; font-size: 1.1rem; }
+
+.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+
+  p { margin: 0; }
+}
+
+.card {
+  width: 100%;
+  max-width: $content-width;
+  margin: auto 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+  padding: 32px 24px;
+  text-align: center;
+}
