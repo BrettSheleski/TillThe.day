@@ -22,7 +22,7 @@ const countdown: Countdown = {
 byId("holiday-year").textContent = String(countdown.target.getFullYear());
 createDisplay().set(countdown, { celebrate: true });
 // Share the page itself, without any query string
-showActions(countdown, `${location.origin}${location.pathname}`);
+showActions(countdown, `${location.origin}${location.pathname}`, { holiday: page.dataset.slug! });
 
 const upcoming = byId("upcoming");
 for (const date of upcomingHolidays(rule, 5)) {

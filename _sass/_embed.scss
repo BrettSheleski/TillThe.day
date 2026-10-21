@@ -1,0 +1,49 @@
+// The embed widget (embed.html): just the countdown, compact enough to fit
+// the iframe height in src/lib/embed.ts at any width from about 300px.
+
+body.embed {
+  padding: 8px;
+  justify-content: center;
+}
+
+.embed-card {
+  margin: 0;
+  max-width: none;
+  padding: 16px 14px 10px;
+
+  .clock { gap: 8px; }
+
+  .unit {
+    padding: 10px 2px;
+
+    span { font-size: clamp(1.4rem, 9vw, 2.6rem); line-height: 1.15; }
+    label { font-size: 0.7rem; }
+  }
+
+  // At most two lines, so long messages can't push the widget past its height;
+  // the credit link leads to the full countdown
+  .status {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    margin: 12px 0 2px;
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  .target { margin: 0 0 4px; font-size: 0.8rem; }
+}
+
+.embed-credit {
+  display: block;
+  text-align: right;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible { color: var(--accent); }
+}
+
+.embed-error { margin: 24px 0; color: var(--muted); }

@@ -39,6 +39,16 @@ describe("themes", () => {
   }
 });
 
+describe("pages kept out of search results", () => {
+  for (const file of ["404.html", "embed.html"]) {
+    it(`${file} isn't in the sitemap`, () => {
+      const text = fs.readFileSync(path.join(root, file), "utf8");
+      const frontMatter = yaml.load(text.match(/^---\r?\n([\s\S]*?)\r?\n---/)![1]) as Record<string, unknown>;
+      expect(frontMatter.sitemap).toBe(false);
+    });
+  }
+});
+
 describe("404 page", () => {
   // GitHub Pages shows 404.html at whatever missing address was asked for,
   // e.g. /TimeUntil/a/b/c, so a relative link would point somewhere wrong

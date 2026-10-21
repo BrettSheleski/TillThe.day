@@ -12,7 +12,7 @@ if (token) {
   applyTheme(peekTheme(token));
   const countdown = await decodeToken(token);
   if (countdown) {
-    showView(countdown);
+    showView(countdown, token);
   } else {
     byId("error-view").hidden = false;
   }
@@ -20,10 +20,10 @@ if (token) {
   showCreate();
 }
 
-function showView(countdown: Countdown): void {
+function showView(countdown: Countdown, token: string): void {
   display.set(countdown, { celebrate: true });
   if (countdown.msg) document.title = `${countdown.msg} | ${document.title}`;
-  showActions(countdown, location.href);
+  showActions(countdown, location.href, { token });
 }
 
 function showCreate(): void {

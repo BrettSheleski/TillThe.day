@@ -3,7 +3,7 @@ layout: default
 ---
 <!-- A holiday page (_holidays/*.md). The page script counts down to the next
      date from the rule in front matter; the Markdown body is the "about" text. -->
-<div id="holiday" data-name="{{ page.name }}" data-theme="{{ page.theme }}" data-rule="{{ page.rule | jsonify | escape }}">
+<div id="holiday" data-slug="{{ page.slug }}" data-name="{{ page.name }}" data-theme="{{ page.theme }}" data-rule="{{ page.rule | jsonify | escape }}">
   <h1>Days until {{ page.name }} <span id="holiday-year"></span></h1>
 </div>
 

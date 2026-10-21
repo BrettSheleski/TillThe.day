@@ -1,17 +1,8 @@
 <!-- The countdown and the buttons under it. Driven by src/lib/countdown-view.ts. -->
-<section id="countdown" hidden>
-  <!-- role="timer" keeps screen readers from announcing every second's tick -->
-  <div class="clock" role="timer">
-    <div class="unit"><span id="days">0</span><label>days</label></div>
-    <div class="unit"><span id="hours">00</span><label>hours</label></div>
-    <div class="unit"><span id="minutes">00</span><label>minutes</label></div>
-    <div class="unit"><span id="seconds">00</span><label>seconds</label></div>
-  </div>
-  <p class="status"><span id="status"></span> <span id="message"></span></p>
-  <p id="target-label" class="target"></p>
-</section>
+{% include clock.html %}
 
-<div id="view-actions" class="actions" hidden>
+<!-- data-embed: where the embed page lives, for the "Embed on a website" code -->
+<div id="view-actions" class="actions" data-embed="{{ '/embed/' | relative_url }}" hidden>
   <button id="copy-link" type="button">Copy link</button>
   <details id="share-menu" class="dropdown">
     <summary class="button secondary">Share</summary>
@@ -22,6 +13,7 @@
       <a id="share-facebook" target="_blank" rel="noopener">Facebook</a>
       <a id="share-x" target="_blank" rel="noopener">X (Twitter)</a>
       <button id="share-qr" type="button">QR code</button>
+      <button id="share-embed" type="button">Embed on a website</button>
     </div>
   </details>
   <details id="calendar-menu" class="dropdown">
@@ -35,7 +27,7 @@
   <a href="{{ '/' | relative_url }}" class="button secondary">Make your own</a>
 </div>
 
-<dialog id="qr-dialog" class="qr-dialog" aria-labelledby="qr-title">
+<dialog id="qr-dialog" class="dialog qr-dialog" aria-labelledby="qr-title">
   <h2 id="qr-title">Scan to open</h2>
   <img id="qr-image" alt="QR code linking to this countdown" width="240" height="240">
   <div class="actions">
@@ -44,6 +36,16 @@
   </div>
 </dialog>
 
-<!-- Particles for the themes' end animations, shown once a countdown has
-     ended (see _sass/themes/*/_elapsed.scss). Count matches $fx-particles. -->
-<div class="fx" aria-hidden="true">{% for i in (1..24) %}<i></i>{% endfor %}</div>
+<dialog id="embed-dialog" class="dialog embed-dialog" aria-labelledby="embed-title">
+  <h2 id="embed-title">Embed on a website</h2>
+  <p class="hint">Paste this code into your site's HTML to show a live countdown:</p>
+  <textarea id="embed-code" rows="4" readonly aria-label="Embed code"></textarea>
+  <p class="hint">Preview</p>
+  <div id="embed-preview" class="embed-preview"></div>
+  <div class="actions">
+    <button id="embed-copy" type="button">Copy code</button>
+    <button id="embed-close" type="button" class="secondary">Close</button>
+  </div>
+</dialog>
+
+{% include fx.html %}

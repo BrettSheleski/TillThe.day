@@ -2,6 +2,7 @@
 // by every page that includes _includes/countdown.html.
 import { calendarLinks } from "./calendar";
 import { byId, copyToClipboard } from "./dom";
+import { EMBED_HEIGHT, embedSnippet, embedUrl, type EmbedSource } from "./embed";
 import { canShareNatively, shareLinks, shareNatively, type ShareInfo } from "./share";
 import type { Countdown } from "./token";
 import { ordinal, upcoming, yearsSince } from "./yearly";
@@ -84,14 +85,53 @@ export function formatTarget({ target, dateOnly }: Countdown): string {
       });
 }
 
-/** Show the buttons under a countdown and wire them up for the given page URL. */
-export function showActions(countdown: Countdown, url: string): void {
-  byId("view-actions").hidden = false;
+/**
+ * Show the buttons under a countdown and wire them up for the given page URL.
+ * `embed` says what the "Embed on a website" widget should show.
+ */
+export function showActions(countdown: Countdown, url: string, embed: EmbedSource): void {
+  const actions = byId("view-actions");
+  actions.hidden = false;
   byId("copy-link").addEventListener("click", (e) =>
     copyToClipboard(url, e.currentTarget as HTMLElement)
   );
-  setUpShareMenu(shareInfo(countdown, url));
+  const info = shareInfo(countdown, url);
+  setUpShareMenu(info);
+  setUpEmbedDialog(info.title, embedUrl(new URL(actions.dataset.embed!, location.href).href, embed));
   setUpCalendarMenu(countdown, url);
+}
+
+/** The "Embed on a website" pop-up: a live preview and the code to copy. */
+function setUpEmbedDialog(title: string, src: string): void {
+  const dialog = byId<HTMLDialogElement>("embed-dialog");
+  setUpDialog(dialog, byId("embed-close"));
+  const code = byId<HTMLTextAreaElement>("embed-code");
+  code.value = embedSnippet(src, title);
+  code.addEventListener("focus", () => code.select());
+
+  byId("share-embed").addEventListener("click", () => {
+    // The preview loads only when first opened
+    const preview = byId("embed-preview");
+    if (!preview.firstChild) {
+      const frame = document.createElement("iframe");
+      frame.src = src;
+      frame.title = title;
+      frame.height = String(EMBED_HEIGHT);
+      preview.append(frame);
+    }
+    dialog.showModal();
+  });
+  byId("embed-copy").addEventListener("click", (e) =>
+    copyToClipboard(code.value, e.currentTarget as HTMLElement)
+  );
+}
+
+/** Close a <dialog> with its button or by clicking the backdrop around it. */
+function setUpDialog(dialog: HTMLDialogElement, closeButton: HTMLElement): void {
+  closeButton.addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
 }
 
 function shareInfo(countdown: Countdown, url: string): ShareInfo {
@@ -130,11 +170,7 @@ function setUpShareMenu(info: ShareInfo): void {
     }
     dialog.showModal();
   });
-  byId("qr-close").addEventListener("click", () => dialog.close());
-  // Clicking the backdrop (outside the dialog's box) closes it too
-  dialog.addEventListener("click", (e) => {
-    if (e.target === dialog) dialog.close();
-  });
+  setUpDialog(dialog, byId("qr-close"));
 }
 
 /** The "Add to calendar" menu; hidden for count-ups and ended countdowns (never for yearly ones). */

@@ -1,0 +1,20 @@
+<!doctype html>
+<!-- Layout for the embed widget (embed.html): just the countdown, for showing
+     inside other websites in an <iframe>. No header, footer or buttons. -->
+<html lang="en"{% if page.theme %} data-theme="{{ page.theme }}"{% endif %}>
+<head>
+  {% include head.html %}
+  <!-- Search engines should index the real pages, not the widget -->
+  <meta name="robots" content="noindex">
+</head>
+<body class="embed">
+  <main class="card embed-card">
+    {{ content }}
+  </main>
+  {% include analytics.html %}
+  {% if page.script %}
+  {% assign script_path = '/assets/js/' | append: page.script | append: '.js' %}
+  <script type="module" src="{% include asset-url.html path=script_path %}"></script>
+  {% endif %}
+</body>
+</html>

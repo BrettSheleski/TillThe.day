@@ -52,8 +52,8 @@
   }
 }
 
-// The QR code pop-up
-.qr-dialog {
+// Pop-ups (the QR code and embed code)
+.dialog {
   padding: 24px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -64,10 +64,36 @@
   &::backdrop { background: rgba(0, 0, 0, 0.55); }
 
   h2 { margin: 0 0 16px; font-size: 1.2rem; }
+}
 
-  img {
-    display: block;
-    margin: 0 auto 16px;
-    border-radius: 4px;
+.qr-dialog img {
+  display: block;
+  margin: 0 auto 16px;
+  border-radius: 4px;
+}
+
+.embed-dialog {
+  width: 92vw;
+  max-width: 640px;
+  text-align: left;
+
+  .hint { margin: 0 0 8px; }
+
+  textarea {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    font: 0.8rem/1.5 ui-monospace, Consolas, monospace;
+    resize: none;
   }
+}
+
+.embed-preview {
+  margin-bottom: 16px;
+
+  iframe { display: block; width: 100%; border: 0; border-radius: 16px; }
 }

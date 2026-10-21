@@ -1,0 +1,12 @@
+<!-- The countdown display itself. Driven by src/lib/countdown-view.ts. -->
+<section id="countdown" hidden>
+  <!-- role="timer" keeps screen readers from announcing every second's tick -->
+  <div class="clock" role="timer">
+    <div class="unit"><span id="days">0</span><label>days</label></div>
+    <div class="unit"><span id="hours">00</span><label>hours</label></div>
+    <div class="unit"><span id="minutes">00</span><label>minutes</label></div>
+    <div class="unit"><span id="seconds">00</span><label>seconds</label></div>
+  </div>
+  <p class="status"><span id="status"></span> <span id="message"></span></p>
+  <p id="target-label" class="target"></p>
+</section>
