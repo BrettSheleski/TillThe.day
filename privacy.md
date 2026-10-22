@@ -41,4 +41,4 @@ If you see a countdown embedded in another website, that website may have its ow
 
 ## Changes and questions
 
-If this policy changes, the date at the top will change too. Questions? Ask on the project's [GitHub issues page](https://github.com/BrettSheleski/TimeUntil/issues).
+If this policy changes, the date at the top will change too. Questions? Ask on the project's [GitHub issues page](https://github.com/BrettSheleski/TillThe.day/issues).
