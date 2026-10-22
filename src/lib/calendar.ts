@@ -6,7 +6,8 @@
 // to its end if it has one. A date-only countdown is an all-day event on that
 // date, or across its days if it has an end. A yearly countdown is a
 // repeating event, starting at its next occurrence (Outlook.com's link can't
-// set a repeat, so it gets just that one).
+// set a repeat, so it gets just that one). Any location goes in the event's
+// location, and any notes in its description above the countdown's link.
 
 import type { Countdown } from "./token";
 import { eventEnd } from "./schedule";
@@ -22,7 +23,9 @@ export interface CalendarLinks {
 export function calendarLinks(original: Countdown, url: string): CalendarLinks {
   const countdown = upcoming(original);
   const title = countdown.msg || "Countdown";
-  const details = `Countdown: ${url}`;
+  const details = countdown.notes ? `${countdown.notes}
+
+Countdown: ${url}` : `Countdown: ${url}`;
   const repeat = original.yearly ? yearlyRule(original) : null;
   return {
     google: googleUrl(countdown, title, details, repeat),
@@ -45,6 +48,7 @@ function googleUrl(countdown: Countdown, title: string, details: string, repeat:
     ? `${compactDate(target)}/${compactDate(endOf(countdown))}`
     : `${compactUtc(target)}/${compactUtc(endOf(countdown))}`;
   const params = new URLSearchParams({ action: "TEMPLATE", text: title, dates, details });
+  if (countdown.location) params.set("location", countdown.location);
   if (repeat) params.set("recur", repeat);
   return `https://calendar.google.com/calendar/render?${query(params)}`;
 }
@@ -60,6 +64,7 @@ function outlookUrl(countdown: Countdown, title: string, details: string): strin
     enddt: dateOnly ? isoDate(endOf(countdown)) : endOf(countdown).toISOString(),
     allday: String(dateOnly),
   });
+  if (countdown.location) params.set("location", countdown.location);
   return `https://outlook.live.com/calendar/0/action/compose?${query(params)}`;
 }
 
@@ -81,6 +86,7 @@ function icsFile(countdown: Countdown, title: string, details: string, url: stri
     ...(repeat ? [repeat] : []),
     `SUMMARY:${escapeText(title)}`,
     `DESCRIPTION:${escapeText(details)}`,
+    ...(countdown.location ? [`LOCATION:${escapeText(countdown.location)}`] : []),
     `URL:${url}`,
     ...alarm("-P1D", `Tomorrow: ${title}`),
     ...alarm("PT0S", title),

@@ -6,10 +6,9 @@ description: Count down to any date and share the link.
 # _includes/analytics.html.
 cloudflare_analytics_token: "d964511e4dd7472d991706760b09432e"
 
-# GitHub Pages fills in `url` and `baseurl` automatically from the repo's Pages
-# settings: with the custom domain set there (tillthe.day), the site is served
-# from the domain's root. Nothing here names the domain, so changing it is
-# only that setting.
+# `url` and `baseurl` come from the repo's Pages settings: the deploy workflow
+# adds them from there (e.g. https://tillthe.day, served from the domain's
+# root). Nothing here names the domain, so changing it is only that setting.
 
 # Files that shouldn't be published to the site
 exclude:

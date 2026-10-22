@@ -57,6 +57,32 @@ describe(".ics file", () => {
   });
 });
 
+describe("location and notes", () => {
+  const c = countdown({ msg: "Party", location: "Grand Hotel, Chicago", notes: "Bring a dish;\nDoors at 6" });
+  const details = `Bring a dish;\nDoors at 6\n\nCountdown: ${url}`;
+
+  it("go in the .ics event's location and description, above the link", () => {
+    const { event } = parseEvent(calendarLinks(c, url).ics);
+    expect(event.location).toBe("Grand Hotel, Chicago");
+    expect(event.description).toBe(details);
+  });
+
+  it("fill in Google's and Outlook's location and details", () => {
+    const { google, outlook } = calendarLinks(c, url);
+    expect(new URL(google).searchParams.get("location")).toBe("Grand Hotel, Chicago");
+    expect(new URL(google).searchParams.get("details")).toBe(details);
+    expect(new URL(outlook).searchParams.get("location")).toBe("Grand Hotel, Chicago");
+    expect(new URL(outlook).searchParams.get("body")).toContain("Bring a dish;");
+  });
+
+  it("are left out when there are none", () => {
+    const { event } = parseEvent(calendarLinks(countdown({ msg: "Party" }), url).ics);
+    expect(event.location).toBeNull();
+    expect(event.description).toBe(`Countdown: ${url}`);
+    expect(new URL(calendarLinks(countdown(), url).google).searchParams.has("location")).toBe(false);
+  });
+});
+
 describe("events with an end", () => {
   it("end at the end time", () => {
     const concert = countdown({ target: new Date("2026-12-25T01:00:00Z"), duration: 240, msg: "Concert" });

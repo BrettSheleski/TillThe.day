@@ -85,10 +85,12 @@ export function createDisplay() {
         status.textContent = "Pick a date";
         message.textContent = "";
         targetLabel.textContent = " "; // keeps the line's height
+        showDetails({});
         return;
       }
       current = upcoming(countdown);
       message.textContent = countdown.msg;
+      showDetails(countdown);
       // Which anniversary this is, e.g. "· 37th"
       const years = countdown.yearly ? yearsSince(countdown.target, current.target) : 0;
       anniversary = years > 0 ? ` · ${ordinal(years)}` : "";
@@ -96,6 +98,17 @@ export function createDisplay() {
       tick();
     },
   };
+}
+
+/** The location (with a map link) and notes under the date, or nothing if it has neither. */
+function showDetails({ location, notes }: { location?: string; notes?: string }): void {
+  byId("event-details").hidden = !location && !notes;
+  byId("event-location").hidden = !location;
+  byId("event-notes").hidden = !notes;
+  const map = byId<HTMLAnchorElement>("event-map");
+  map.textContent = location ?? "";
+  if (location) map.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+  byId("event-notes").textContent = notes ?? "";
 }
 
 const TIMED: Intl.DateTimeFormatOptions = {

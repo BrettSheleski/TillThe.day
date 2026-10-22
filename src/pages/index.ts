@@ -136,6 +136,46 @@ function showCreate(): void {
   dateInput.addEventListener("input", moveEndWithStart);
   timeInput.addEventListener("input", moveEndWithStart);
 
+  // The optional location and notes, hidden until asked for
+  const addDetails = byId<HTMLButtonElement>("add-details");
+  const detailsFields = byId("details-fields");
+  const locationInput = byId<HTMLInputElement>("location");
+  const notesInput = byId<HTMLTextAreaElement>("notes");
+  function showDetailsFields(show: boolean): void {
+    detailsFields.hidden = !show;
+    addDetails.hidden = show;
+  }
+  addDetails.addEventListener("click", () => {
+    showDetailsFields(true);
+    locationInput.focus();
+  });
+  byId("remove-details").addEventListener("click", () => {
+    locationInput.value = notesInput.value = "";
+    showDetailsFields(false);
+    update();
+    addDetails.focus();
+  });
+  // An address pasted over several lines (from an email or a maps app) becomes
+  // one line with commas, as calendars and map searches expect; a single-line
+  // field would otherwise run the lines together
+  locationInput.addEventListener("paste", (e) => {
+    const text = e.clipboardData?.getData("text") ?? "";
+    if (!/[\r\n]/.test(text)) return;
+    e.preventDefault();
+    const oneLine = text
+      .split(/\r?\n/)
+      .map((line) => line.trim().replace(/,$/, ""))
+      .filter(Boolean)
+      .join(", ");
+    const { selectionStart: start, selectionEnd: end } = locationInput;
+    // Inserting from code skips maxlength, so keep to the room that's left
+    const room = locationInput.maxLength - (locationInput.value.length - ((end ?? 0) - (start ?? 0)));
+    locationInput.setRangeText(oneLine.slice(0, Math.max(0, room)), start ?? 0, end ?? 0, "end");
+    locationInput.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  // Values the browser restored, e.g. after Back
+  if (locationInput.value || notesInput.value) showDetailsFields(true);
+
   byId("remove-end").addEventListener("click", () => {
     endFields.hidden = true;
     endDateInput.value = endTimeInput.value = "";
@@ -155,6 +195,8 @@ function showCreate(): void {
       target,
       dateOnly: !time,
       msg: byId<HTMLInputElement>("msg").value.trim(),
+      location: locationInput.value.trim(),
+      notes: notesInput.value.trim(),
       theme: themeById(themeSelect.value),
       countUp: countingUp(),
       yearly: yearlyInput.checked,

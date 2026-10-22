@@ -36,7 +36,7 @@ coming_up_title: Or count down to a holiday
 
     <!-- Optional end, for events that last a while (src/pages/index.ts). Whether
          to count down or up comes from the dates themselves. -->
-    <button id="add-end" type="button" class="link-button add-end">+ Add end</button>
+    <button id="add-end" type="button" class="link-button add-link">+ Add end</button>
     <div id="end-fields" hidden>
       <div class="label-row">
         <label for="end-date">Ends</label>
@@ -55,6 +55,20 @@ coming_up_title: Or count down to a holiday
 
     <label for="msg">Message <span class="hint">(optional)</span></label>
     <input id="msg" type="text" maxlength="200" placeholder="e.g. Until our vacation!">
+
+    <!-- Optional location and notes, shown on the countdown and added to
+         calendars (src/pages/index.ts) -->
+    <button id="add-details" type="button" class="link-button add-link">+ Add location &amp; notes</button>
+    <div id="details-fields" class="details-fields" hidden>
+      <div class="label-row">
+        <label for="location">Location</label>
+        <button id="remove-details" type="button" class="link-button">Remove</button>
+      </div>
+      <input id="location" type="text" maxlength="200" placeholder="e.g. Grand Hotel, Chicago" autocomplete="off">
+      <label for="notes">Notes</label>
+      <textarea id="notes" rows="2" maxlength="300" placeholder="e.g. Bring a dish to share"></textarea>
+      <p class="hint field-hint">Anyone with the link can see these.</p>
+    </div>
 
     <label for="theme">Theme</label>
     <select id="theme">

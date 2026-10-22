@@ -11,8 +11,11 @@
 //           U for count-up mode (time since the date)
 //           Y for a yearly repeat: counts down to the next anniversary of the date
 //           U and Y are reserved and never used as theme codes
-// message = .<base64url UTF-8 message>        plain
-//         | ~<base64url deflated message>     compressed, used when shorter
+// message = .<base64url UTF-8 text>           plain
+//         | ~<base64url deflated text>        compressed, used when shorter
+//           The text is the message, then, if there are any, the location
+//           and notes, each after a U+001F (unit separator). Older links have
+//           just the message.
 //
 // An exact moment is stored in UTC, so everyone counts down to the same
 // instant, shown in their own local time zone.
@@ -26,6 +29,10 @@ export interface Countdown {
   dateOnly: boolean;
   msg: string;
   theme: Theme;
+  /** Where it is, e.g. an address; shown with a map link and added to calendars. */
+  location?: string;
+  /** Anything else to know, e.g. "Bring a dish"; shown and added to calendars. */
+  notes?: string;
   /** Count up from the date (time since) instead of down to it. */
   countUp: boolean;
   /** Repeats every year; target is the original date (see ./yearly.ts). */
@@ -43,16 +50,24 @@ const COUNT_UP = "U";
 const YEARLY = "Y";
 const FLAGS = [COUNT_UP, YEARLY];
 const DAY = 86_400_000;
+/** Separates the message, location and notes in a link's text. */
+const SEPARATOR = "\u001f";
 
-export async function encodeToken({ target, dateOnly, msg, theme, countUp, yearly, duration }: Countdown): Promise<string> {
+export async function encodeToken(countdown: Countdown): Promise<string> {
+  const { target, dateOnly, theme, countUp, yearly, duration } = countdown;
   const when = dateOnly
     ? "_" + (Date.UTC(target.getFullYear(), target.getMonth(), target.getDate()) / DAY).toString(36)
     : Math.round(target.getTime() / MINUTE).toString(36);
   const length = duration > 0 ? `_${Math.round(duration).toString(36)}` : "";
   const prefix = when + length + theme.code + (countUp ? COUNT_UP : "") + (yearly ? YEARLY : "");
-  if (!msg) return prefix;
+  // Message, location, notes, leaving off empty ones from the end
+  const clean = (text = "") => text.replaceAll(SEPARATOR, " ");
+  const parts = [clean(countdown.msg), clean(countdown.location), clean(countdown.notes)];
+  while (parts.length && !parts[parts.length - 1]) parts.pop();
+  const text = parts.join(SEPARATOR);
+  if (!text) return prefix;
 
-  const bytes = new TextEncoder().encode(msg);
+  const bytes = new TextEncoder().encode(text);
   let best = "." + toBase64Url(bytes);
   if (typeof CompressionStream !== "undefined") {
     const packed = "~" + toBase64Url(await transform(bytes, new CompressionStream("deflate-raw")));
@@ -94,20 +109,23 @@ export async function decodeToken(token: string): Promise<Countdown | null> {
   }
   if (isNaN(target.getTime())) return null;
 
-  let msg = "";
+  let text = "";
   if (m[6]) {
     try {
       let bytes = fromBase64Url(m[6]);
       if (m[5] === "~") bytes = await transform(bytes, new DecompressionStream("deflate-raw"));
-      msg = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+      text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
     } catch {
       return null;
     }
   }
+  const [msg = "", location, notes] = text.split(SEPARATOR);
   return {
     target,
     dateOnly,
     msg,
+    ...(location ? { location } : {}),
+    ...(notes ? { notes } : {}),
     theme: themeFromLetters(m[4]),
     countUp: m[4].includes(COUNT_UP),
     yearly: m[4].includes(YEARLY),

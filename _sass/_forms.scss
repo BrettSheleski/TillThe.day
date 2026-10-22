@@ -30,7 +30,8 @@ label { font-size: 0.9rem; font-weight: 600; margin-top: 8px; }
 }
 
 input,
-select {
+select,
+textarea {
   font: inherit;
   padding: 10px 12px;
   border: 1px solid var(--border);
@@ -84,9 +85,21 @@ button,
   &:has(input:disabled) { opacity: 0.45; cursor: default; }
 }
 
-// The optional end: "+ Add end", then the end date and time side by side
-.add-end { align-self: flex-start; margin-top: 8px; }
+// "+ Add end" and "+ Add location & notes": reveal optional fields
+.add-link { align-self: flex-start; margin-top: 8px; }
 
+// The optional location and notes
+.details-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  textarea { resize: vertical; }
+}
+
+.field-hint { margin: 0; font-size: 0.8rem; }
+
+// The optional end: the end date and time side by side
 .end-row {
   display: flex;
   gap: 8px;

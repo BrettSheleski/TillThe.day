@@ -40,6 +40,27 @@
 
 .target { margin: 0 0 24px; color: var(--muted); font-size: 0.9rem; }
 
+// The countdown's location (a map link) and notes, under the date
+.event-details {
+  margin: -16px auto 24px;
+  max-width: 440px;
+  font-size: 0.9rem;
+
+  p { margin: 0 0 4px; }
+}
+
+.event-location a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible { text-decoration: underline; }
+}
+
+// Line breaks as typed
+.event-notes { color: var(--muted); white-space: pre-line; overflow-wrap: anywhere; }
+
 // What a page shows depends on its mode, set before the first paint (see
 // src/head/early.ts), so nothing appears late and pushes things around:
 // "create" is the home page form; "view" shows a countdown.

@@ -25,7 +25,10 @@ if (countdown) {
 
   byId("holiday-year").textContent = String(year);
   createDisplay().set(countdown, { celebrate: true });
-  showActions(countdown, pageUrl, { holiday: page.dataset.slug!, ...(isNext ? {} : { year }) });
+  // The holiday's summary goes in calendar events' description (not on the page,
+  // which has it in its About section)
+  const withNotes = { ...countdown, notes: page.dataset.summary };
+  showActions(withNotes, pageUrl, { holiday: page.dataset.slug!, ...(isNext ? {} : { year }) });
 
   // Fill the lines the page reserved with links to each occurrence; drop any left over
   const items = [...byId("upcoming").children];

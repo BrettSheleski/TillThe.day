@@ -5,7 +5,7 @@ A static countdown page you can host on GitHub Pages. Pick a date, add an option
 Nothing is stored on a server. The date and message are packed into a single `c` parameter in the URL:
 
 ```
-https://<user>.github.io/<repo>/?c=<when>[_<length>][<letters>][.<message> | ~<compressed message>]
+https://<user>.github.io/<repo>/?c=<when>[_<length>][<letters>][.<text> | ~<compressed text>]
 ```
 
 - `<when>` is one of:
@@ -17,10 +17,10 @@ https://<user>.github.io/<repo>/?c=<when>[_<length>][<letters>][.<message> | ~<c
   - `U` for a count-up (time since the date). The home page sets it by itself when the start has already passed, unless the event has an end or repeats yearly (then it counts toward the next start or end).
   - `Y` for a yearly repeat (birthdays, anniversaries). The link keeps the original date, and the page counts down to its next anniversary, showing which one it is (e.g. "37th"). Feb 29 falls on Feb 28 in other years.
   - `U` and `Y` are reserved and must never be used as theme codes.
-- `.<message>`: the optional message as URL-safe base64 of its UTF-8 text.
-- `~<compressed message>`: the same, but deflate-compressed first. Used instead of `.` when it's shorter, which is usually true for longer messages.
+- `.<text>`: the optional message as URL-safe base64 of its UTF-8 text. If the countdown has a location or notes, they follow the message, each after a U+001F (unit separator) character, in the order message, location, notes, with empty ones dropped from the end. Older links have just the message.
+- `~<compressed text>`: the same, but deflate-compressed first. Used instead of `.` when it's shorter, which is usually true for longer text.
 
-The message is encoded, not encrypted: anyone with the link can decode it. When the date has passed, the page counts the time since it.
+The message, location and notes are encoded, not encrypted: anyone with the link can decode them. The location and notes show under the countdown's date (the location as a Google Maps link) and go into calendar events; the embed widget leaves them out. When the date has passed, the page counts the time since it.
 
 ## Project layout
 

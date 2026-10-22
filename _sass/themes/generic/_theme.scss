@@ -106,7 +106,8 @@ $generic-dark: (
   #message { font-weight: 700; }
 
   input,
-  select {
+  select,
+  textarea {
     background: var(--unit-bg);
     transition: border-color 0.15s, box-shadow 0.15s;
 

@@ -33,6 +33,9 @@ body.embed {
     line-height: 1.3;
   }
   .target { margin: 0 0 4px; font-size: 0.8rem; }
+
+  // No room for the location and notes; they're on the full countdown
+  .event-details { display: none; }
 }
 
 .embed-credit {

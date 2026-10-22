@@ -4,17 +4,17 @@ title: Privacy
 heading: Privacy policy
 description: What Till the Day collects (very little) and who else is involved in running it.
 permalink: /privacy/
-last_updated: 2026-10-21
+last_updated: 2026-10-22
 ---
 Till the Day is built to collect as little as possible. There are no accounts and no database, and the site sets no cookies.
 
 ## Your countdowns
 
-A countdown's date, time, message and theme are stored **only in its link** (the part after `?c=`). They aren't saved anywhere else, so we can't see your countdowns, and we can't recover a lost link.
+A countdown's date, time, message, location, notes and theme are stored **only in its link** (the part after `?c=`). They aren't saved anywhere else, so we can't see your countdowns, and we can't recover a lost link.
 
 Two things to know:
 
-- **Anyone with the link can read the message.** It's encoded to keep links short, not encrypted. Don't put anything private in a countdown you share.
+- **Anyone with the link can read the message, location and notes.** They're encoded to keep links short, not encrypted. Don't put anything private in a countdown you share, such as a home address you wouldn't want forwarded.
 - **The link is sent to our host when the page loads.** The site is hosted on [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#data-collection), which receives every page request, including the full link and your IP address, and may keep logs of them under the [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement). We don't have access to those logs.
 
 QR codes and calendar files are created in your browser and never leave your device. Fonts and everything else the pages need are served from this site too, so loading a countdown doesn't contact any other service except the visit counter below.
@@ -33,7 +33,7 @@ See [Cloudflare's privacy policy](https://www.cloudflare.com/privacypolicy/) for
 
 ## Sharing and calendars
 
-The share and calendar buttons (email, WhatsApp, Facebook, X, Google Calendar and Outlook) open those services with your countdown's link and message filled in. Nothing is sent until you choose one, and from then on that service's privacy policy applies.
+The share and calendar buttons (email, WhatsApp, Facebook, X, Google Calendar and Outlook) open those services with your countdown's link, message, location and notes filled in. A countdown's location links to Google Maps, which receives the location if you click it. Nothing is sent until you choose one, and from then on that service's privacy policy applies.
 
 ## Embedded countdowns
 

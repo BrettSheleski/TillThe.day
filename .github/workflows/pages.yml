@@ -33,7 +33,14 @@ jobs:
       # Failing tests stop the deploy
       - run: npm test
       - run: npm run build
-      - uses: actions/configure-pages@v5
+      - id: pages
+        uses: actions/configure-pages@v5
+      # Build for the address in the repo's Pages settings, e.g.
+      # https://tillthe.day, so links, the sitemap and link previews use
+      # https (Jekyll's own guess stays on http). Nothing in the repo names
+      # the domain.
+      - run: |
+          printf 'url: "%s"\nbaseurl: "%s"\n' "${{ steps.pages.outputs.origin }}" "${{ steps.pages.outputs.base_path }}" >> _config.yml
       - uses: actions/jekyll-build-pages@v1
         with:
           source: ./

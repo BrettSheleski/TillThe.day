@@ -88,6 +88,11 @@ describe("encode and decode", () => {
     "an end (4 hours)": countdown({ duration: 240, msg: "Concert" }),
     "a long end, with every option": countdown({ duration: 60 * 24 * 3, theme: themeById("party"), yearly: true, msg: "Festival" }),
     "a multi-day date-only event": countdown({ dateOnly: true, target: new Date(2027, 5, 12), duration: 7, msg: "Trip" }),
+    "a location": countdown({ msg: "Wedding", location: "Grand Hotel, 123 Main St, Chicago" }),
+    "notes with line breaks": countdown({ msg: "Potluck", notes: "Bring a dish.\nDoors at 6." }),
+    "a location and notes": countdown({ msg: "Reunion", location: "Lake House", notes: "Swimsuits!" }),
+    "notes but no location": countdown({ msg: "Launch", notes: "Watch the stream" }),
+    "a location but no message": countdown({ location: "Wrigley Field" }),
   };
 
   for (const [name, original] of Object.entries(cases)) {
@@ -99,6 +104,15 @@ describe("encode and decode", () => {
       expect(decoded).toEqual(original);
     });
   }
+
+  it("turns a separator typed into the text into a space, so it can't shift the fields", async () => {
+    const decoded = await decodeToken(await encodeToken(countdown({ msg: "a\u001fb", location: "Here" })));
+    expect(decoded).toMatchObject({ msg: "a b", location: "Here" });
+  });
+
+  it("leaves the text out entirely when there's no message, location or notes", async () => {
+    expect(await encodeToken(countdown({ location: "", notes: "" }))).not.toMatch(/[.~]/);
+  });
 
   it("round-trips a date-only countdown", async () => {
     const original = countdown({ dateOnly: true, target: new Date(2027, 6, 4), msg: "Fireworks" });
