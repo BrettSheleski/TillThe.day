@@ -135,9 +135,9 @@ function formatEnding(countdown: Countdown): string {
  */
 export function showActions(countdown: Countdown, url: string, embed: EmbedSource): void {
   const actions = byId("view-actions");
-  byId("copy-link").addEventListener("click", (e) =>
-    copyToClipboard(url, e.currentTarget as HTMLElement)
-  );
+  // Copy link is in the Share menu, which closes when it's chosen, so the
+  // result ("Copied!") shows on the Share button
+  byId("copy-link").addEventListener("click", () => copyToClipboard(url, byId("share-label")));
   const info = shareInfo(countdown, url);
   setUpShareMenu(info);
   setUpEmbedDialog(info.title, embedUrl(new URL(actions.dataset.embed!, location.href).href, embed));

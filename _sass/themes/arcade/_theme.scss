@@ -78,6 +78,14 @@ html[data-theme="arcade"] {
     box-shadow: 4px 4px 0 $arcade-cyan;
 
     &.secondary { border-width: 3px; }
+    &.icon-button { box-shadow: none; }
+  }
+
+  // The pixel font is wide: keep the paired buttons on one line on phones
+  .primary-actions > button,
+  .primary-actions summary {
+    font-size: clamp(0.55rem, 2.6vw, 0.75rem);
+    white-space: nowrap;
   }
 }
 

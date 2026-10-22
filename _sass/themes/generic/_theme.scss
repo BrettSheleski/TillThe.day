@@ -133,6 +133,15 @@ $generic-dark: (
 
       &:hover { border-color: var(--accent); color: var(--accent); }
     }
+
+    &.icon-button {
+      background: transparent;
+      color: var(--muted);
+      border-color: transparent;
+      box-shadow: none;
+
+      &:hover { border-color: var(--border); color: var(--accent); transform: none; }
+    }
   }
 
   // Small text buttons and menu items stay plain

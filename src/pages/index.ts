@@ -71,16 +71,35 @@ function showCreate(): void {
 
   addEnd.addEventListener("click", () => {
     endFields.hidden = false;
-    // Start from the start date, and an hour after the start time
-    if (!endDateInput.value) endDateInput.value = dateInput.value;
-    if (timeInput.value && !endTimeInput.value && dateInput.value) {
-      const later = new Date(new Date(`${dateInput.value}T${timeInput.value}`).getTime() + 3_600_000);
-      endDateInput.value = localDate(later);
-      endTimeInput.value = later.toTimeString().slice(0, 5);
+    // Start from the shortest valid end: an hour after the start time, or with
+    // only a date, the following day (the end date is the last day, inclusive)
+    if (dateInput.value && !endDateInput.value && !endTimeInput.value) {
+      if (timeInput.value) {
+        endAnHourAfterStart();
+      } else {
+        const [y, m, d] = dateInput.value.split("-").map(Number);
+        endDateInput.value = localDate(new Date(y, m - 1, d + 1));
+      }
     }
     update();
     endDateInput.focus();
   });
+  function endAnHourAfterStart(): void {
+    const later = new Date(new Date(`${dateInput.value}T${timeInput.value}`).getTime() + 3_600_000);
+    endDateInput.value = localDate(later);
+    endTimeInput.value = later.toTimeString().slice(0, 5);
+  }
+
+  // Adding a start time to a date-only event with an end: end at the same
+  // time on its end date (a day later is 24 hours). Runs before the form's
+  // update, which listens on the form.
+  let hadTime = false; // as of the last update()
+  timeInput.addEventListener("input", () => {
+    if (hadTime || !timeInput.value || !hasEnd() || !dateInput.value || endTimeInput.value) return;
+    if (endDateInput.value > dateInput.value) endTimeInput.value = timeInput.value;
+    else endAnHourAfterStart();
+  });
+
   byId("remove-end").addEventListener("click", () => {
     endFields.hidden = true;
     endDateInput.value = endTimeInput.value = "";
@@ -142,12 +161,17 @@ function showCreate(): void {
   function update(): void {
     applyTheme(themeById(themeSelect.value));
     clearTime.hidden = !timeInput.value;
+    hadTime = !!timeInput.value;
     yearlyInput.disabled = countingUp();
 
-    // An end doesn't apply to count-ups; a date-only countdown ends on a date
+    // An end doesn't apply to count-ups
     addEnd.hidden = !endFields.hidden;
-    addEnd.disabled = endDateInput.disabled = endTimeInput.disabled = countingUp();
-    endTimeInput.hidden = !timeInput.value;
+    addEnd.disabled = endDateInput.disabled = countingUp();
+    // The end time only applies once there's a start time; shown either way so
+    // the row keeps its two columns. Clearing the start time clears it too.
+    if (!timeInput.value) endTimeInput.value = "";
+    endTimeInput.disabled = countingUp() || !timeInput.value;
+    endTimeInput.title = timeInput.value ? "" : "Pick a start time first";
     endDateInput.min = dateInput.value;
     endDateInput.setCustomValidity("");
     endTimeInput.setCustomValidity("");

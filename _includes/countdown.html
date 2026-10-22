@@ -3,30 +3,45 @@
 
 <!-- Shown in "view" mode (see _sass/_countdown.scss). data-embed: where the
      embed page lives, for the "Embed on a website" code -->
-<div id="view-actions" class="actions" data-embed="{{ '/embed/' | relative_url }}">
-  <button id="copy-link" type="button">Copy link</button>
-  <details id="share-menu" class="dropdown">
-    <summary class="button secondary">Share</summary>
-    <div class="menu">
-      <button id="share-native" type="button" hidden>Share via&hellip;</button>
-      <a id="share-email">Email</a>
-      <a id="share-whatsapp" target="_blank" rel="noopener">WhatsApp</a>
-      <a id="share-facebook" target="_blank" rel="noopener">Facebook</a>
-      <a id="share-x" target="_blank" rel="noopener">X (Twitter)</a>
-      <button id="share-qr" type="button">QR code</button>
-      <button id="share-embed" type="button">Embed on a website</button>
-    </div>
-  </details>
-  <details id="calendar-menu" class="dropdown">
-    <summary class="button secondary">Add to calendar</summary>
-    <div class="menu">
-      <a id="calendar-google" target="_blank" rel="noopener">Google Calendar</a>
-      <a id="calendar-outlook" target="_blank" rel="noopener">Outlook.com</a>
-      <a id="calendar-ics">Apple / Outlook / other (.ics)</a>
-    </div>
-  </details>
-  <button id="present" type="button" class="secondary" title="Full screen (F)" hidden>Full screen</button>
-  <a href="{{ '/' | relative_url }}" class="button secondary">Make your own</a>
+<!-- Full screen: an icon in the card's top-right corner, shown in "view" mode -->
+<button id="present" type="button" class="icon-button present-toggle" title="Full screen (F)" aria-label="Full screen">
+  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
+</button>
+
+<div id="view-actions" class="view-actions" data-embed="{{ '/embed/' | relative_url }}">
+  <div class="primary-actions">
+    <details id="share-menu" class="dropdown">
+      <summary class="button">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
+        <!-- Briefly says "Copied!" after Copy link -->
+        <span id="share-label">Share</span>
+      </summary>
+      <div class="menu">
+        <button id="copy-link" type="button">Copy link</button>
+        <button id="share-native" type="button" hidden>Share via&hellip;</button>
+        <a id="share-email">Email</a>
+        <a id="share-whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+        <a id="share-facebook" target="_blank" rel="noopener">Facebook</a>
+        <a id="share-x" target="_blank" rel="noopener">X (Twitter)</a>
+        <button id="share-qr" type="button">QR code</button>
+        <button id="share-embed" type="button">Embed on a website</button>
+      </div>
+    </details>
+    <details id="calendar-menu" class="dropdown">
+      <summary class="button secondary">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM4 10h16M8 3v4M16 3v4"/></svg>
+        <!-- Shortened on narrow screens (see _sass/_countdown.scss) -->
+        <span class="wide-only">Add to calendar</span><span class="narrow-only" aria-hidden="true">Calendar</span>
+      </summary>
+      <div class="menu">
+        <a id="calendar-google" target="_blank" rel="noopener">Google Calendar</a>
+        <a id="calendar-outlook" target="_blank" rel="noopener">Outlook.com</a>
+        <a id="calendar-ics">Apple / Outlook / other (.ics)</a>
+      </div>
+    </details>
+  </div>
+
+  <a href="{{ '/' | relative_url }}" class="make-own">Make your own countdown &rarr;</a>
 </div>
 
 <!-- Shown only in full-screen mode; fades out with the cursor when idle -->

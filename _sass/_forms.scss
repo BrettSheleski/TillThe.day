@@ -130,3 +130,60 @@ button,
 
   input { flex: 1; min-width: 0; }
 }
+
+// Two fields side by side, e.g. date and time
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+// Narrow side-by-side inputs: less side padding, so a date still fits on phones
+.field-row input,
+.end-row input { padding-left: 8px; padding-right: 8px; }
+
+// Small line icons inside buttons
+.icon {
+  width: 1.15em;
+  height: 1.15em;
+  margin-right: 6px;
+  vertical-align: -0.22em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+// Icon-only buttons (e.g. Full screen): quiet and square; give each a title
+// (tooltip) and an aria-label
+button.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+
+  .icon { width: 20px; height: 20px; margin: 0; }
+
+  &:hover,
+  &:focus-visible { border-color: var(--border); color: var(--accent); }
+}
+
+// Fields that don't apply yet, e.g. the end time before a start time is picked
+input:disabled,
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

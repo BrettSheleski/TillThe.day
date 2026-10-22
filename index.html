@@ -21,14 +21,20 @@ script: index
       <label><input type="radio" name="mode" value="up"> Count up from</label>
     </fieldset>
 
-    <label for="date">Date</label>
-    <input id="date" type="date" required>
-
-    <div class="label-row">
-      <label for="time">Time <span class="hint">(optional)</span></label>
-      <button id="clear-time" type="button" class="link-button" hidden>Clear</button>
+    <!-- Date and time side by side -->
+    <div class="field-row">
+      <div class="field">
+        <label for="date">Date</label>
+        <input id="date" type="date" required>
+      </div>
+      <div class="field">
+        <div class="label-row">
+          <label for="time">Time <span class="hint">(optional)</span></label>
+          <button id="clear-time" type="button" class="link-button" hidden>Clear</button>
+        </div>
+        <input id="time" type="time">
+      </div>
     </div>
-    <input id="time" type="time">
 
     <!-- Optional end, for events that last a while (src/pages/index.ts) -->
     <button id="add-end" type="button" class="link-button add-end">+ Add end</button>
@@ -45,7 +51,7 @@ script: index
 
     <label class="checkbox">
       <input id="yearly" type="checkbox">
-      Repeat every year <span class="hint">(birthdays, anniversaries)</span>
+      <span>Repeat every year <span class="hint">(birthdays, anniversaries)</span></span>
     </label>
 
     <label for="msg">Message <span class="hint">(optional)</span></label>

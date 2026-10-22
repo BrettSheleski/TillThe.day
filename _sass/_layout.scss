@@ -29,6 +29,8 @@
 }
 
 .card {
+  // For things pinned to its corners, e.g. the full-screen button
+  position: relative;
   width: 100%;
   max-width: $content-width;
   margin: auto 0;
