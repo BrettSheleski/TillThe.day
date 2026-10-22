@@ -2,8 +2,9 @@
 layout: default
 ---
 <!-- An occasion page (_occasions/*.md): the create form preset for the
-     occasion (theme, message, and the occasion saved in the link), then the
-     Markdown body as tips. src/pages/index.ts runs it, as on the home page. -->
+     occasion (theme, message, date label, message ideas, and the occasion
+     saved in the link), then the tips (the Markdown body) and questions (the
+     `faq` front matter). src/pages/index.ts runs it, as on the home page. -->
 <div id="create-intro">
   <h1 class="intro-title"><span aria-hidden="true">{{ page.emoji }}</span> {{ page.heading }}</h1>
   <p class="sub occasion-intro">{{ page.intro }}</p>
@@ -12,15 +13,54 @@ layout: default
 <!-- The live preview -->
 {% include countdown.html %}
 
-{% include create-form.html theme=page.theme message=page.message occasion=page.slug yearly=page.yearly %}
+{% include create-form.html theme=page.theme message=page.message occasion=page.slug yearly=page.yearly date_label=page.date_label ideas=page.ideas open_end=page.open_end open_details=page.open_details %}
 
 <!-- Create mode only, like the form -->
 <div class="create-only">
-  <!-- Tips: closed by default to keep the page to the form; search engines still read them -->
+  <!-- Tips and questions: closed by default to keep the page to the form;
+       search engines still read them -->
   <details class="about">
-    <summary>Tips for your {{ page.name | downcase }} countdown</summary>
+    <summary>Tips and questions</summary>
+    <h2>Tips</h2>
     {{ content }}
+    {% if page.faq %}
+    <div class="faq">
+      <h2>Common questions</h2>
+      {% for item in page.faq %}
+      <h3>{{ item.q }}</h3>
+      <p>{{ item.a }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
   </details>
 
   {% include occasion-links.html %}
 </div>
+
+<!-- Structured data for search engines: the questions above and where this
+     page sits in the site. Text is JSON-escaped with jsonify. -->
+<script type="application/ld+json">
+[
+  {% if page.faq %}{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {% for item in page.faq %}{
+        "@type": "Question",
+        "name": {{ item.q | jsonify }},
+        "acceptedAnswer": { "@type": "Answer", "text": {{ item.a | jsonify }} }
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  },{% endif %}
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": {{ site.title | jsonify }}, "item": {{ '/' | absolute_url | jsonify }} },
+      { "@type": "ListItem", "position": 2, "name": "Occasions", "item": {{ '/occasions/' | absolute_url | jsonify }} },
+      { "@type": "ListItem", "position": 3, "name": {{ page.heading | jsonify }}, "item": {{ page.url | absolute_url | jsonify }} }
+    ]
+  }
+]
+</script>

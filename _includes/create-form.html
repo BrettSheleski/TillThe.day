@@ -7,6 +7,10 @@
     occasion   the occasion page's name, saved in the countdown's link
     yearly     true for "Repeat every year"; on occasion pages the box is
                hidden, so this decides it
+    date_label the date field's label, e.g. "Due date" (default: "Date")
+    ideas      message ideas, shown as buttons that fill in the message
+    open_end   true to start with the end fields showing (e.g. a vacation)
+    open_details  true to start with the location and notes showing
   Driven by src/pages/index.ts; a new countdown always opens on the home page.
 {%- endcomment -%}
 <!-- Create mode only (see _sass/_countdown.scss) -->
@@ -16,7 +20,7 @@
     <!-- Date and time side by side -->
     <div class="field-row">
       <div class="field">
-        <label for="date">Date</label>
+        <label for="date">{{ include.date_label | default: "Date" }}</label>
         <input id="date" type="date" required>
       </div>
       <div class="field">
@@ -30,8 +34,8 @@
 
     <!-- Optional end, for events that last a while (src/pages/index.ts). Whether
          to count down or up comes from the dates themselves. -->
-    <button id="add-end" type="button" class="link-button add-link">+ Add end</button>
-    <div id="end-fields" hidden>
+    <button id="add-end" type="button" class="link-button add-link"{% if include.open_end %} hidden{% endif %}>+ Add end</button>
+    <div id="end-fields"{% unless include.open_end %} hidden{% endunless %}>
       <div class="label-row">
         <label for="end-date">Ends</label>
         <button id="remove-end" type="button" class="link-button">Remove</button>
@@ -51,11 +55,20 @@
 
     <label for="msg">Message <span class="hint">(optional)</span></label>
     <input id="msg" type="text" maxlength="200" placeholder="e.g. Our trip to Japan" value="{{ include.message }}">
+    {%- if include.ideas %}
+    <!-- Tapping one fills in the message (src/pages/index.ts) -->
+    <div class="message-ideas">
+      <span class="hint">Ideas:</span>
+      {%- for idea in include.ideas %}
+      <button type="button" class="chip idea" data-idea="{{ idea | escape }}">{{ idea }}</button>
+      {%- endfor %}
+    </div>
+    {%- endif %}
 
     <!-- Optional location and notes, shown on the countdown and added to
          calendars (src/pages/index.ts) -->
-    <button id="add-details" type="button" class="link-button add-link">+ Add location &amp; notes</button>
-    <div id="details-fields" class="details-fields" hidden>
+    <button id="add-details" type="button" class="link-button add-link"{% if include.open_details %} hidden{% endif %}>+ Add location &amp; notes</button>
+    <div id="details-fields" class="details-fields"{% unless include.open_details %} hidden{% endunless %}>
       <div class="label-row">
         <label for="location">Location</label>
         <button id="remove-details" type="button" class="link-button">Remove</button>

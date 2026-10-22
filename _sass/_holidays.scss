@@ -258,3 +258,33 @@ $holiday-tints: (
 
   li { margin-bottom: 8px; }
 }
+
+// Message ideas under an occasion page's message field: small chips that fill
+// it in. They're buttons, so they undo the themes' button look.
+.message-ideas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+
+  .hint { font-size: 0.8rem; }
+
+  button.idea {
+    margin: 0;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: none;
+    box-shadow: none;
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: normal;
+    transform: none;
+
+    &:hover,
+    &:focus-visible { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+  }
+}

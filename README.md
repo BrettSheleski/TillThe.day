@@ -34,6 +34,7 @@ _includes/header.html    Site header / nav
 _includes/footer.html    Site footer
 index.html               Home page: create a countdown, or view one from a link
 holidays.html            Holiday list page, soonest first (/holidays/)
+occasions.html           Occasion list page (/occasions/): countdowns, then count-ups
 _holidays/<name>.md      One holiday countdown page each (/<name>/), laid out by _layouts/holiday.html
 _occasions/<name>.md     One occasion page each (/<name>/, e.g. /wedding/), laid out by _layouts/occasion.html
 _includes/create-form.html  The create form, shared by the home and occasion pages
@@ -134,7 +135,7 @@ Each holiday page also gets its next five dates and a short FAQ ("When is Easter
 
 ### Adding an occasion
 
-Occasion pages (wedding, baby, birthday, retirement) are the create form preset for an occasion, with tips. Create `_occasions/<name>.md`, published at `/<name>/` (pick a name no holiday uses):
+Occasion pages (wedding, baby, birthday, sobriety, ...) are the create form preset for an occasion, with tips, questions and message ideas. They're listed on `/occasions/`. Create `_occasions/<name>.md`, published at `/<name>/` (pick a name no holiday uses):
 
 ```
 ---
@@ -146,14 +147,28 @@ intro: Count down to the big day, and share it with family and guests.
 link_text: a wedding                # its words in "Counting down to a wedding, ...?"
 emoji: "💍"
 theme: romantic                     # the theme the form starts on
-message: "Our wedding"              # suggested message; not "Until ...", which the countdown already says
+message: "Our wedding"              # suggested message; not "Until ..."/"Since ...", which the countdown already says
+summary: "Count down to the big day and share it with your guests."   # its card on /occasions/
+date_label: "Wedding date"          # the date field's label
+featured: true                      # optional: suggested under the home page's form (keep it to a few)
 yearly: true                        # optional: repeats every year (birthdays)
+count_up: true                      # optional: counts up from a past date (sobriety); listed separately
+open_end: true                      # optional: start with the end fields showing (vacation)
+open_details: true                  # optional: start with location and notes showing
 order: 1                            # position among the occasions
 image_intro: "Countdown to the"     # the link-preview image's two lines
 image_title: "Big Day"
+ideas:                              # message ideas, as buttons under the message; include `message`
+  - "Our wedding"
+  - "We say I do"
+faq:                                # questions and answers, shown and as structured data
+  - q: "Will guests in other time zones see the right time?"
+    a: "Yes, if you add a time. ..."
 ---
 - Tips for this occasion, as a Markdown list.
 ```
+
+Each one should earn its place: tips and questions specific to the occasion, not a renamed copy of another page, or search engines may treat it as a near-duplicate and skip it (or count it against the site). Tests check that each has a summary, at least two questions and three message ideas.
 
 On an occasion page the "Repeat every year" box is hidden and `yearly` decides it. The occasion is saved in the countdown's link, for later use; a new countdown always opens on the home page. Then run `npm run holiday-images` to draw its link-preview image (it adds the `image:` line), and commit both. A line under the home page's form, and under each occasion page, links to the others automatically.
 

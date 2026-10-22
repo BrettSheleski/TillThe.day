@@ -1,0 +1,37 @@
+---
+layout: default
+title: Occasion countdowns
+description: Countdowns for life's big days, like weddings, babies, birthdays, graduations and trips, and count-ups from a fresh start. Free and shareable.
+permalink: /occasions/
+---
+<h1>Occasion countdowns</h1>
+<p class="sub">Count down to life's big days, or count up from a fresh start.</p>
+
+<!-- Every occasion page (_occasions/*.md), in `order`, as cards like the
+     holidays page's (_sass/_holidays.scss), grouped by whether it counts down
+     or, with `count_up: true`, up -->
+{%- assign occasions = site.occasions | sort: "order" -%}
+{%- assign groups = "down,up" | split: "," -%}
+{%- for group in groups %}
+<section class="month">
+  <h2>{% if group == "up" %}Count up from{% else %}Count down to{% endif %}</h2>
+  <ul class="holiday-cards">
+    {%- for occasion in occasions -%}
+    {%- if group == "up" -%}{%- unless occasion.count_up -%}{%- continue -%}{%- endunless -%}
+    {%- else -%}{%- if occasion.count_up -%}{%- continue -%}{%- endif -%}{%- endif %}
+    <li>
+      <a class="holiday-card tint-{{ occasion.theme }}" href="{{ occasion.url | relative_url }}">
+        <span class="holiday-emoji" aria-hidden="true">{{ occasion.emoji }}</span>
+        <span class="holiday-text">
+          <span class="holiday-name">{{ occasion.name }}</span>
+          <span class="holiday-summary">{{ occasion.summary }}</span>
+        </span>
+        <span class="holiday-when" aria-hidden="true">&rarr;</span>
+      </a>
+    </li>
+    {%- endfor %}
+  </ul>
+</section>
+{%- endfor %}
+
+<p class="all-holidays"><a class="quiet-link" href="{{ '/holidays/' | relative_url }}">Holiday countdowns &rarr;</a></p>

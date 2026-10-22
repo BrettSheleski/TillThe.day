@@ -172,6 +172,12 @@ describe("occasion pages", () => {
     expect(pages.length).toBeGreaterThan(0);
   });
 
+  it("feature a few in the suggestions, so the line under the form stays short", () => {
+    const featured = pages.filter((p) => p.data.featured === true).length;
+    expect(featured).toBeGreaterThan(1);
+    expect(featured).toBeLessThanOrEqual(5);
+  });
+
   it("have unique positions in the list of occasions", () => {
     const orders = pages.map((p) => p.data.order);
     expect(new Set(orders).size).toBe(orders.length);
@@ -180,14 +186,30 @@ describe("occasion pages", () => {
   for (const { file, slug, data } of pages) {
     describe(file, () => {
       it("has its text, a suggested message and an emoji", () => {
-        for (const key of ["name", "title", "description", "heading", "intro", "link_text", "message", "image_intro", "image_title"]) {
+        for (const key of ["name", "title", "description", "heading", "intro", "link_text", "message", "image_intro", "image_title", "summary", "date_label"]) {
           expect(typeof data[key], key).toBe("string");
         }
         expect(String(data.emoji)).toMatch(/^\p{Extended_Pictographic}[\uFE0F\u200D\p{Extended_Pictographic}]*$/u);
       });
 
-      it("doesn't start its message with \"until\", which the countdown already says", () => {
-        expect(String(data.message)).not.toMatch(/^until\b/i);
+      it("doesn't start its message or ideas with \"until\" or \"since\", which the countdown already says", () => {
+        expect(String(data.message)).not.toMatch(/^(until|since)\b/i);
+        for (const idea of data.ideas as string[]) expect(idea).not.toMatch(/^(until|since)\b/i);
+      });
+
+      it("has a few message ideas, including its suggested message", () => {
+        const ideas = data.ideas as string[];
+        expect(ideas.length).toBeGreaterThanOrEqual(3);
+        expect(ideas).toContain(data.message);
+      });
+
+      it("has its own questions and answers", () => {
+        const faq = data.faq as { q: string; a: string }[];
+        expect(faq.length).toBeGreaterThanOrEqual(2);
+        for (const { q, a } of faq) {
+          expect(q).toMatch(/\?$/);
+          expect(a.length).toBeGreaterThan(20);
+        }
       });
 
       it("uses a theme that exists", () => {

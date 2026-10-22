@@ -1,12 +1,15 @@
-<!-- A line linking the occasion pages (_occasions/*.md, in `order`), leaving
-     out the page's own: "Counting down to a wedding, a new baby, a birthday or
-     retirement?" Each page's `link_text` is its words here. -->
+<!-- A line linking the featured occasion pages (`featured: true` in
+     _occasions/*.md, in `order`), leaving out the page's own: "Counting down
+     to a wedding, a new baby, a birthday or retirement?" Each page's
+     `link_text` is its words here. On occasion pages, a link to all of them
+     follows. -->
 {%- assign all = site.occasions | sort: "order" -%}
 {%- assign occasions = "" | split: "" -%}
 {%- for occasion in all -%}
-{%- unless occasion.url == page.url -%}{%- assign occasions = occasions | push: occasion -%}{%- endunless -%}
+{%- if occasion.featured -%}{%- unless occasion.url == page.url -%}{%- assign occasions = occasions | push: occasion -%}{%- endunless -%}{%- endif -%}
 {%- endfor -%}
-{%- if occasions.size > 0 %}
+{%- comment -%} Not under a count-up (sobriety, quitting smoking), where it would jar {%- endcomment -%}
+{%- if occasions.size > 0 and page.count_up != true %}
 <p class="occasion-links">
   {%- if page.layout == "occasion" %}Or counting down to {% else %}Counting down to {% endif -%}
   {%- for occasion in occasions -%}
@@ -14,4 +17,7 @@
   <a href="{{ occasion.url | relative_url }}">{{ occasion.link_text }}</a>
   {%- endfor -%}?
 </p>
+{%- endif %}
+{%- if page.layout == "occasion" %}
+<p class="all-holidays"><a class="quiet-link" href="{{ '/occasions/' | relative_url }}">All occasions &rarr;</a></p>
 {%- endif %}

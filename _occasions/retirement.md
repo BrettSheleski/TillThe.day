@@ -13,6 +13,21 @@ emoji: "🏖️"
 theme: vacation
 message: "My retirement"
 order: 4
+summary: "Count down to your last day of work."
+featured: true
+date_label: "Last day of work"
+ideas:
+  - "My retirement"
+  - "Last day at work"
+  - "Freedom"
+  - "Beach life"
+faq:
+  - q: "Can I count down to the end of my last shift?"
+    a: "Yes. Add the time you finish, like 5:00 PM, and it counts down to that minute."
+  - q: "Does it count working days?"
+    a: "No. It counts every day, hour, minute and second until the date, weekends included."
+  - q: "Can I see how long I've been retired?"
+    a: "Yes. Make a countdown with your retirement date once it has passed: past dates count up, showing the time since."
 ---
 - **Add the time you finish**, like 5:00 PM on your last day, to count down to the very minute.
 - **Share it with coworkers**, or add it to your phone's home screen to check on it between meetings.

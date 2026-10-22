@@ -108,7 +108,10 @@ function showCreate(): void {
     const before = lastStart;
     if (!dateInput.value) return; // e.g. half-typed; keep the last valid start
     lastStart = { date: dateInput.value, time: timeInput.value };
-    if (!before || !hasEnd()) return;
+    if (!hasEnd()) return;
+    // End fields that start open (a vacation page) get the same start as "+ Add end"
+    if (!endDateInput.value && !endTimeInput.value) return setEnd(defaultEnd(dateInput.value, timeInput.value));
+    if (!before) return;
     const moved = movedEnd(before, lastStart, { endDate: endDateInput.value, endTime: endTimeInput.value });
     if (moved) setEnd(moved);
   }
@@ -149,6 +152,16 @@ function showCreate(): void {
   // Values the browser restored, e.g. after Back
   if (locationInput.value || notesInput.value) showDetailsFields(true);
 
+  // Message ideas on occasion pages (_includes/create-form.html): tapping one
+  // fills in the message
+  const msgInput = byId<HTMLInputElement>("msg");
+  for (const idea of document.querySelectorAll<HTMLButtonElement>("[data-idea]")) {
+    idea.addEventListener("click", () => {
+      msgInput.value = idea.dataset.idea!;
+      msgInput.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+  }
+
   function readForm(): Countdown | null {
     const date = dateInput.value;
     if (!date) return null;
@@ -160,7 +173,7 @@ function showCreate(): void {
     return {
       target,
       dateOnly: !time,
-      msg: byId<HTMLInputElement>("msg").value.trim(),
+      msg: msgInput.value.trim(),
       location: locationInput.value.trim(),
       notes: notesInput.value.trim(),
       // Set by an occasion page (_includes/create-form.html)
