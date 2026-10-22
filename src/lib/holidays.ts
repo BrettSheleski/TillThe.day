@@ -82,6 +82,23 @@ export function nextHoliday(rule: HolidayRule, now = new Date()): Date | null {
   return null;
 }
 
+/**
+ * The occurrence in `year` if it's still to come (or today), otherwise the
+ * next one; with no year, the next one. Null if no upcoming date is known.
+ */
+export function holidayOccurrence(rule: HolidayRule, year: number | null, now = new Date()): Date | null {
+  const next = nextHoliday(rule, now);
+  if (!next || year === null) return next;
+  const date = holidayDate(rule, year);
+  return date && date >= next ? date : next;
+}
+
+/** A ?year= value: a four-digit year, or null for anything else. */
+export function parseYear(value: string | null): number | null {
+  const year = Number(value);
+  return value && Number.isInteger(year) && year >= 1000 && year <= 9999 ? year : null;
+}
+
 /** Up to `count` upcoming dates, starting with nextHoliday(). */
 export function upcomingHolidays(rule: HolidayRule, count: number, now = new Date()): Date[] {
   const first = nextHoliday(rule, now);
@@ -172,11 +189,18 @@ function seasonStart(season: Season, year: number): Date {
 }
 
 /**
- * A holiday as a countdown to its next date: a whole day, or for seasons the
- * exact moment. Null if no upcoming date is known.
+ * A holiday as a countdown: to its next date, or to its date in `year` if
+ * that's still to come (see holidayOccurrence). A whole day, or for seasons
+ * the exact moment. Null if no upcoming date is known.
  */
-export function holidayCountdown(rule: HolidayRule, name: string, theme: Theme, now = new Date()): Countdown | null {
-  const target = nextHoliday(rule, now);
+export function holidayCountdown(
+  rule: HolidayRule,
+  name: string,
+  theme: Theme,
+  year: number | null = null,
+  now = new Date()
+): Countdown | null {
+  const target = holidayOccurrence(rule, year, now);
   if (!target) return null;
   return {
     target,

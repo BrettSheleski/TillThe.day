@@ -12,6 +12,10 @@ describe("embed address", () => {
     expect(embedUrl(page, { holiday: "christmas" })).toBe("https://example.com/TimeUntil/embed/?holiday=christmas");
   });
 
+  it("carries a holiday in a given year", () => {
+    expect(embedUrl(page, { holiday: "christmas", year: 2028 })).toBe("https://example.com/TimeUntil/embed/?holiday=christmas&year=2028");
+  });
+
   it("handles tokens with every character links can contain", () => {
     const token = "_dxqRUY~a-b_c";
     expect(new URL(embedUrl(page, { token })).searchParams.get("c")).toBe(token);

@@ -86,6 +86,7 @@ describe("event IDs for pages without a countdown link", () => {
     const uid = (u: string) => calendarLinks(countdown(), u).ics.match(/^UID:(.*)$/m)![1];
     expect(uid("https://example.com/TimeUntil/christmas/")).toBe("TimeUntil-christmas@example.com");
     expect(uid("https://example.com/TimeUntil/halloween/")).toBe("TimeUntil-halloween@example.com");
+    expect(uid("https://example.com/TimeUntil/christmas/?year=2028")).toBe("TimeUntil-christmas-2028@example.com");
   });
 });
 

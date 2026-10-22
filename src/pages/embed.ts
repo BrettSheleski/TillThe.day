@@ -1,13 +1,13 @@
 // Script for embed.html, the widget shown inside other websites: displays the
-// countdown from ?c=<token> or the holiday from ?holiday=<name>.
+// countdown from ?c=<token> or the holiday from ?holiday=<name>[&year=<year>].
 import { createDisplay } from "../lib/countdown-view";
 import { byId } from "../lib/dom";
-import { holidayCountdown, type HolidayRule } from "../lib/holidays";
+import { holidayCountdown, parseYear, type HolidayRule } from "../lib/holidays";
 import { applyTheme, themeById } from "../lib/themes";
 import { decodeToken, peekTheme, type Countdown } from "../lib/token";
 
 const params = new URLSearchParams(location.search);
-const credit = byId<HTMLAnchorElement>("embed-credit");
+const creditLink = byId<HTMLAnchorElement>("embed-credit");
 const token = params.get("c");
 const holiday = params.get("holiday");
 
@@ -23,7 +23,7 @@ async function fromToken(token: string): Promise<Countdown | null> {
   applyTheme(peekTheme(token));
   const countdown = await decodeToken(token);
   // The credit opens this countdown's full page
-  if (countdown) credit.href = `${credit.href}?c=${token}`;
+  if (countdown) creditLink.href = `${creditLink.href}?c=${token}`;
   return countdown;
 }
 
@@ -32,6 +32,11 @@ function fromHoliday(slug: string): Countdown | null {
   if (!item) return null;
   const theme = themeById(item.dataset.theme!);
   applyTheme(theme);
-  credit.href = new URL(item.dataset.url!, location.href).href;
-  return holidayCountdown(JSON.parse(item.dataset.rule!) as HolidayRule, item.dataset.name!, theme);
+  const year = parseYear(params.get("year"));
+  const countdown = holidayCountdown(JSON.parse(item.dataset.rule!) as HolidayRule, item.dataset.name!, theme, year);
+  // The credit opens the holiday's page, for the same year if one was given
+  const credit = new URL(item.dataset.url!, location.href);
+  if (year && countdown?.target.getFullYear() === year) credit.searchParams.set("year", String(year));
+  creditLink.href = credit.href;
+  return countdown;
 }

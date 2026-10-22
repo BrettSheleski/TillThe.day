@@ -86,11 +86,13 @@ function icsFile(countdown: Countdown, title: string, details: string, url: stri
 
 /**
  * Stable per page, so adding the same countdown again updates the event: the
- * link's countdown, or for pages without one (holidays) the page's path.
+ * link's countdown, or for pages without one (holidays) the page's path plus
+ * any year, so each year's Christmas is its own event.
  */
 function eventId(url: string): string {
   const { searchParams, pathname } = new URL(url);
-  return searchParams.get("c") ?? pathname.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const year = searchParams.get("year");
+  return searchParams.get("c") ?? `${pathname}${year ? `-${year}` : ""}`.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
 function alarm(trigger: string, description: string): string[] {

@@ -5,14 +5,17 @@
 /** Fixed size that fits the widget's content at any width from about 300px up. */
 export const EMBED_HEIGHT = 250;
 
-/** What the widget shows: a countdown link's token, or a holiday page. */
-export type EmbedSource = { token: string } | { holiday: string };
+/** What the widget shows: a countdown link's token, or a holiday (in a given year, or the next). */
+export type EmbedSource = { token: string } | { holiday: string; year?: number };
 
 /** The widget's address. `embedPage` is the embed page's absolute URL. */
 export function embedUrl(embedPage: string, source: EmbedSource): string {
   const url = new URL(embedPage);
   if ("token" in source) url.searchParams.set("c", source.token);
-  else url.searchParams.set("holiday", source.holiday);
+  else {
+    url.searchParams.set("holiday", source.holiday);
+    if (source.year) url.searchParams.set("year", String(source.year));
+  }
   return url.toString();
 }
 

@@ -69,3 +69,14 @@ h2 { font-size: 1.15rem; margin: 28px 0 10px; }
   border-style: dashed;
   font-weight: 600;
 }
+
+// Each upcoming date links to its own countdown; the one shown is marked
+.upcoming {
+  a { color: inherit; }
+
+  a[aria-current] {
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+  }
+}

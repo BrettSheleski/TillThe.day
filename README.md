@@ -118,7 +118,7 @@ Then run `npm run holiday-images` to draw the holiday's link-preview image (in i
 
 Add `featured: true` to show a holiday in the quick links on the home and holiday pages; every holiday appears on `/holidays/`. `order` is the holiday's typical date as MMDD (e.g. `1225`), used to sort the quick links.
 
-The page counts down to the next date, celebrates on the day itself, and rolls over to next year the day after. It also appears in the holiday links and on `/holidays/` automatically.
+The page counts down to the next date, celebrates on the day itself, and rolls over to next year the day after. Adding `?year=2028` counts down to that year's date instead (its "Upcoming dates" link there); a past year, a year with no listed date, or anything unreadable falls back to the next date, and the address is tidied to match. It also appears in the holiday links and on `/holidays/` automatically.
 
 ### Link previews
 

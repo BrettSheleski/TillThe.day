@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 import {
   daysUntil,
   holidayCountdown,
+  holidayOccurrence,
   holidayDate,
   isExactTime,
   nextHoliday,
+  parseYear,
   upcomingHolidays,
   type HolidayRule,
   type Season,
@@ -163,5 +165,36 @@ describe("holiday countdowns", () => {
   it("are null when no date is known", () => {
     const theme = themeById("generic");
     expect(holidayCountdown({ type: "dates", dates: ["2020-01-01"] }, "Old", theme)).toBeNull();
+  });
+});
+
+describe("a holiday in a given year", () => {
+  const christmas: HolidayRule = { type: "fixed", month: 12, day: 25 };
+  const now = new Date(2026, 9, 22);
+
+  it("is that year's date when it's still to come", () => {
+    expect(ymd(holidayOccurrence(christmas, 2028, now)!)).toEqual([2028, 12, 25]);
+  });
+
+  it("is the next one with no year, or a year that's past", () => {
+    expect(ymd(holidayOccurrence(christmas, null, now)!)).toEqual([2026, 12, 25]);
+    expect(ymd(holidayOccurrence(christmas, 2020, now)!)).toEqual([2026, 12, 25]);
+  });
+
+  it("is the next one for a year a date list doesn't cover", () => {
+    const rule: HolidayRule = { type: "dates", dates: ["2026-11-08", "2027-10-29"] };
+    expect(ymd(holidayOccurrence(rule, 2031, now)!)).toEqual([2026, 11, 8]);
+  });
+
+  it("counts down from a holiday countdown too", () => {
+    const c = holidayCountdown(christmas, "Christmas", themeById("holiday"), 2028, now)!;
+    expect(ymd(c.target)).toEqual([2028, 12, 25]);
+  });
+});
+
+describe("reading ?year=", () => {
+  it("accepts four-digit years only", () => {
+    expect(parseYear("2028")).toBe(2028);
+    for (const bad of [null, "", "abc", "28", "2028.5", "20280", "-2028", " "]) expect(parseYear(bad), String(bad)).toBeNull();
   });
 });
