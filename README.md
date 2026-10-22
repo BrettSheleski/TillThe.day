@@ -101,9 +101,11 @@ Create `_holidays/<name>.md`. It's published at `/<name>/`:
 name: Christmas
 title: How many days until Christmas?
 description: Live countdown to Christmas Day, December 25. (Shown in search results.)
+summary: "Gifts, decorations, family and festive food on December 25."  # one line, on /holidays/
+emoji: "🎄"          # its icon on /holidays/
 theme: holiday
 order: 1225          # typical date as MMDD, for sorting
-featured: true       # show in the quick links (optional)
+featured: true       # suggest it in the holiday lists (optional)
 rule: { type: fixed, month: 12, day: 25 }
 ---
 A paragraph or two about the holiday, in Markdown.

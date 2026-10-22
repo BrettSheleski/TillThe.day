@@ -2,6 +2,8 @@
 name: "Hanukkah"
 title: "How many days until Hanukkah?"
 description: "Live countdown to Hanukkah, the Jewish festival of lights. Its date changes every year with the Hebrew calendar."
+summary: "The Jewish festival of lights: eight nights of candles, latkes and dreidels."
+emoji: "🕎"
 image: /assets/images/holidays/hanukkah.png
 theme: holiday
 order: 1205

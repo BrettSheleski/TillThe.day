@@ -2,6 +2,8 @@
 name: "Cyber Monday"
 title: "How many days until Cyber Monday?"
 description: "Live countdown to Cyber Monday, the Monday after US Thanksgiving. See how many days are left until the online sales."
+summary: "The Monday after Thanksgiving, when online shops roll out their biggest deals."
+emoji: "💻"
 image: /assets/images/holidays/cyber-monday.png
 theme: space
 order: 1130

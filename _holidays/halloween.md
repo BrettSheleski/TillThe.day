@@ -2,6 +2,8 @@
 name: Halloween
 title: How many days until Halloween?
 description: Live countdown to Halloween, October 31. See how many days are left to pick a costume and stock up on candy.
+summary: "Costumes, trick-or-treating and jack-o'-lanterns on October 31."
+emoji: "🎃"
 image: /assets/images/holidays/halloween.png
 theme: doomsday
 order: 1031

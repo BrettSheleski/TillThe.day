@@ -2,6 +2,8 @@
 name: "Veterans Day"
 title: "How many days until Veterans Day?"
 description: "Live countdown to Veterans Day, November 11. See how many days are left until the US holiday honoring military veterans."
+summary: "Honors everyone who has served in the US armed forces, on November 11."
+emoji: "🎖️"
 image: /assets/images/holidays/veterans-day.png
 theme: generic
 order: 1111

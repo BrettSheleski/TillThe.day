@@ -2,6 +2,8 @@
 name: "Summer"
 title: "When is the first day of summer?"
 description: "Live countdown to the exact moment of the June solstice, the first day of summer in the Northern Hemisphere."
+summary: "The summer solstice, the longest day of the year."
+emoji: "☀️"
 image: /assets/images/holidays/summer.png
 theme: vacation
 order: 621

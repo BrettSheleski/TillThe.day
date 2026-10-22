@@ -2,6 +2,8 @@
 name: "Mothering Sunday"
 title: "How many days until Mother's Day in the UK?"
 description: "Live countdown to Mothering Sunday, Mother's Day in the UK and Ireland, three weeks before Easter."
+summary: "The UK's Mother's Day, three weeks before Easter."
+emoji: "💐"
 image: /assets/images/holidays/mothering-sunday.png
 theme: romantic
 order: 315

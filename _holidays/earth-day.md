@@ -2,6 +2,8 @@
 name: "Earth Day"
 title: "How many days until Earth Day?"
 description: "Live countdown to Earth Day, April 22. See how many days are left until the annual day for the environment."
+summary: "A worldwide day of action for the environment, every April 22."
+emoji: "🌍"
 image: /assets/images/holidays/earth-day.png
 theme: zen
 order: 422

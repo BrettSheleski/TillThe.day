@@ -2,6 +2,8 @@
 name: "Presidents' Day"
 title: "How many days until Presidents' Day?"
 description: "Live countdown to Presidents' Day (Washington's Birthday), the third Monday in February."
+summary: "Washington's Birthday, honoring US presidents on the third Monday in February."
+emoji: "🏛️"
 image: /assets/images/holidays/presidents-day.png
 theme: generic
 order: 216

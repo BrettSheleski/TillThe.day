@@ -2,6 +2,8 @@
 name: "April Fools' Day"
 title: "How many days until April Fools' Day?"
 description: "Live countdown to April Fools' Day, April 1. See how long you have to plan the perfect prank."
+summary: "A day for harmless pranks and hoaxes, so don't believe everything you read."
+emoji: "🤡"
 image: /assets/images/holidays/april-fools-day.png
 theme: arcade
 order: 401

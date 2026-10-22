@@ -2,6 +2,8 @@
 name: "Spring"
 title: "When is the first day of spring?"
 description: "Live countdown to the exact moment of the March equinox, the first day of spring in the Northern Hemisphere."
+summary: "The spring equinox: longer days and the first blooms."
+emoji: "🌸"
 image: /assets/images/holidays/spring.png
 theme: vacation
 order: 320

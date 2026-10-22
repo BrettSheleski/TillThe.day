@@ -2,6 +2,8 @@
 name: "Canadian Thanksgiving"
 title: "How many days until Thanksgiving in Canada?"
 description: "Live countdown to Canadian Thanksgiving, the second Monday in October."
+summary: "Canada's harvest celebration, on the second Monday in October."
+emoji: "🍁"
 image: /assets/images/holidays/canadian-thanksgiving.png
 theme: zen
 order: 1012

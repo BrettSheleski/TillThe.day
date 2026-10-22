@@ -2,6 +2,8 @@
 name: "Cinco de Mayo"
 title: "How many days until Cinco de Mayo?"
 description: "Live countdown to Cinco de Mayo, May 5. See how many days are left until the celebration."
+summary: "Marks Mexico's victory at the Battle of Puebla in 1862, celebrated widely in the US."
+emoji: "🎊"
 image: /assets/images/holidays/cinco-de-mayo.png
 theme: party
 order: 505

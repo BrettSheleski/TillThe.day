@@ -2,6 +2,8 @@
 name: "Christmas Eve"
 title: "How many days until Christmas Eve?"
 description: "Live countdown to Christmas Eve, December 24. See how many days are left until the night before Christmas."
+summary: "The night before Christmas: carols, candlelight and last-minute wrapping."
+emoji: "🌟"
 image: /assets/images/holidays/christmas-eve.png
 theme: holiday
 order: 1224

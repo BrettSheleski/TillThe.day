@@ -2,6 +2,8 @@
 name: "Fall"
 title: "When is the first day of fall?"
 description: "Live countdown to the exact moment of the September equinox, the first day of fall (autumn) in the Northern Hemisphere."
+summary: "The autumn equinox, when day and night are nearly equal and fall begins."
+emoji: "🍂"
 image: /assets/images/holidays/fall.png
 theme: zen
 order: 922

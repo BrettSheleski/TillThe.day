@@ -2,6 +2,8 @@
 name: "New Year's Eve"
 title: "How many days until New Year's Eve?"
 description: "Live countdown to New Year's Eve, December 31. See how many days are left until the last night of the year."
+summary: "The last night of the year, counting down to midnight."
+emoji: "🎉"
 image: /assets/images/holidays/new-years-eve.png
 theme: party
 order: 1231

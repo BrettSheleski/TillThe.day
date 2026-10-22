@@ -1,0 +1,20 @@
+<!-- One holiday on the holidays page (holidays.html): its emoji, name and
+     summary, tinted with its theme's color, and its next date and days to go
+     (`next`, from _data/holidays_soonest.json; left out once a date list has
+     run out). src/pages/holidays.ts redoes the date and days in the reader's
+     time zone. -->
+{%- assign holiday = include.holiday -%}
+{%- assign next = include.next -%}
+<li data-rule="{{ holiday.rule | jsonify | escape }}">
+  <a class="holiday-card tint-{{ holiday.theme }}" href="{{ holiday.url | relative_url }}">
+    <span class="holiday-emoji" aria-hidden="true">{{ holiday.emoji }}</span>
+    <span class="holiday-text">
+      <span class="holiday-name">{{ holiday.name }}{% if holiday.featured %} <span class="badge">Popular</span>{% endif %}</span>
+      <span class="holiday-summary">{{ holiday.summary }}</span>
+    </span>
+    <span class="holiday-when">
+      <span class="days">{% if next %}{% if next.days == 0 %}Today!{% elsif next.days == 1 %}Tomorrow{% else %}{{ next.days }} days{% endif %}{% endif %}</span>
+      <span class="date">{% if next %}{{ next.short }}{% else %}Not yet published{% endif %}</span>
+    </span>
+  </a>
+</li>

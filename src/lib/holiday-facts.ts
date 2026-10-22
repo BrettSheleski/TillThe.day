@@ -4,7 +4,7 @@
 // search engines, and shown as a visible FAQ with matching structured data
 // (_layouts/holiday.html).
 
-import { holidayDate, isExactTime, upcomingHolidays, type HolidayRule } from "./holidays";
+import { daysUntil, holidayDate, isExactTime, upcomingHolidays, type HolidayRule } from "./holidays";
 
 export interface HolidayFacts {
   /** The next few occurrences, starting with the next one */
@@ -30,6 +30,40 @@ export function formatHolidayDate(rule: HolidayRule, date: Date): string {
   return isExactTime(rule)
     ? date.toLocaleString("en-US", MOMENT).replace(/ at (.*)$/, " at $1 UTC")
     : date.toLocaleDateString("en-US", DAY);
+}
+
+/** A holiday's next date as the holiday lists show it. */
+export interface ListingDates {
+  /** e.g. "Oct 31", on chips */
+  date: string;
+  /** e.g. "Sat, Oct 31", on the holidays page's cards */
+  short: string;
+  /** e.g. "Saturday, October 31, 2026", with the time for seasons */
+  long: string;
+  /** The month it's listed under, e.g. "October 2026" */
+  month: string;
+  /** Whole days to go, 0 on the day itself */
+  days: number;
+}
+
+/**
+ * How a holiday's next date is shown in lists: in the reader's own language
+ * and time zone, or when the site is built (`build`), in US English with
+ * seasons' exact moments in UTC (like formatHolidayDate).
+ */
+export function listingDates(rule: HolidayRule, date: Date, now = new Date(), build = false): ListingDates {
+  const locale = build ? "en-US" : undefined;
+  const zone: Intl.DateTimeFormatOptions = build && isExactTime(rule) ? { timeZone: "UTC" } : {};
+  const format = (options: Intl.DateTimeFormatOptions) => date.toLocaleDateString(locale, { ...options, ...zone });
+  return {
+    date: format({ month: "short", day: "numeric" }),
+    short: format({ weekday: "short", month: "short", day: "numeric" }),
+    long: build ? formatHolidayDate(rule, date)
+      : isExactTime(rule) ? date.toLocaleString(undefined, { dateStyle: "full", timeStyle: "short" })
+      : date.toLocaleDateString(undefined, DAY),
+    month: format({ month: "long", year: "numeric" }),
+    days: daysUntil(date, now),
+  };
 }
 
 export function holidayFacts(rule: HolidayRule, name: string, now = new Date(), count = 5): HolidayFacts {

@@ -2,6 +2,8 @@
 name: "Ash Wednesday"
 title: "How many days until Ash Wednesday?"
 description: "Live countdown to Ash Wednesday, the first day of Lent. Its date changes every year with Easter."
+summary: "The first day of Lent, 46 days before Easter."
+emoji: "✝️"
 image: /assets/images/holidays/ash-wednesday.png
 theme: zen
 order: 218

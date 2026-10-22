@@ -2,6 +2,8 @@
 name: "Good Friday"
 title: "How many days until Good Friday?"
 description: "Live countdown to Good Friday, the Friday before Easter."
+summary: "The Friday before Easter, marking the crucifixion of Jesus."
+emoji: "🕯️"
 image: /assets/images/holidays/good-friday.png
 theme: zen
 order: 403

@@ -2,6 +2,8 @@
 name: "Rosh Hashanah"
 title: "How many days until Rosh Hashanah?"
 description: "Live countdown to Rosh Hashanah, the Jewish New Year. Its date changes every year with the Hebrew calendar."
+summary: "The Jewish New Year, welcomed with apples and honey for a sweet year."
+emoji: "🍎"
 image: /assets/images/holidays/rosh-hashanah.png
 theme: zen
 order: 912

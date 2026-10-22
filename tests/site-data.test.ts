@@ -171,6 +171,13 @@ describe("holiday pages", () => {
         expect(data.order).toBeLessThanOrEqual(1231);
       });
 
+      it("has a one-line summary and an emoji for the holidays page", () => {
+        expect(typeof data.summary).toBe("string");
+        expect(String(data.summary).length).toBeLessThanOrEqual(100);
+        // One emoji (allowing for variation selectors), no plain text
+        expect(String(data.emoji)).toMatch(/^\p{Extended_Pictographic}[️‍\p{Extended_Pictographic}]*$/u);
+      });
+
       it("has its own link-preview image", () => {
         // Drawn by scripts/holiday-images.mjs (npm run holiday-images)
         const slug = file.replace(/.md$/, "");

@@ -63,24 +63,161 @@ h2 { font-size: 1.15rem; margin: 28px 0 10px; }
   color: var(--muted);
 }
 
-// holidays.html: one row per holiday, soonest first
-.holiday-list {
+// --- The holidays page (holidays.html)
+
+// Each holiday is tinted with its theme's accent color (tint-<theme>)
+$holiday-tints: (
+  generic: map-get($generic-light, accent),
+  party: map-get($party-colors, pink),
+  birthday: #e9005c,
+  romantic: $romantic-rose,
+  holiday: $holiday-red,
+  vacation: $vacation-coral,
+  space: $space-cyan,
+  arcade: $arcade-magenta,
+  zen: $zen-sage,
+  doomsday: $doomsday-red
+);
+
+@each $theme, $tint in $holiday-tints {
+  .tint-#{$theme} { --tint: #{$tint}; }
+}
+
+// The soonest holiday, with a ticking clock
+.next-up {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 20px 16px;
+  border: 1px solid color-mix(in srgb, var(--tint) 35%, var(--border));
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--tint) 10%, var(--unit-bg));
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible { border-color: var(--tint); }
+}
+
+.next-up-label {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.next-up-emoji { font-size: 2.6rem; line-height: 1.1; }
+.next-up-name { font-size: 1.5rem; font-weight: 700; }
+.next-up-summary { max-width: 36ch; color: var(--muted); }
+
+.next-up-clock { display: flex; gap: 18px; margin-top: 6px; }
+
+.next-up-unit {
+  display: grid;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.next-up-number {
+  min-width: 2ch;
+  color: var(--text);
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.next-up-date { color: var(--muted); font-size: 0.85rem; }
+
+// One group per month
+.month h2 {
+  margin: 24px 0 8px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.holiday-cards {
+  display: grid;
+  gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
-  text-align: left;
+}
 
-  li {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 2px 12px;
-    padding: 12px 4px;
-    border-bottom: 1px solid var(--border);
+// Emoji, name and summary, then days to go and the date on the right
+.holiday-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 10px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--unit-bg);
+  color: var(--text);
+  text-align: left;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible { border-color: var(--tint); }
+}
+
+.holiday-emoji {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tint) 16%, transparent);
+  font-size: 1.4rem;
+}
+
+.holiday-text { display: grid; gap: 2px; min-width: 0; }
+.holiday-name { font-weight: 600; }
+.holiday-summary { color: var(--muted); font-size: 0.85rem; line-height: 1.4; }
+
+// Marks the featured holidays (`featured: true`)
+.holiday-name .badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 600;
+  vertical-align: 2px;
+}
+
+.holiday-when {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  white-space: nowrap;
+
+  .days { font-weight: 700; }
+  .date { color: var(--muted); font-size: 0.8rem; }
+}
+
+// Phones: the summary runs the full width under the name and days, rather
+// than squeezed between the emoji and the days
+@media (max-width: 520px) {
+  .holiday-card {
+    grid-template-areas:
+      "emoji name when"
+      "emoji summary summary";
+    row-gap: 4px;
   }
 
-  a { color: var(--accent); font-weight: 600; text-decoration: none; }
-  .days { grid-row: 1 / span 2; grid-column: 2; align-self: center; font-weight: 600; }
-  .date { color: var(--muted); font-size: 0.9rem; }
+  .holiday-text { display: contents; }
+  .holiday-emoji { grid-area: emoji; align-self: start; }
+  .holiday-name { grid-area: name; align-self: center; }
+  .holiday-summary { grid-area: summary; }
+  .holiday-when { grid-area: when; }
 }
 
 // "All holidays", the quiet link under the holiday chips

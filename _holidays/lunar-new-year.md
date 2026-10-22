@@ -2,6 +2,8 @@
 name: "Lunar New Year"
 title: "How many days until Lunar New Year?"
 description: "Live countdown to Lunar New Year (Chinese New Year). Its date changes every year with the lunar calendar."
+summary: "The start of the lunar new year: family reunions, red envelopes and lion dances."
+emoji: "🧧"
 image: /assets/images/holidays/lunar-new-year.png
 theme: party
 order: 217

@@ -2,6 +2,8 @@
 name: Valentine's Day
 title: How many days until Valentine's Day?
 description: Live countdown to Valentine's Day, February 14. See how many days are left to plan cards, flowers and dinner.
+summary: "A day for love, cards and chocolates on February 14."
+emoji: "💘"
 image: /assets/images/holidays/valentines-day.png
 theme: romantic
 order: 214

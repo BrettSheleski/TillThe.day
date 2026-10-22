@@ -2,6 +2,8 @@
 name: "Winter"
 title: "When is the first day of winter?"
 description: "Live countdown to the exact moment of the December solstice, the first day of winter in the Northern Hemisphere."
+summary: "The winter solstice, the shortest day of the year, with longer days from here on."
+emoji: "❄️"
 image: /assets/images/holidays/winter.png
 theme: holiday
 order: 1221

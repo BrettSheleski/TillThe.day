@@ -2,6 +2,8 @@
 name: New Year's Day
 title: How many days until New Year's Day?
 description: Live countdown to New Year's Day, January 1. See exactly how many days, hours, minutes and seconds are left until the new year.
+summary: "The first day of the year: fresh starts and resolutions."
+emoji: "🥂"
 image: /assets/images/holidays/new-years-day.png
 theme: party
 order: 101

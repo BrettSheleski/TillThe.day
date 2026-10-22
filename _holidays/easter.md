@@ -2,6 +2,8 @@
 name: Easter
 title: How many days until Easter?
 description: Live countdown to Easter Sunday. Easter's date changes every year; see when the next one is and how many days are left.
+summary: "The Christian celebration of the resurrection, with egg hunts and spring feasts."
+emoji: "🐣"
 image: /assets/images/holidays/easter.png
 theme: birthday
 order: 405

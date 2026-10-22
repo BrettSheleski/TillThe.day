@@ -2,6 +2,8 @@
 name: "Passover"
 title: "How many days until Passover?"
 description: "Live countdown to Passover (Pesach). Its date changes every year with the Hebrew calendar."
+summary: "The Jewish festival recalling the Exodus from Egypt, beginning with the Seder."
+emoji: "🍷"
 image: /assets/images/holidays/passover.png
 theme: zen
 order: 402

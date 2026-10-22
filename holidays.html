@@ -9,14 +9,58 @@ script: holidays
 <h1>Holiday countdowns</h1>
 <p class="sub">How many days until the next holiday?</p>
 
-<!-- The page script fills in each date and the days to go, soonest first -->
-<ul id="holiday-list" class="holiday-list">
-  {% assign holidays = site.holidays | sort: "order" %}
-  {% for holiday in holidays %}
-  <li data-rule="{{ holiday.rule | jsonify | escape }}">
-    <a href="{{ holiday.url | relative_url }}">{{ holiday.name }}</a>
-    <span class="date"></span>
-    <span class="days"></span>
-  </li>
-  {% endfor %}
-</ul>
+<!-- Everything below is laid out when the site is built, from
+     _data/holidays_soonest.json (scripts/holiday-data.ts), so it's in place
+     on the first paint. The page script then redoes the dates and days to go
+     in the reader's own time zone, and ticks the "Next up" clock. -->
+{%- assign soonest_slugs = site.data.holidays_soonest | map: "slug" -%}
+{%- assign first = site.data.holidays_soonest | first -%}
+{%- assign hero = site.holidays | where: "slug", first.slug | first -%}
+
+<!-- The soonest holiday; the page script fills it from that holiday's card -->
+<a id="next-up" class="next-up tint-{{ hero.theme }}" href="{{ hero.url | relative_url }}">
+  <span class="next-up-label">Next up</span>
+  <span class="next-up-emoji" aria-hidden="true">{{ hero.emoji }}</span>
+  <span class="next-up-name">{{ hero.name }}</span>
+  <span class="next-up-summary">{{ hero.summary }}</span>
+  <span class="next-up-clock" aria-hidden="true">
+    {%- assign units = "days,hours,minutes,seconds" | split: "," -%}
+    {%- for unit in units %}
+    <span class="next-up-unit"><span class="next-up-number" data-unit="{{ unit }}">--</span>{{ unit }}</span>
+    {%- endfor %}
+  </span>
+  <span class="next-up-date">{{ first.long }}</span>
+</a>
+
+<!-- Every holiday, grouped by the month of its next date, soonest first -->
+<div id="holiday-groups">
+  {%- assign month = "" -%}
+  {%- for next in site.data.holidays_soonest -%}
+  {%- assign holiday = site.holidays | where: "slug", next.slug | first -%}
+  {%- if next.month != month -%}
+  {%- unless forloop.first %}</ul></section>{% endunless %}
+  {%- assign month = next.month %}
+  <section class="month">
+    <h2>{{ month }}</h2>
+    <ul class="holiday-cards">
+  {%- endif %}
+      {% include holiday-card.html holiday=holiday next=next %}
+  {%- endfor %}
+  {%- if site.data.holidays_soonest.size > 0 %}</ul></section>{% endif %}
+
+  {%- comment -%} Holidays whose date list has run out {%- endcomment -%}
+  {%- assign undated = "" | split: "" -%}
+  {%- for holiday in site.holidays -%}
+  {%- unless soonest_slugs contains holiday.slug -%}{%- assign undated = undated | push: holiday -%}{%- endunless -%}
+  {%- endfor -%}
+  {%- if undated.size > 0 %}
+  <section class="month">
+    <h2>Date to be announced</h2>
+    <ul class="holiday-cards">
+      {%- for holiday in undated %}
+      {% include holiday-card.html holiday=holiday %}
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+</div>

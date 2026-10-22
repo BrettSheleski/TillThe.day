@@ -2,6 +2,8 @@
 name: "Boxing Day"
 title: "How many days until Boxing Day?"
 description: "Live countdown to Boxing Day, December 26. See how many days are left until the day after Christmas."
+summary: "The day after Christmas, a holiday in the UK, Canada and beyond."
+emoji: "🎁"
 image: /assets/images/holidays/boxing-day.png
 theme: holiday
 order: 1226

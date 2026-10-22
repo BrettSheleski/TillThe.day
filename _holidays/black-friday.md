@@ -2,6 +2,8 @@
 name: "Black Friday"
 title: "How many days until Black Friday?"
 description: "Live countdown to Black Friday, the day after US Thanksgiving. See how many days are left until the biggest sales of the year."
+summary: "The day after Thanksgiving and the unofficial start of holiday shopping."
+emoji: "🛍️"
 image: /assets/images/holidays/black-friday.png
 theme: party
 order: 1127

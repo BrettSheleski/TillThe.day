@@ -2,6 +2,8 @@
 name: "Diwali"
 title: "How many days until Diwali?"
 description: "Live countdown to Diwali, the festival of lights. Its date changes every year with the Hindu lunar calendar."
+summary: "The Hindu festival of lights, with lamps, sweets, fireworks and family."
+emoji: "🪔"
 image: /assets/images/holidays/diwali.png
 theme: party
 order: 1108
