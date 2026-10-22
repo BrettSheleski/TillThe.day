@@ -24,7 +24,10 @@ if (countdown) {
   if (!isNext) document.title = `${name} ${year} | ${document.title}`;
 
   byId("holiday-year").textContent = String(year);
-  createDisplay().set(countdown, { celebrate: true });
+  // The time left goes in the tab's title only while it's in the background:
+  // search engines read the title after the page script runs, and should see
+  // "How many days until Christmas?"
+  createDisplay().set(countdown, { celebrate: true, tabTitle: "hidden" });
   // The holiday's summary goes in calendar events' description (not on the page,
   // which has it in its About section)
   const withNotes = { ...countdown, notes: page.dataset.summary };

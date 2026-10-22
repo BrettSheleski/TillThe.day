@@ -22,6 +22,10 @@ export type Display = ReturnType<typeof createDisplay>;
  * class to <html>, which starts the current theme's end animation (see
  * _sass/themes/). Counting up, it shows the time since the target, or zeros
  * if that hasn't arrived yet.
+ *
+ * With `tabTitle`, the browser tab's title shows the time too (see
+ * tabTitleText): "always", or "hidden" for only while the tab is in the
+ * background, for pages whose own title matters to search engines.
  */
 export function createDisplay() {
   const section = byId("countdown");
@@ -38,6 +42,10 @@ export function createDisplay() {
   let anniversary = "";
   let celebrate = false;
   let shownPhase: Phase | null = null;
+  let tabTitle: "always" | "hidden" | null = null;
+  let pageTitle = document.title;
+  // Back to the page's own title when a "hidden"-only tab is looked at
+  document.addEventListener("visibilitychange", tick);
 
   function tick(): void {
     if (!current) return;
@@ -71,13 +79,21 @@ export function createDisplay() {
     }
     const celebrating = phase === "during" || (phase === "after" && !current.duration);
     document.documentElement.classList.toggle("elapsed", celebrate && celebrating);
+
+    if (tabTitle) {
+      const show = tabTitle === "always" || document.hidden;
+      const name = current.msg || pageTitle.split(" | ").pop()!;
+      document.title = show ? (tabTitleText(ms, phase, current, name) ?? pageTitle) : pageTitle;
+    }
   }
   setInterval(tick, 1000);
 
   return {
-    set(countdown: Countdown | null, options: { celebrate?: boolean } = {}): void {
+    set(countdown: Countdown | null, options: { celebrate?: boolean; tabTitle?: "always" | "hidden" } = {}): void {
       current = countdown;
       celebrate = options.celebrate ?? false;
+      tabTitle = options.tabTitle ?? null;
+      pageTitle = document.title;
       shownPhase = null;
       section.hidden = false;
       if (!countdown) {
@@ -98,6 +114,22 @@ export function createDisplay() {
       tick();
     },
   };
+}
+
+/**
+ * The tab title for a countdown, e.g. "12d 4h · Christmas": days and hours,
+ * hours and minutes in the last day, or minutes in the last hour (background
+ * tabs only tick about once a minute). "· 3h 20m left" while it's on; null
+ * once it's over, for the page's own title. Count-ups say "since".
+ */
+export function tabTitleText(ms: number, phase: Phase | null, { countUp, duration }: Countdown, name: string): string | null {
+  if (phase === "after") return duration ? null : `🎉 ${name}`;
+  const m = Math.max(0, Math.floor(ms / 60_000));
+  const d = Math.floor(m / 1440);
+  const h = Math.floor((m % 1440) / 60);
+  const time = d > 0 ? `${d.toLocaleString()}d ${h}h` : h > 0 ? `${h}h ${m % 60}m` : m > 0 ? `${m}m` : "<1m";
+  if (countUp) return `${time} since · ${name}`;
+  return phase === "during" ? `${time} left · ${name}` : `${time} · ${name}`;
 }
 
 /** The location (with a map link) and notes under the date, or nothing if it has neither. */

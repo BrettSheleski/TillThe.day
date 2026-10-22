@@ -138,6 +138,8 @@ Link to CSS, JavaScript and icon files with `{% include asset-url.html path='/as
 
 ### Full screen
 
+A countdown link's browser tab shows the time left in its title, e.g. "12d 4h · Holiday party", so it can be checked from another tab. Holiday pages do this only while the tab is in the background, so search engines (which read the title after the page script runs) still see "How many days until Christmas?".
+
 Countdown and holiday pages have a **Full screen** button (or press **F**) for TVs and parties: it hides everything but the countdown, sizes it to the screen, keeps the screen awake where the browser allows it, and hides the cursor when the mouse is idle. Esc, F or the Exit button leaves. The layout is in `_sass/_present.scss`; themes can adjust it under `html[data-theme="<id>"].presenting` (Arcade does, for its wide font). Where the browser won't go truly full screen (iPhone), the big layout still applies.
 
 ### Fonts
@@ -164,6 +166,8 @@ The tests in `tests/` cover the parts where a silent break would hurt most:
 - `holidays.test.ts`: holiday date rules, against known dates.
 - `holiday-facts.test.ts`: the holiday pages' upcoming dates and FAQ wording.
 - `calendar.test.ts`: the .ics file (checked with a real iCalendar parser) and the Google/Outlook links.
+- `form-dates.test.ts`: the home page form's date rules (`src/lib/form-dates.ts`): counting down or up, reading and checking the end, where a new end starts, moving the end with the start (including across daylight saving), and pasted addresses.
+- `tab-title.test.ts` and `map-link.test.ts`: the countdown in the tab's title, and the map link for each kind of device.
 - `site-data.test.ts`: that themes, Sass and holiday pages agree, e.g. unique theme letters, no theme using `U`, every holiday using a real theme.
 
 The deploy workflow runs the tests first, so a failing test stops the deploy.
