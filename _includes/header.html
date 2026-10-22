@@ -1,7 +1,17 @@
 <header class="site-header">
-  <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+  <!-- The logo: a calendar page with "the day" marked, drawn in the header's
+       text color so it reads on every theme (the coral dot stays coral). Its
+       app-icon version, on a purple square, is assets/images/favicon.svg. -->
+  <a class="site-title" href="{{ '/' | relative_url }}">
+    <svg class="logo" viewBox="8 10 48 48" aria-hidden="true">
+      <path d="M12 21a7 7 0 0 1 7-7h26a7 7 0 0 1 7 7v17L36 54H19a7 7 0 0 1-7-7z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M12 21a7 7 0 0 1 7-7h26a7 7 0 0 1 7 7v4H12z" fill="currentColor"/>
+      <path d="M52 38H36v16z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+      <circle cx="26" cy="38" r="6.5" fill="#d85a30"/>
+    </svg>
+    <span>{{ site.title }}</span>
+  </a>
   <nav>
     <a href="{{ '/holidays/' | relative_url }}">Holidays</a>
-    <a href="{{ '/' | relative_url }}">New countdown</a>
   </nav>
 </header>

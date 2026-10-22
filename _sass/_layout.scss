@@ -18,7 +18,23 @@
   nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 16px; }
 }
 
-.site-title { font-weight: 700; font-size: 1.1rem; }
+// The logo and name: the same font and size on every theme (themes leave it
+// alone), in the header's text color. Holiday sets that color for its dark
+// background via `.site-header a`.
+.site-header .site-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-family: "Inter", $font-stack;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  white-space: nowrap;
+
+  .logo { width: 28px; height: 28px; flex: none; }
+}
 
 .site-footer {
   text-align: center;
