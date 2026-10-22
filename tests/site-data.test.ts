@@ -140,6 +140,26 @@ describe("404 page", () => {
   });
 });
 
+describe("web app manifest", () => {
+  // The JSON, without the front matter (whose comments mention start_url)
+  const manifest = fs.readFileSync(path.join(root, "site.webmanifest"), "utf8").replace(/^---[\s\S]*?---\n/, "");
+
+  it("names icons that exist (from npm run icons)", () => {
+    const icons = [...manifest.matchAll(/'(\/assets\/images\/[^']+)'/g)].map((m) => m[1]);
+    expect(icons.length).toBeGreaterThanOrEqual(3);
+    for (const icon of icons) expect(fs.existsSync(path.join(root, icon)), icon).toBe(true);
+  });
+
+  it("has no start_url, so a home-screen icon opens the countdown it was added from", () => {
+    expect(manifest).not.toContain("start_url");
+  });
+
+  it("is valid JSON once Jekyll fills in its values", () => {
+    const body = manifest.replace(/\{\{[^}]*\}\}/g, '"x"');
+    expect(() => JSON.parse(body)).not.toThrow();
+  });
+});
+
 describe("holiday pages", () => {
   const dir = path.join(root, "_holidays");
   const pages = fs.readdirSync(dir).filter((f) => f.endsWith(".md")).map((file) => {

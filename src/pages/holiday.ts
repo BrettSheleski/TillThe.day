@@ -2,13 +2,14 @@
 // counts down to the holiday's next date, worked out from the page's rule, or
 // with ?year=2028 to its date in that year.
 import { createDisplay, formatTarget, showActions } from "../lib/countdown-view";
-import { byId } from "../lib/dom";
+import { byId, setHomeScreenName } from "../lib/dom";
 import { holidayCountdown, nextHoliday, parseYear, upcomingHolidays, type HolidayRule } from "../lib/holidays";
 import { themeById } from "../lib/themes";
 
 const page = byId("holiday");
 const rule = JSON.parse(page.dataset.rule!) as HolidayRule;
 const name = page.dataset.name!;
+setHomeScreenName(name);
 const requestedYear = parseYear(new URLSearchParams(location.search).get("year"));
 const countdown = holidayCountdown(rule, name, themeById(page.dataset.theme!), requestedYear);
 

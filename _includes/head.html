@@ -8,6 +8,10 @@
 <link rel="icon" href="{% include asset-url.html path='/assets/images/favicon.svg' %}" type="image/svg+xml">
 <link rel="icon" href="{% include asset-url.html path='/assets/images/favicon-32.png' %}" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="{% include asset-url.html path='/assets/images/apple-touch-icon.png' %}">
+<!-- For adding to a home screen (site.webmanifest). iPhones name the icon
+     from this; countdown and holiday pages change it to their own name. -->
+<link rel="manifest" href="{{ '/site.webmanifest' | relative_url }}">
+<meta name="apple-mobile-web-app-title" content="{{ site.title }}">
 <!-- Sets the page mode and theme before the first paint (src/head/early.ts) -->
 <script src="{% include asset-url.html path='/assets/js/early.js' %}"></script>
 <!-- Includes the theme fonts, served from this site (see _sass/_fonts.scss) -->

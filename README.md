@@ -37,7 +37,9 @@ holidays.html            Holiday list page, soonest first (/holidays/)
 _holidays/<name>.md      One holiday countdown page each (/<name>/), laid out by _layouts/holiday.html
 _includes/countdown.html The countdown and its buttons, shared by the home and holiday pages
 assets/images/og-image.png  Link-preview image (1200x630); its source is src/images/og-image.svg
-assets/images/favicon.svg   Site icon; favicon-32.png and apple-touch-icon.png are exported from it
+assets/images/favicon.svg   Site icon (the calendar logo); the PNG icons are exported from it
+site.webmanifest         Name, icons and colors for adding the site to a home screen
+scripts/icons.ts         `npm run icons`: exports the PNG icons and og-image.png from their SVGs
 assets/css/style.scss    Stylesheet entry: imports the _sass partials (Jekyll compiles it to style.css)
 _data/themes.json        Theme list: id, name shown in the picker, link code
 _sass/themes/<id>/       One folder per theme: _theme.scss (look) and _elapsed.scss (end animation)

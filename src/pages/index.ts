@@ -4,7 +4,7 @@
 // yearly, in which case it counts toward the next start or end. The date
 // rules themselves are in ../lib/form-dates.
 import { createDisplay, showActions } from "../lib/countdown-view";
-import { byId } from "../lib/dom";
+import { byId, setHomeScreenName } from "../lib/dom";
 import {
   defaultEnd,
   endForAddedTime,
@@ -34,7 +34,10 @@ if (token) {
 }
 
 function showView(countdown: Countdown, token: string): void {
-  if (countdown.msg) document.title = `${countdown.msg} | ${document.title}`;
+  if (countdown.msg) {
+    document.title = `${countdown.msg} | ${document.title}`;
+    setHomeScreenName(countdown.msg);
+  }
   // The tab shows the time left, e.g. "12d 4h · Christmas"
   display.set(countdown, { celebrate: true, tabTitle: "always" });
   showActions(countdown, location.href, { token });

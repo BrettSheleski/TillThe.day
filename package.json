@@ -11,7 +11,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tests && tsc --noEmit -p scripts",
     "fonts": "node scripts/self-host-fonts.mjs",
-    "holiday-images": "node scripts/holiday-images.mjs"
+    "holiday-images": "node scripts/holiday-images.mjs",
+    "icons": "esbuild scripts/icons.ts --bundle --platform=node --format=esm --packages=external --log-level=warning | node --input-type=module"
   },
   "devDependencies": {
     "@fontsource/baloo-2": "5.3.0",

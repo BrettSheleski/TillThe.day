@@ -36,3 +36,8 @@ function legacyCopy(text: string): boolean {
     area.remove();
   }
 }
+
+/** The name an iPhone suggests when the page is added to its home screen (see _includes/head.html). */
+export function setHomeScreenName(name: string): void {
+  document.querySelector('meta[name="apple-mobile-web-app-title"]')?.setAttribute("content", name);
+}
