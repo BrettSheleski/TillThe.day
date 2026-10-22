@@ -1,0 +1,26 @@
+---
+layout: default
+---
+<!-- An occasion page (_occasions/*.md): the create form preset for the
+     occasion (theme, message, and the occasion saved in the link), then the
+     Markdown body as tips. src/pages/index.ts runs it, as on the home page. -->
+<div id="create-intro">
+  <h1 class="intro-title"><span aria-hidden="true">{{ page.emoji }}</span> {{ page.heading }}</h1>
+  <p class="sub occasion-intro">{{ page.intro }}</p>
+</div>
+
+<!-- The live preview -->
+{% include countdown.html %}
+
+{% include create-form.html theme=page.theme message=page.message occasion=page.slug yearly=page.yearly %}
+
+<!-- Create mode only, like the form -->
+<div class="create-only">
+  <!-- Tips: closed by default to keep the page to the form; search engines still read them -->
+  <details class="about">
+    <summary>Tips for your {{ page.name | downcase }} countdown</summary>
+    {{ content }}
+  </details>
+
+  {% include occasion-links.html %}
+</div>

@@ -17,7 +17,7 @@ https://<user>.github.io/<repo>/?c=<when>[_<length>][<letters>][.<text> | ~<comp
   - `U` for a count-up (time since the date). The home page sets it by itself when the start has already passed, unless the event has an end or repeats yearly (then it counts toward the next start or end).
   - `Y` for a yearly repeat (birthdays, anniversaries). The link keeps the original date, and the page counts down to its next anniversary, showing which one it is (e.g. "37th"). Feb 29 falls on Feb 28 in other years.
   - `U` and `Y` are reserved and must never be used as theme codes.
-- `.<text>`: the optional message as URL-safe base64 of its UTF-8 text. If the countdown has a location or notes, they follow the message, each after a U+001F (unit separator) character, in the order message, location, notes, with empty ones dropped from the end. Older links have just the message.
+- `.<text>`: the optional message as URL-safe base64 of its UTF-8 text. If the countdown has a location, notes or an occasion (the occasion page it was made on, e.g. `wedding`), they follow the message, each after a U+001F (unit separator) character, in the order message, location, notes, occasion, with empty ones dropped from the end. Older links have just the message.
 - `~<compressed text>`: the same, but deflate-compressed first. Used instead of `.` when it's shorter, which is usually true for longer text.
 
 The message, location and notes are encoded, not encrypted: anyone with the link can decode them. The location and notes show under the countdown's date (the location as a map link: Apple Maps on iPhone and iPad, the default maps app on Android, Google Maps elsewhere) and go into calendar events; the embed widget leaves them out. When the date has passed, the page counts the time since it.
@@ -35,6 +35,8 @@ _includes/footer.html    Site footer
 index.html               Home page: create a countdown, or view one from a link
 holidays.html            Holiday list page, soonest first (/holidays/)
 _holidays/<name>.md      One holiday countdown page each (/<name>/), laid out by _layouts/holiday.html
+_occasions/<name>.md     One occasion page each (/<name>/, e.g. /wedding/), laid out by _layouts/occasion.html
+_includes/create-form.html  The create form, shared by the home and occasion pages
 _includes/countdown.html The countdown and its buttons, shared by the home and holiday pages
 assets/images/og-image.png  Link-preview image (1200x630); its source is src/images/og-image.svg
 assets/images/favicon.svg   Site icon (the calendar logo); the PNG icons are exported from it
@@ -129,6 +131,31 @@ Add `featured: true` to suggest a holiday: it then appears, soonest first with i
 The page counts down to the next date, celebrates on the day itself, and rolls over to next year the day after. Adding `?year=2028` counts down to that year's date instead (its "Upcoming dates" link there); a past year, a year with no listed date, or anything unreadable falls back to the next date, and the address is tidied to match. It appears on `/holidays/` automatically, and in the suggestions if featured (see above).
 
 Each holiday page also gets its next five dates and a short FAQ ("When is Easter 2027?", "Is Easter on the same date every year?") written into its HTML when the site is built, plus matching structured data (FAQ and breadcrumbs) for search engines. To keep the page to the countdown, the description, dates and FAQ are in an "About" section that starts closed; search engines still read it. The wording comes from the rule, in `src/lib/holiday-facts.ts`. Because the dates are worked out at build time, the deploy workflow also runs daily, so they move on once a holiday passes. The page script still rewrites the dates in the reader's own time zone and language.
+
+### Adding an occasion
+
+Occasion pages (wedding, baby, birthday, retirement) are the create form preset for an occasion, with tips. Create `_occasions/<name>.md`, published at `/<name>/` (pick a name no holiday uses):
+
+```
+---
+name: Wedding
+title: Wedding countdown            # page title and search results
+description: Make a free wedding countdown ...
+heading: Wedding countdown          # the page's heading
+intro: Count down to the big day, and share it with family and guests.
+link_text: a wedding                # its words in "Counting down to a wedding, ...?"
+emoji: "💍"
+theme: romantic                     # the theme the form starts on
+message: "Our wedding"              # suggested message; not "Until ...", which the countdown already says
+yearly: true                        # optional: repeats every year (birthdays)
+order: 1                            # position among the occasions
+image_intro: "Countdown to the"     # the link-preview image's two lines
+image_title: "Big Day"
+---
+- Tips for this occasion, as a Markdown list.
+```
+
+On an occasion page the "Repeat every year" box is hidden and `yearly` decides it. The occasion is saved in the countdown's link, for later use; a new countdown always opens on the home page. Then run `npm run holiday-images` to draw its link-preview image (it adds the `image:` line), and commit both. A line under the home page's form, and under each occasion page, links to the others automatically.
 
 ### Link previews
 

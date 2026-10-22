@@ -123,6 +123,8 @@ $generic-dark: (
     transition: transform 0.15s, box-shadow 0.15s;
 
     &:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(99, 102, 241, 0.75); }
+    &:disabled,
+    &:disabled:hover { transform: none; box-shadow: none; }
 
     &.secondary {
       background: var(--unit-bg);

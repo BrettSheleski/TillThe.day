@@ -34,6 +34,12 @@ collections:
   holidays:
     output: true
     permalink: /:name/
+  # Occasion pages (e.g. /wedding/): the create form preset for an occasion,
+  # with tips. One Markdown file each in _occasions/, laid out by
+  # _layouts/occasion.html
+  occasions:
+    output: true
+    permalink: /:name/
 
 defaults:
   # The image shown in link previews, unless a page sets its own
@@ -51,6 +57,12 @@ defaults:
       script: holiday
       # The "Coming up" card under the countdown (_includes/coming-up.html)
       coming_up: true
+  - scope:
+      type: occasions
+    values:
+      layout: occasion
+      # The home page's script: the same create form
+      script: index
 
 # Both are supported by GitHub Pages (part of the github-pages gem):
 # - jekyll-sitemap generates sitemap.xml listing every page, for search engines

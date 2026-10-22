@@ -93,6 +93,9 @@ describe("encode and decode", () => {
     "a location and notes": countdown({ msg: "Reunion", location: "Lake House", notes: "Swimsuits!" }),
     "notes but no location": countdown({ msg: "Launch", notes: "Watch the stream" }),
     "a location but no message": countdown({ location: "Wrigley Field" }),
+    "an occasion": countdown({ msg: "Our wedding", occasion: "wedding" }),
+    "an occasion and every other field": countdown({ msg: "Our wedding", location: "Grand Hotel", notes: "Black tie", occasion: "wedding" }),
+    "an occasion alone": countdown({ occasion: "birthday", yearly: true, dateOnly: true, target: new Date(1996, 2, 4) }),
   };
 
   for (const [name, original] of Object.entries(cases)) {

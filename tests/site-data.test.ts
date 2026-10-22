@@ -160,6 +160,53 @@ describe("web app manifest", () => {
   });
 });
 
+describe("occasion pages", () => {
+  const dir = path.join(root, "_occasions");
+  const pages = fs.readdirSync(dir).filter((f) => f.endsWith(".md")).map((file) => {
+    const text = fs.readFileSync(path.join(dir, file), "utf8");
+    const frontMatter = text.match(/^---\r?\n([\s\S]*?)\r?\n---/)![1];
+    return { file, slug: file.replace(/\.md$/, ""), data: yaml.load(frontMatter) as Record<string, unknown> };
+  });
+
+  it("exist", () => {
+    expect(pages.length).toBeGreaterThan(0);
+  });
+
+  it("have unique positions in the list of occasions", () => {
+    const orders = pages.map((p) => p.data.order);
+    expect(new Set(orders).size).toBe(orders.length);
+  });
+
+  for (const { file, slug, data } of pages) {
+    describe(file, () => {
+      it("has its text, a suggested message and an emoji", () => {
+        for (const key of ["name", "title", "description", "heading", "intro", "link_text", "message", "image_intro", "image_title"]) {
+          expect(typeof data[key], key).toBe("string");
+        }
+        expect(String(data.emoji)).toMatch(/^\p{Extended_Pictographic}[\uFE0F\u200D\p{Extended_Pictographic}]*$/u);
+      });
+
+      it("doesn't start its message with \"until\", which the countdown already says", () => {
+        expect(String(data.message)).not.toMatch(/^until\b/i);
+      });
+
+      it("uses a theme that exists", () => {
+        expect(themes.map((t) => t.id)).toContain(data.theme);
+      });
+
+      it("has its own link-preview image", () => {
+        // Drawn by scripts/holiday-images.mjs (npm run holiday-images)
+        expect(data.image).toBe(`/assets/images/occasions/${slug}.png`);
+        expect(fs.existsSync(path.join(root, String(data.image))), String(data.image)).toBe(true);
+      });
+
+      it("doesn't share its address with a holiday", () => {
+        expect(fs.existsSync(path.join(root, "_holidays", file))).toBe(false);
+      });
+    });
+  }
+});
+
 describe("holiday pages", () => {
   const dir = path.join(root, "_holidays");
   const pages = fs.readdirSync(dir).filter((f) => f.endsWith(".md")).map((file) => {

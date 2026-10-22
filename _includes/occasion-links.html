@@ -1,0 +1,17 @@
+<!-- A line linking the occasion pages (_occasions/*.md, in `order`), leaving
+     out the page's own: "Counting down to a wedding, a new baby, a birthday or
+     retirement?" Each page's `link_text` is its words here. -->
+{%- assign all = site.occasions | sort: "order" -%}
+{%- assign occasions = "" | split: "" -%}
+{%- for occasion in all -%}
+{%- unless occasion.url == page.url -%}{%- assign occasions = occasions | push: occasion -%}{%- endunless -%}
+{%- endfor -%}
+{%- if occasions.size > 0 %}
+<p class="occasion-links">
+  {%- if page.layout == "occasion" %}Or counting down to {% else %}Counting down to {% endif -%}
+  {%- for occasion in occasions -%}
+  {%- unless forloop.first -%}{%- if forloop.last %} or {% else %}, {% endif -%}{%- endunless -%}
+  <a href="{{ occasion.url | relative_url }}">{{ occasion.link_text }}</a>
+  {%- endfor -%}?
+</p>
+{%- endif %}

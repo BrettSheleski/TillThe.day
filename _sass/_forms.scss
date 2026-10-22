@@ -157,9 +157,11 @@ button.icon-button {
   &:focus-visible { border-color: var(--border); color: var(--accent); }
 }
 
-// Fields that don't apply yet, e.g. the end time before a start time is picked
+// Fields and buttons that don't apply yet, e.g. the end time before a start
+// time is picked, or "Create countdown" before a date is
 input:disabled,
-select:disabled {
+select:disabled,
+button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

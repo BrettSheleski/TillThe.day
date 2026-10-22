@@ -1,0 +1,79 @@
+{%- comment -%}
+  The create form, with the live preview above it coming from countdown.html.
+  Used by the home page and the occasion pages (_layouts/occasion.html), which
+  preset it with:
+    theme      the theme to start on (default: the first, Generic)
+    message    a suggested message
+    occasion   the occasion page's name, saved in the countdown's link
+    yearly     true for "Repeat every year"; on occasion pages the box is
+               hidden, so this decides it
+  Driven by src/pages/index.ts; a new countdown always opens on the home page.
+{%- endcomment -%}
+<!-- Create mode only (see _sass/_countdown.scss) -->
+<div id="create-view">
+  <form id="create-form" data-home="{{ '/' | relative_url }}">
+    <input id="occasion" type="hidden" value="{{ include.occasion }}">
+    <!-- Date and time side by side -->
+    <div class="field-row">
+      <div class="field">
+        <label for="date">Date</label>
+        <input id="date" type="date" required>
+      </div>
+      <div class="field">
+        <div class="label-row">
+          <label for="time">Time <span class="hint">(optional)</span></label>
+          <button id="clear-time" type="button" class="link-button" hidden>Clear</button>
+        </div>
+        <input id="time" type="time">
+      </div>
+    </div>
+
+    <!-- Optional end, for events that last a while (src/pages/index.ts). Whether
+         to count down or up comes from the dates themselves. -->
+    <button id="add-end" type="button" class="link-button add-link">+ Add end</button>
+    <div id="end-fields" hidden>
+      <div class="label-row">
+        <label for="end-date">Ends</label>
+        <button id="remove-end" type="button" class="link-button">Remove</button>
+      </div>
+      <div class="end-row">
+        <input id="end-date" type="date" aria-label="End date">
+        <input id="end-time" type="time" aria-label="End time">
+      </div>
+    </div>
+
+    <!-- On an occasion page the occasion decides this (birthdays repeat, the
+         others don't), so it's hidden there -->
+    <label class="checkbox"{% if include.occasion %} hidden{% endif %}>
+      <input id="yearly" type="checkbox"{% if include.yearly %} checked{% endif %}>
+      <span>Repeat every year <span class="hint">(birthdays, anniversaries)</span></span>
+    </label>
+
+    <label for="msg">Message <span class="hint">(optional)</span></label>
+    <input id="msg" type="text" maxlength="200" placeholder="e.g. Our trip to Japan" value="{{ include.message }}">
+
+    <!-- Optional location and notes, shown on the countdown and added to
+         calendars (src/pages/index.ts) -->
+    <button id="add-details" type="button" class="link-button add-link">+ Add location &amp; notes</button>
+    <div id="details-fields" class="details-fields" hidden>
+      <div class="label-row">
+        <label for="location">Location</label>
+        <button id="remove-details" type="button" class="link-button">Remove</button>
+      </div>
+      <input id="location" type="text" maxlength="200" placeholder="e.g. Grand Hotel, Chicago" autocomplete="off">
+      <label for="notes">Notes</label>
+      <textarea id="notes" rows="2" maxlength="300" placeholder="e.g. Bring a dish to share"></textarea>
+      <p class="hint field-hint">Anyone with the link can see these.</p>
+    </div>
+
+    <label for="theme">Theme</label>
+    <select id="theme">
+      {% for theme in site.data.themes %}
+      <option value="{{ theme.id }}"{% if theme.id == include.theme %} selected{% endif %}>{{ theme.name }}</option>
+      {% endfor %}
+    </select>
+
+    <!-- Enabled once a date is picked (src/pages/index.ts) -->
+    <button id="create-button" type="submit" disabled>Create countdown</button>
+  </form>
+</div>

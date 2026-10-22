@@ -1,9 +1,10 @@
-// Draws a link-preview image (1200x630) for each holiday page, in the
-// holiday's theme, and points the page's `image` front matter at it:
-//   assets/images/holidays/<name>.png
+// Draws a link-preview image (1200x630) for each holiday and occasion page,
+// in its theme, and points the page's `image` front matter at it:
+//   assets/images/holidays/<name>.png    "Days until" + the holiday's name
+//   assets/images/occasions/<name>.png   the page's image_intro + image_title
 //
 // The images show no dates or numbers, since holidays repeat every year.
-// Run with `npm run holiday-images` after adding a holiday or changing a
+// Run with `npm run holiday-images` after adding a holiday or occasion, or changing a
 // theme's look. Commit the results.
 import fs from "node:fs";
 import path from "node:path";
@@ -217,7 +218,7 @@ function fitTitle(name, s) {
   return best;
 }
 
-function drawHoliday(name, themeId) {
+function drawHoliday(name, themeId, intro = "Days until") {
   const t = THEMES[themeId];
   if (!t) throw new Error(`No image look for theme "${themeId}"`);
   const cx = W / 2;
@@ -227,7 +228,7 @@ function drawHoliday(name, themeId) {
   const pillH = pillSize * 2.2;
   const pillY = CARD.y + CARD.h - 50 - pillH;
 
-  // Center "Days until" and the title in the space above the pill
+  // Center the intro ("Days until") and the title in the space above the pill
   const introSize = t.intro.size ?? 44;
   const gap = 24;
   const lineHeight = size * 1.1;
@@ -250,33 +251,41 @@ function drawHoliday(name, themeId) {
     `<rect x="${cx - pillW / 2}" y="${pillY}" width="${pillW}" height="${pillH}" rx="${t.pill.radius ?? pillH / 2}" fill="${t.pill.fill}"${t.pill.stroke ? ` stroke="${t.pill.stroke}" stroke-width="3"` : ""}/>` +
     textEl(pillText, cx, pillY + pillH / 2 + pillSize * 0.36, { ...t.pill, fill: t.pill.text }, pillSize);
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${t.defs}</defs>${t.background}${t.card}${textEl("Days until", cx, introY, t.intro, introSize)}${title}${pill}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${t.defs}</defs>${t.background}${t.card}${textEl(intro, cx, introY, t.intro, introSize)}${title}${pill}</svg>`;
 }
 
 // --- Main
 
 await loadFonts();
-const outDir = path.join(root, "assets/images/holidays");
-fs.mkdirSync(outDir, { recursive: true });
+// Each kind of page: its folder, where its images go, and the image's two lines
+const kinds = [
+  { dir: "_holidays", out: "holidays", text: (data) => ["Days until", data.name] },
+  { dir: "_occasions", out: "occasions", text: (data) => [data.image_intro, data.image_title] },
+];
 
-const holidaysDir = path.join(root, "_holidays");
-let count = 0;
-for (const file of fs.readdirSync(holidaysDir).filter((f) => f.endsWith(".md")).sort()) {
-  const slug = file.replace(/\.md$/, "");
-  const full = path.join(holidaysDir, file);
-  const text = fs.readFileSync(full, "utf8");
-  const [, frontMatter] = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  const data = yaml.load(frontMatter);
+for (const kind of kinds) {
+  const outDir = path.join(root, "assets/images", kind.out);
+  fs.mkdirSync(outDir, { recursive: true });
+  const dir = path.join(root, kind.dir);
+  let count = 0;
+  for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".md")).sort()) {
+    const slug = file.replace(/\.md$/, "");
+    const full = path.join(dir, file);
+    const text = fs.readFileSync(full, "utf8");
+    const [, frontMatter] = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+    const data = yaml.load(frontMatter);
 
-  const svg = drawHoliday(data.name, data.theme);
-  const png = new Resvg(svg, { font: { loadSystemFonts: false }, fitTo: { mode: "width", value: W } }).render().asPng();
-  fs.writeFileSync(path.join(outDir, `${slug}.png`), png);
+    const [intro, title] = kind.text(data);
+    const svg = drawHoliday(title, data.theme, intro);
+    const png = new Resvg(svg, { font: { loadSystemFonts: false }, fitTo: { mode: "width", value: W } }).render().asPng();
+    fs.writeFileSync(path.join(outDir, `${slug}.png`), png);
 
-  // Point the page's link preview at the image
-  const image = `image: /assets/images/holidays/${slug}.png`;
-  const updated = /^image: .*$/m.test(text) ? text.replace(/^image: .*$/m, image) : text.replace(/^(description: .*)$/m, `$1\n${image}`);
-  if (updated !== text) fs.writeFileSync(full, updated);
-  count++;
+    // Point the page's link preview at the image
+    const image = `image: /assets/images/${kind.out}/${slug}.png`;
+    const updated = /^image: .*$/m.test(text) ? text.replace(/^image: .*$/m, image) : text.replace(/^(description: .*)$/m, `$1\n${image}`);
+    if (updated !== text) fs.writeFileSync(full, updated);
+    count++;
+  }
+  console.log(`Drew ${count} images in assets/images/${kind.out}/`);
 }
 
-console.log(`Drew ${count} holiday images in assets/images/holidays/`);

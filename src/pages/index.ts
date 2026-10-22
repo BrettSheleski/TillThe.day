@@ -57,6 +57,7 @@ function showCreate(): void {
   const themeSelect = byId<HTMLSelectElement>("theme");
   const clearTime = byId("clear-time");
   const yearlyInput = byId<HTMLInputElement>("yearly");
+  const createButton = byId<HTMLButtonElement>("create-button");
 
   // The optional end: an end time (and date, if different) for a countdown
   // with a time, or an end date for a date-only one
@@ -162,6 +163,8 @@ function showCreate(): void {
       msg: byId<HTMLInputElement>("msg").value.trim(),
       location: locationInput.value.trim(),
       notes: notesInput.value.trim(),
+      // Set by an occasion page (_includes/create-form.html)
+      occasion: byId<HTMLInputElement>("occasion").value,
       theme: themeById(themeSelect.value),
       countUp: isCountingUp(dates()),
       yearly: yearlyInput.checked,
@@ -187,6 +190,8 @@ function showCreate(): void {
     if (problem) (problem.field === "endDate" ? endDateInput : endTimeInput).setCustomValidity(problem.message);
 
     display.set(readForm());
+    // Nothing to create until there's a date
+    createButton.disabled = !dateInput.value;
   }
 
   form.addEventListener("input", update);
@@ -204,6 +209,7 @@ function showCreate(): void {
     if (!form.reportValidity()) return;
     const countdown = readForm();
     if (!countdown) return;
-    location.assign(`${location.pathname}?c=${await encodeToken(countdown)}`);
+    // Countdowns open on the home page, wherever they were made (an occasion page too)
+    location.assign(`${form.dataset.home}?c=${await encodeToken(countdown)}`);
   });
 }
