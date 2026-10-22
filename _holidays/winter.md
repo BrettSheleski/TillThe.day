@@ -2,6 +2,7 @@
 name: "Winter"
 title: "When is the first day of winter?"
 description: "Live countdown to the exact moment of the December solstice, the first day of winter in the Northern Hemisphere."
+image: /assets/images/holidays/winter.png
 theme: holiday
 order: 1221
 rule: { type: season, season: winter }

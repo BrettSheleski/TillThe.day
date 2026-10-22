@@ -2,6 +2,7 @@
 name: "Ash Wednesday"
 title: "How many days until Ash Wednesday?"
 description: "Live countdown to Ash Wednesday, the first day of Lent. Its date changes every year with Easter."
+image: /assets/images/holidays/ash-wednesday.png
 theme: zen
 order: 218
 rule: { type: easter, offset: -46 }

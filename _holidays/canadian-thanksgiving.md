@@ -2,6 +2,7 @@
 name: "Canadian Thanksgiving"
 title: "How many days until Thanksgiving in Canada?"
 description: "Live countdown to Canadian Thanksgiving, the second Monday in October."
+image: /assets/images/holidays/canadian-thanksgiving.png
 theme: zen
 order: 1012
 rule: { type: nth-weekday, month: 10, weekday: 1, n: 2 }

@@ -114,6 +114,8 @@ The `rule` sets the date each year:
 - `{ type: dates, dates: ["2026-12-05", "2027-12-25"] }`: a list of dates, for holidays on lunar calendars. Quote each date. Take them from a reliable published source, and note it in the commit. A test fails a year before the list runs out, as a reminder to add more.
 - Any rule can add `offset: <days>` to move it, e.g. `{ type: easter, offset: -47 }` for Mardi Gras, or Thanksgiving with `offset: 1` for Black Friday.
 
+Then run `npm run holiday-images` to draw the holiday's link-preview image (in its theme) and add the `image:` line to its front matter, and commit both. A test fails if a holiday has no image. Run it again after changing a theme's look; the looks are in `scripts/holiday-images.mjs`.
+
 Add `featured: true` to show a holiday in the quick links on the home and holiday pages; every holiday appears on `/holidays/`. `order` is the holiday's typical date as MMDD (e.g. `1225`), used to sort the quick links.
 
 The page counts down to the next date, celebrates on the day itself, and rolls over to next year the day after. It also appears in the holiday links and on `/holidays/` automatically.

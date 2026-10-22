@@ -2,6 +2,7 @@
 name: Mother's Day
 title: How many days until Mother's Day?
 description: Live countdown to Mother's Day in the US, the second Sunday in May. See how many days are left to plan something special.
+image: /assets/images/holidays/mothers-day.png
 theme: romantic
 order: 510
 featured: true

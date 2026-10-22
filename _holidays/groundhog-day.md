@@ -2,6 +2,7 @@
 name: "Groundhog Day"
 title: "How many days until Groundhog Day?"
 description: "Live countdown to Groundhog Day, February 2. Will the groundhog see its shadow?"
+image: /assets/images/holidays/groundhog-day.png
 theme: generic
 order: 202
 rule: { type: fixed, month: 2, day: 2 }

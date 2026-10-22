@@ -167,6 +167,13 @@ describe("holiday pages", () => {
         expect(data.order).toBeLessThanOrEqual(1231);
       });
 
+      it("has its own link-preview image", () => {
+        // Drawn by scripts/holiday-images.mjs (npm run holiday-images)
+        const slug = file.replace(/.md$/, "");
+        expect(data.image).toBe(`/assets/images/holidays/${slug}.png`);
+        expect(fs.existsSync(path.join(root, String(data.image))), String(data.image)).toBe(true);
+      });
+
       it("uses a theme that exists", () => {
         expect(themes.map((t) => t.id)).toContain(data.theme);
       });

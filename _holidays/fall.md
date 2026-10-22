@@ -2,6 +2,7 @@
 name: "Fall"
 title: "When is the first day of fall?"
 description: "Live countdown to the exact moment of the September equinox, the first day of fall (autumn) in the Northern Hemisphere."
+image: /assets/images/holidays/fall.png
 theme: zen
 order: 922
 rule: { type: season, season: fall }

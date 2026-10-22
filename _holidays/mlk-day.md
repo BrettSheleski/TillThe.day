@@ -2,6 +2,7 @@
 name: "Martin Luther King Jr. Day"
 title: "How many days until Martin Luther King Jr. Day?"
 description: "Live countdown to Martin Luther King Jr. Day, the third Monday in January."
+image: /assets/images/holidays/mlk-day.png
 theme: generic
 order: 119
 rule: { type: nth-weekday, month: 1, weekday: 1, n: 3 }

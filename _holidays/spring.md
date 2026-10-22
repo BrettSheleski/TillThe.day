@@ -2,6 +2,7 @@
 name: "Spring"
 title: "When is the first day of spring?"
 description: "Live countdown to the exact moment of the March equinox, the first day of spring in the Northern Hemisphere."
+image: /assets/images/holidays/spring.png
 theme: vacation
 order: 320
 rule: { type: season, season: spring }

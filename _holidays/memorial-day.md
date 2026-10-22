@@ -2,6 +2,7 @@
 name: Memorial Day
 title: How many days until Memorial Day?
 description: Live countdown to Memorial Day, the last Monday in May. See how many days are left until the long weekend.
+image: /assets/images/holidays/memorial-day.png
 theme: generic
 order: 525
 featured: true

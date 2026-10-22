@@ -2,6 +2,7 @@
 name: "Juneteenth"
 title: "How many days until Juneteenth?"
 description: "Live countdown to Juneteenth, June 19. See how many days are left until the US federal holiday."
+image: /assets/images/holidays/juneteenth.png
 theme: generic
 order: 619
 rule: { type: fixed, month: 6, day: 19 }

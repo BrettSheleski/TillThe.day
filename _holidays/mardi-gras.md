@@ -2,6 +2,7 @@
 name: "Mardi Gras"
 title: "How many days until Mardi Gras?"
 description: "Live countdown to Mardi Gras (Fat Tuesday). Its date changes every year with Easter; see when the next one is."
+image: /assets/images/holidays/mardi-gras.png
 theme: party
 order: 217
 rule: { type: easter, offset: -47 }

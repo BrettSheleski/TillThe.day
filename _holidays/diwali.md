@@ -2,6 +2,7 @@
 name: "Diwali"
 title: "How many days until Diwali?"
 description: "Live countdown to Diwali, the festival of lights. Its date changes every year with the Hindu lunar calendar."
+image: /assets/images/holidays/diwali.png
 theme: party
 order: 1108
 rule: { type: dates, dates: ["2026-11-08", "2027-10-29", "2028-10-17", "2029-11-05"] }

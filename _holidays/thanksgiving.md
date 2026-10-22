@@ -2,6 +2,7 @@
 name: Thanksgiving
 title: How many days until Thanksgiving?
 description: Live countdown to Thanksgiving in the US, the fourth Thursday in November. See how many days are left until the feast.
+image: /assets/images/holidays/thanksgiving.png
 theme: zen
 order: 1126
 featured: true

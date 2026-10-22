@@ -2,6 +2,7 @@
 name: Father's Day
 title: How many days until Father's Day?
 description: Live countdown to Father's Day in the US, the third Sunday in June. See how many days are left to plan.
+image: /assets/images/holidays/fathers-day.png
 theme: vacation
 order: 620
 featured: true

@@ -2,6 +2,7 @@
 name: "Palm Sunday"
 title: "How many days until Palm Sunday?"
 description: "Live countdown to Palm Sunday, the Sunday before Easter."
+image: /assets/images/holidays/palm-sunday.png
 theme: zen
 order: 329
 rule: { type: easter, offset: -7 }

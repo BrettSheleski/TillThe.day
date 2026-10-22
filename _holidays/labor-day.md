@@ -2,6 +2,7 @@
 name: Labor Day
 title: How many days until Labor Day?
 description: Live countdown to Labor Day, the first Monday in September. See how many days are left until the long weekend.
+image: /assets/images/holidays/labor-day.png
 theme: vacation
 order: 905
 featured: true
