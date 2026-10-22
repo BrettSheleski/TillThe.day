@@ -154,7 +154,7 @@ Theme fonts are self-hosted (`assets/fonts/`), not loaded from Google Fonts, so 
 
 ### Analytics
 
-Visits are counted with [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/): free, no cookies, and it doesn't record query strings, so the messages in shared links never reach it. To turn it on, add a site in the Cloudflare dashboard under **Analytics & Logs > Web Analytics** (the hostname must match the live site), choose the manual JavaScript setup, and put the token from its snippet in `cloudflare_analytics_token` in `_config.yml`. Leave it empty to turn analytics off. The footer mentions analytics only while it's on.
+Visits are counted with [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/): free, no cookies, and it doesn't record query strings, so the messages in shared links never reach it. To turn it on, add a site in the Cloudflare dashboard under **Analytics & Logs > Web Analytics** (the hostname must match the live site), choose the manual JavaScript setup, and put the token from its snippet in `cloudflare_analytics_token` in `_config.yml`. Leave it empty to turn analytics off.
 
 ## Tests
 
