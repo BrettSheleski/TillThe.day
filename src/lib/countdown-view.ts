@@ -107,8 +107,33 @@ function showDetails({ location, notes }: { location?: string; notes?: string })
   byId("event-notes").hidden = !notes;
   const map = byId<HTMLAnchorElement>("event-map");
   map.textContent = location ?? "";
-  if (location) map.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+  if (location) {
+    const link = mapLink(location);
+    map.href = link.href;
+    map.title = link.title;
+    // Phones open their maps app, which would leave an empty tab behind
+    if (link.newTab) map.target = "_blank";
+    else map.removeAttribute("target");
+  }
   byId("event-notes").textContent = notes ?? "";
+}
+
+/**
+ * A link that opens the location in this device's maps: Apple Maps on an
+ * iPhone or iPad, the default maps app on Android (geo: links), and Google
+ * Maps in a new tab anywhere else.
+ */
+export function mapLink(
+  location: string,
+  ua = navigator.userAgent,
+  touchPoints = navigator.maxTouchPoints,
+): { href: string; title: string; newTab: boolean } {
+  const query = encodeURIComponent(location);
+  // iPads ask for desktop sites, so they look like a Mac with a touch screen
+  const appleMobile = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && touchPoints > 1);
+  if (appleMobile) return { href: `https://maps.apple.com/?q=${query}`, title: "Open in Maps", newTab: false };
+  if (/Android/.test(ua)) return { href: `geo:0,0?q=${query}`, title: "Open in Maps", newTab: false };
+  return { href: `https://www.google.com/maps/search/?api=1&query=${query}`, title: "Open in Google Maps", newTab: true };
 }
 
 const TIMED: Intl.DateTimeFormatOptions = {

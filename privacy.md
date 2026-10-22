@@ -33,7 +33,7 @@ See [Cloudflare's privacy policy](https://www.cloudflare.com/privacypolicy/) for
 
 ## Sharing and calendars
 
-The share and calendar buttons (email, WhatsApp, Facebook, X, Google Calendar and Outlook) open those services with your countdown's link, message, location and notes filled in. A countdown's location links to Google Maps, which receives the location if you click it. Nothing is sent until you choose one, and from then on that service's privacy policy applies.
+The share and calendar buttons (email, WhatsApp, Facebook, X, Google Calendar and Outlook) open those services with your countdown's link, message, location and notes filled in. A countdown's location links to a maps service (Apple Maps on iPhone and iPad, your phone's maps app on Android, Google Maps elsewhere), which receives the location if you click it. Nothing is sent until you choose one, and from then on that service's privacy policy applies.
 
 ## Embedded countdowns
 

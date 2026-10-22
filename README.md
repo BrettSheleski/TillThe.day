@@ -20,7 +20,7 @@ https://<user>.github.io/<repo>/?c=<when>[_<length>][<letters>][.<text> | ~<comp
 - `.<text>`: the optional message as URL-safe base64 of its UTF-8 text. If the countdown has a location or notes, they follow the message, each after a U+001F (unit separator) character, in the order message, location, notes, with empty ones dropped from the end. Older links have just the message.
 - `~<compressed text>`: the same, but deflate-compressed first. Used instead of `.` when it's shorter, which is usually true for longer text.
 
-The message, location and notes are encoded, not encrypted: anyone with the link can decode them. The location and notes show under the countdown's date (the location as a Google Maps link) and go into calendar events; the embed widget leaves them out. When the date has passed, the page counts the time since it.
+The message, location and notes are encoded, not encrypted: anyone with the link can decode them. The location and notes show under the countdown's date (the location as a map link: Apple Maps on iPhone and iPad, the default maps app on Android, Google Maps elsewhere) and go into calendar events; the embed widget leaves them out. When the date has passed, the page counts the time since it.
 
 ## Project layout
 
