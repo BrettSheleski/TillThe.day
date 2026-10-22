@@ -11,7 +11,7 @@
   </main>
   {% if page.coming_up %}
   <!-- A second, quieter card with links to the next few holidays -->
-  <aside class="card card-secondary">
+  <aside class="card card-secondary{% if page.coming_up == 'create' %} create-only{% endif %}">
     {% include coming-up.html %}
   </aside>
   {% endif %}

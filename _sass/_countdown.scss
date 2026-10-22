@@ -54,6 +54,17 @@ html[data-mode="create"] {
 
 html[data-mode="view"] #view-actions { display: grid; }
 
+// Only in create mode, e.g. the home page's holiday card (index.html); the
+// main card then centers on its own again
+html:not([data-mode="create"]) {
+  .create-only { display: none; }
+  .card:has(+ .create-only) { margin-bottom: auto; }
+}
+
+// The home page's heading: a one-line description, since the header already
+// shows the site's name. By id, to win over the themes' own heading sizes.
+#create-intro .intro-title { margin-bottom: 16px; font-size: 1.25rem; line-height: 1.3; }
+
 // Live preview of the countdown while creating one
 html[data-mode="create"] #countdown {
   position: relative;
@@ -72,6 +83,19 @@ html[data-mode="create"] #countdown {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--muted);
+  }
+}
+
+// Phones: a shorter preview, so the form fits on the first screen. Fixed
+// sizes, so it still doesn't change size when a date is picked.
+@media (max-width: 480px) {
+  html[data-mode="create"] #countdown {
+    padding: 24px 8px 0;
+
+    .clock { gap: 8px; }
+    .unit { padding: 10px 2px; }
+    .status { margin: 12px 0 2px; font-size: 1.15rem; }
+    .target { margin-bottom: 12px; }
   }
 }
 

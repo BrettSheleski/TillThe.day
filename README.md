@@ -14,7 +14,7 @@ https://<user>.github.io/<repo>/?c=<when>[_<length>][<letters>][.<message> | ~<c
 - `_<length>`: how long the event lasts, in base 36: minutes after the start for a countdown with a time, or extra days for a date-only one (e.g. `_7` for an 8-day trip). Left out when it has no end. With an end, the page counts down to the start, then shows "happening now" counting down to the end, then "ended"; calendar events get the real end.
 - `<letters>`: uppercase letters, in any order:
   - the theme's one-letter code, from `_data/themes.json`. Left out for the default (generic) theme.
-  - `U` for a count-up (time since the date).
+  - `U` for a count-up (time since the date). The home page sets it by itself when the start has already passed, unless the event has an end or repeats yearly (then it counts toward the next start or end).
   - `Y` for a yearly repeat (birthdays, anniversaries). The link keeps the original date, and the page counts down to its next anniversary, showing which one it is (e.g. "37th"). Feb 29 falls on Feb 28 in other years.
   - `U` and `Y` are reserved and must never be used as theme codes.
 - `.<message>`: the optional message as URL-safe base64 of its UTF-8 text.
@@ -120,9 +120,9 @@ The `rule` sets the date each year:
 
 Then run `npm run holiday-images` to draw the holiday's link-preview image (in its theme) and add the `image:` line to its front matter, and commit both. A test fails if a holiday has no image. Run it again after changing a theme's look; the looks are in `scripts/holiday-images.mjs`.
 
-Add `featured: true` to suggest a holiday: it then appears in the quick links on the home and 404 pages and in the "Coming up" card under holiday pages, soonest first, each with its next date. Keep it to the holidays most people count down to; every holiday appears on `/holidays/`. `order` is the holiday's typical date as MMDD (e.g. `1225`), used for the starting order of `/holidays/` before its script sorts it by date.
+Add `featured: true` to suggest a holiday: it then appears, soonest first with its next date, in the "Coming up" card under the home page's form and under holiday pages (the next six, from `_includes/coming-up.html`), and in the 404 page's holiday links. Keep it to the holidays most people count down to; every holiday appears on `/holidays/`. `order` is the holiday's typical date as MMDD (e.g. `1225`), used for the starting order of `/holidays/` before its script sorts it by date.
 
-The page counts down to the next date, celebrates on the day itself, and rolls over to next year the day after. Adding `?year=2028` counts down to that year's date instead (its "Upcoming dates" link there); a past year, a year with no listed date, or anything unreadable falls back to the next date, and the address is tidied to match. It appears on `/holidays/` automatically and, if featured, in the quick links and the "Coming up" card under other holiday pages (the next six featured holidays, from `_includes/coming-up.html`).
+The page counts down to the next date, celebrates on the day itself, and rolls over to next year the day after. Adding `?year=2028` counts down to that year's date instead (its "Upcoming dates" link there); a past year, a year with no listed date, or anything unreadable falls back to the next date, and the address is tidied to match. It appears on `/holidays/` automatically, and in the suggestions if featured (see above).
 
 Each holiday page also gets its next five dates and a short FAQ ("When is Easter 2027?", "Is Easter on the same date every year?") written into its HTML when the site is built, plus matching structured data (FAQ and breadcrumbs) for search engines. To keep the page to the countdown, the description, dates and FAQ are in an "About" section that starts closed; search engines still read it. The wording comes from the rule, in `src/lib/holiday-facts.ts`. Because the dates are worked out at build time, the deploy workflow also runs daily, so they move on once a holiday passes. The page script still rewrites the dates in the reader's own time zone and language.
 

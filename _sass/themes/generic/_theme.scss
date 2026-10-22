@@ -152,8 +152,6 @@ $generic-dark: (
     transform: none;
   }
 
-  .mode-toggle label:has(input:checked) { background: $generic-gradient; }
-
   @media (prefers-reduced-motion: reduce) {
     button,
     .button { transition: none; &:hover { transform: none; } }
