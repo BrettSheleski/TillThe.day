@@ -54,7 +54,9 @@
     </label>
 
     <label for="msg">Message <span class="hint">(optional)</span></label>
-    <input id="msg" type="text" maxlength="200" placeholder="e.g. Our trip to Japan" value="{{ include.message }}">
+    <!-- The placeholder is picked at random from _data/placeholders.yml on
+         each load (src/pages/index.ts); the first shows until then -->
+    <input id="msg" type="text" maxlength="200" placeholder="e.g. {{ site.data.placeholders | first }}" data-placeholders="{{ site.data.placeholders | jsonify | escape }}" value="{{ include.message }}">
     {%- if include.ideas %}
     <!-- Tapping one fills in the message (src/pages/index.ts) -->
     <div class="message-ideas">

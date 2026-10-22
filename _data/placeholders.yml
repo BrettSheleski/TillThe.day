@@ -1,0 +1,20 @@
+# Examples for the create form's message placeholder ("e.g. ..."): one is
+# picked at random on each page load (src/pages/index.ts), to show the range
+# of things worth counting down to. The first is the one shown before the
+# page script runs. Each should read naturally after the countdown's "until:",
+# stay short enough for a phone, and avoid anything that could land badly.
+- Our trip to Japan
+- Spring break
+- Road trip to the coast
+- Mom's 60th
+- Grandma visits
+- Family reunion
+- Sam comes home
+- Concert night
+- Game day
+- Graduation day
+- Moving day
+- First day at the new job
+- Payday
+- The weekend
+- My new puppy arrives

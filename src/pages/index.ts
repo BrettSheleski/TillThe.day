@@ -155,6 +155,9 @@ function showCreate(): void {
   // Message ideas on occasion pages (_includes/create-form.html): tapping one
   // fills in the message
   const msgInput = byId<HTMLInputElement>("msg");
+  // A different example message each visit, to show the range of uses
+  const examples = JSON.parse(msgInput.dataset.placeholders ?? "[]") as string[];
+  if (examples.length) msgInput.placeholder = `e.g. ${examples[Math.floor(Math.random() * examples.length)]}`;
   for (const idea of document.querySelectorAll<HTMLButtonElement>("[data-idea]")) {
     idea.addEventListener("click", () => {
       msgInput.value = idea.dataset.idea!;

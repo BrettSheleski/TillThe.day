@@ -160,6 +160,25 @@ describe("web app manifest", () => {
   });
 });
 
+describe("message placeholders", () => {
+  // _data/placeholders.yml: one is picked at random for the create form
+  const examples = yaml.load(fs.readFileSync(path.join(root, "_data", "placeholders.yml"), "utf8")) as string[];
+
+  it("offer a good range without padding the list out", () => {
+    expect(examples.length).toBeGreaterThanOrEqual(10);
+    expect(examples.length).toBeLessThanOrEqual(20);
+    expect(new Set(examples).size).toBe(examples.length);
+  });
+
+  for (const example of examples) {
+    it(`"${example}" fits the field and reads after "until:"`, () => {
+      // "e.g. " is added in front, and the whole thing should fit a phone-width field
+      expect(example.length).toBeLessThanOrEqual(28);
+      expect(example).not.toMatch(/^(until|since|e\.g\.)/i);
+    });
+  }
+});
+
 describe("occasion pages", () => {
   const dir = path.join(root, "_occasions");
   const pages = fs.readdirSync(dir).filter((f) => f.endsWith(".md")).map((file) => {

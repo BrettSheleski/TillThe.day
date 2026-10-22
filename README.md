@@ -45,6 +45,7 @@ site.webmanifest         Name, icons and colors for adding the site to a home sc
 scripts/icons.ts         `npm run icons`: exports the PNG icons and og-image.png from their SVGs
 assets/css/style.scss    Stylesheet entry: imports the _sass partials (Jekyll compiles it to style.css)
 _data/themes.json        Theme list: id, name shown in the picker, link code
+_data/placeholders.yml   Example messages; the create form shows a random one as its placeholder
 _sass/themes/<id>/       One folder per theme: _theme.scss (look) and _elapsed.scss (end animation)
 _sass/themes/_index.scss Imports the themes; documents the settings each theme defines
 _sass/_variables.scss    Layout sizes and the base font stack
