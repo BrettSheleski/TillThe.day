@@ -2,12 +2,14 @@
 // Outlook.com with the event filled in, and an .ics file for everything else
 // (Apple Calendar, desktop Outlook, ...).
 //
-// A countdown with a time is an event at that exact moment. A date-only
-// countdown is an all-day event on that date. A yearly countdown is a
+// A countdown with a time is an event at that exact moment, or from its start
+// to its end if it has one. A date-only countdown is an all-day event on that
+// date, or across its days if it has an end. A yearly countdown is a
 // repeating event, starting at its next occurrence (Outlook.com's link can't
 // set a repeat, so it gets just that one).
 
 import type { Countdown } from "./token";
+import { eventEnd } from "./schedule";
 import { upcoming } from "./yearly";
 
 export interface CalendarLinks {
@@ -37,23 +39,25 @@ function yearlyRule({ target, dateOnly }: Countdown): string {
   return month === 1 && day === 29 ? "RRULE:FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=-1" : "RRULE:FREQ=YEARLY";
 }
 
-function googleUrl({ target, dateOnly }: Countdown, title: string, details: string, repeat: string | null): string {
+function googleUrl(countdown: Countdown, title: string, details: string, repeat: string | null): string {
+  const { target, dateOnly } = countdown;
   const dates = dateOnly
-    ? `${compactDate(target)}/${compactDate(nextDay(target))}`
-    : `${compactUtc(target)}/${compactUtc(target)}`;
+    ? `${compactDate(target)}/${compactDate(endOf(countdown))}`
+    : `${compactUtc(target)}/${compactUtc(endOf(countdown))}`;
   const params = new URLSearchParams({ action: "TEMPLATE", text: title, dates, details });
   if (repeat) params.set("recur", repeat);
   return `https://calendar.google.com/calendar/render?${query(params)}`;
 }
 
-function outlookUrl({ target, dateOnly }: Countdown, title: string, details: string): string {
+function outlookUrl(countdown: Countdown, title: string, details: string): string {
+  const { target, dateOnly } = countdown;
   const params = new URLSearchParams({
     path: "/calendar/action/compose",
     rru: "addevent",
     subject: title,
     body: details,
     startdt: dateOnly ? isoDate(target) : target.toISOString(),
-    enddt: dateOnly ? isoDate(nextDay(target)) : target.toISOString(),
+    enddt: dateOnly ? isoDate(endOf(countdown)) : endOf(countdown).toISOString(),
     allday: String(dateOnly),
   });
   return `https://outlook.live.com/calendar/0/action/compose?${query(params)}`;
@@ -70,8 +74,10 @@ function icsFile(countdown: Countdown, title: string, details: string, url: stri
     `UID:${eventId(url)}@${location.host}`,
     `DTSTAMP:${compactUtc(new Date())}`,
     ...(dateOnly
-      ? [`DTSTART;VALUE=DATE:${compactDate(target)}`, `DTEND;VALUE=DATE:${compactDate(nextDay(target))}`]
-      : [`DTSTART:${compactUtc(target)}`]), // no DTEND: an instant
+      ? [`DTSTART;VALUE=DATE:${compactDate(target)}`, `DTEND;VALUE=DATE:${compactDate(endOf(countdown))}`]
+      : countdown.duration
+        ? [`DTSTART:${compactUtc(target)}`, `DTEND:${compactUtc(endOf(countdown))}`]
+        : [`DTSTART:${compactUtc(target)}`]), // no DTEND: an instant
     ...(repeat ? [repeat] : []),
     `SUMMARY:${escapeText(title)}`,
     `DESCRIPTION:${escapeText(details)}`,
@@ -93,6 +99,15 @@ function eventId(url: string): string {
   const { searchParams, pathname } = new URL(url);
   const year = searchParams.get("year");
   return searchParams.get("c") ?? `${pathname}${year ? `-${year}` : ""}`.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+/**
+ * When the event ends, the way calendars count it: the end moment, or for a
+ * date-only event the day after its last day (calendar end dates are
+ * exclusive). Without an end: an instant, or a single day.
+ */
+function endOf(countdown: Countdown): Date {
+  return eventEnd(countdown) ?? (countdown.dateOnly ? nextDay(countdown.target) : countdown.target);
 }
 
 function alarm(trigger: string, description: string): string[] {

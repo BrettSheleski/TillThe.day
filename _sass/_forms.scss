@@ -120,3 +120,13 @@ button,
 
   &:has(input:disabled) { opacity: 0.45; cursor: default; }
 }
+
+// The optional end: "+ Add end", then the end date and time side by side
+.add-end { align-self: flex-start; margin-top: 8px; }
+
+.end-row {
+  display: flex;
+  gap: 8px;
+
+  input { flex: 1; min-width: 0; }
+}

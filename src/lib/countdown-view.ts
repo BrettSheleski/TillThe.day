@@ -6,6 +6,7 @@ import { EMBED_HEIGHT, embedSnippet, embedUrl, type EmbedSource } from "./embed"
 import { setUpPresenting } from "./present";
 import { canShareNatively, shareLinks, shareNatively, type ShareInfo } from "./share";
 import type { Countdown } from "./token";
+import { eventEnd, lastDay, phaseAt, type Phase } from "./schedule";
 import { ordinal, upcoming, yearsSince } from "./yearly";
 
 export type Display = ReturnType<typeof createDisplay>;
@@ -14,10 +15,13 @@ export type Display = ReturnType<typeof createDisplay>;
  * The ticking countdown display. `set(null)` shows an empty placeholder of the
  * same size, so the page doesn't shift when a date is first picked.
  *
- * Counting down, it shows zeros once the target has passed; with `celebrate`,
- * it also adds the "elapsed" class to <html>, which starts the current theme's
- * end animation (see _sass/themes/). Counting up, it shows the time since the
- * target, or zeros if that hasn't arrived yet.
+ * Counting down, it shows the time to the start. If the event has an end, it
+ * then shows "happening now" with the time to the end, then "ended" with
+ * zeros; without an end, it shows zeros from the start. While the event is
+ * on (or from the start, without an end), `celebrate` adds the "elapsed"
+ * class to <html>, which starts the current theme's end animation (see
+ * _sass/themes/). Counting up, it shows the time since the target, or zeros
+ * if that hasn't arrived yet.
  */
 export function createDisplay() {
   const section = byId("countdown");
@@ -31,21 +35,42 @@ export function createDisplay() {
   const pad = (n: number) => String(n).padStart(2, "0");
 
   let current: Countdown | null = null;
+  let anniversary = "";
   let celebrate = false;
+  let shownPhase: Phase | null = null;
 
   function tick(): void {
     if (!current) return;
-    const remaining = current.target.getTime() - Date.now();
-    const shown = current.countUp ? -remaining : remaining;
-    const ended = !current.countUp && remaining <= 0;
-    const s = shown > 0 ? Math.floor(shown / 1000) : 0;
+    const now = new Date();
+    let ms: number;
+    let label: string;
+    let phase: Phase | null = null;
+
+    if (current.countUp) {
+      ms = now.getTime() - current.target.getTime();
+      label = "since";
+    } else {
+      const state = phaseAt(current, now);
+      phase = state.phase;
+      ms = state.countTo.getTime() - now.getTime();
+      label = phase === "during" ? "happening now" : phase === "after" && current.duration ? "ended" : "until";
+    }
+
+    const s = ms > 0 ? Math.floor(ms / 1000) : 0;
     days.textContent = Math.floor(s / 86400).toLocaleString();
     days.classList.toggle("long", days.textContent.length > 3);
     hours.textContent = pad(Math.floor((s % 86400) / 3600));
     minutes.textContent = pad(Math.floor((s % 3600) / 60));
     seconds.textContent = pad(s % 60);
-    status.textContent = (current.countUp ? "since" : "until") + (current.msg ? ":" : "");
-    document.documentElement.classList.toggle("elapsed", celebrate && ended);
+    status.textContent = label + (current.msg ? ":" : "");
+
+    // The date line changes with the phase: when it is, or when it ends
+    if (phase !== shownPhase) {
+      shownPhase = phase;
+      targetLabel.textContent = phase === "during" ? formatEnding(current) : formatWhen(current) + anniversary;
+    }
+    const celebrating = phase === "during" || (phase === "after" && !current.duration);
+    document.documentElement.classList.toggle("elapsed", celebrate && celebrating);
   }
   setInterval(tick, 1000);
 
@@ -53,6 +78,7 @@ export function createDisplay() {
     set(countdown: Countdown | null, options: { celebrate?: boolean } = {}): void {
       current = countdown;
       celebrate = options.celebrate ?? false;
+      shownPhase = null;
       section.hidden = false;
       if (!countdown) {
         for (const unit of [days, hours, minutes, seconds]) unit.textContent = "--";
@@ -63,27 +89,44 @@ export function createDisplay() {
       }
       current = upcoming(countdown);
       message.textContent = countdown.msg;
-      targetLabel.textContent = formatTarget(current);
       // Which anniversary this is, e.g. "· 37th"
       const years = countdown.yearly ? yearsSince(countdown.target, current.target) : 0;
-      if (years > 0) targetLabel.textContent += ` · ${ordinal(years)}`;
+      anniversary = years > 0 ? ` · ${ordinal(years)}` : "";
+      targetLabel.textContent = formatWhen(current) + anniversary;
       tick();
     },
   };
 }
 
+const TIMED: Intl.DateTimeFormatOptions = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  hour: "numeric",
+  minute: "2-digit",
+  timeZoneName: "short",
+};
+const DATE_ONLY: Intl.DateTimeFormatOptions = { dateStyle: "full" };
+
+/** When the countdown is, without its end. */
 export function formatTarget({ target, dateOnly }: Countdown): string {
-  return dateOnly
-    ? target.toLocaleDateString(undefined, { dateStyle: "full" })
-    : target.toLocaleString(undefined, {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        timeZoneName: "short",
-      });
+  return target.toLocaleString(undefined, dateOnly ? DATE_ONLY : TIMED);
+}
+
+/** When the countdown is: its date, or the range from start to end. */
+export function formatWhen(countdown: Countdown): string {
+  if (!countdown.duration) return formatTarget(countdown);
+  const format = new Intl.DateTimeFormat(undefined, countdown.dateOnly ? DATE_ONLY : TIMED);
+  const end = countdown.dateOnly ? lastDay(countdown) : eventEnd(countdown)!;
+  return format.formatRange(countdown.target, end);
+}
+
+/** While the event is on: when it ends. */
+function formatEnding(countdown: Countdown): string {
+  return countdown.dateOnly
+    ? `Through ${lastDay(countdown).toLocaleString(undefined, DATE_ONLY)}`
+    : `Ends ${eventEnd(countdown)!.toLocaleString(undefined, TIMED)}`;
 }
 
 /**

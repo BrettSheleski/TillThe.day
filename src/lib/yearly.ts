@@ -1,18 +1,25 @@
 // Yearly repeats (birthdays, anniversaries). A yearly countdown's link keeps
 // the original date; these work out the next time it comes around.
+import { eventEnd } from "./schedule";
 import type { Countdown } from "./token";
 
 /**
  * The next occurrence of a yearly countdown. Date-only ones count today all
- * day, then roll over; timed ones roll over once the moment has passed. An
- * original date still in the future is its own first occurrence.
+ * day, then roll over; timed ones roll over once the moment has passed. One
+ * with an end stays current until that year's event is over. An original
+ * date still in the future is its own first occurrence.
  */
-export function nextOccurrence({ target, dateOnly }: Countdown, now = new Date()): Date {
+export function nextOccurrence(countdown: Countdown, now = new Date()): Date {
+  const { target, dateOnly } = countdown;
   // Years in the same calendar inYear() uses: local for date-only, else UTC
   const yearOf = (d: Date) => (dateOnly ? d.getFullYear() : d.getUTCFullYear());
   const firstYear = Math.max(yearOf(now), yearOf(target));
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const isAhead = (d: Date) => (dateOnly ? d >= today : d > now);
+  const isAhead = (d: Date) => {
+    const end = eventEnd({ ...countdown, target: d });
+    if (end) return end > now;
+    return dateOnly ? d >= today : d > now;
+  };
 
   const thisYear = inYear(target, dateOnly, firstYear);
   return isAhead(thisYear) ? thisYear : inYear(target, dateOnly, firstYear + 1);

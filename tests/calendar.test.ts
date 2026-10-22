@@ -57,6 +57,26 @@ describe(".ics file", () => {
   });
 });
 
+describe("events with an end", () => {
+  it("end at the end time", () => {
+    const concert = countdown({ target: new Date("2026-12-25T01:00:00Z"), duration: 240, msg: "Concert" });
+    const links = calendarLinks(concert, url);
+    const { event } = parseEvent(links.ics);
+    expect(event.endDate.toJSDate().toISOString()).toBe("2026-12-25T05:00:00.000Z");
+    expect(new URL(links.google).searchParams.get("dates")).toBe("20261225T010000Z/20261225T050000Z");
+    expect(new URL(links.outlook).searchParams.get("enddt")).toBe("2026-12-25T05:00:00.000Z");
+  });
+
+  it("span every day of a multi-day date-only event", () => {
+    const trip = countdown({ dateOnly: true, target: new Date(2027, 5, 12), duration: 7, msg: "Trip" });
+    const links = calendarLinks(trip, url);
+    const { event } = parseEvent(links.ics);
+    expect([event.startDate.toString(), event.endDate.toString()]).toEqual(["2027-06-12", "2027-06-20"]);
+    expect(new URL(links.google).searchParams.get("dates")).toBe("20270612/20270620");
+    expect(new URL(links.outlook).searchParams.get("enddt")).toBe("2027-06-20");
+  });
+});
+
 describe("yearly countdowns", () => {
   it("become a repeating event starting at the next occurrence", () => {
     const birthday = countdown({ yearly: true, dateOnly: true, target: new Date(1990, 4, 3), msg: "Sam" });

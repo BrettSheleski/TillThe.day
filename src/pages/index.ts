@@ -44,6 +44,50 @@ function showCreate(): void {
   // Repeating doesn't apply to count-ups; disabled rather than hidden so the form doesn't jump
   const repeating = () => yearlyInput.checked && !countingUp();
 
+  // The optional end: an end time (and date, if different) for a countdown
+  // with a time, or an end date for a date-only one
+  const addEnd = byId<HTMLButtonElement>("add-end");
+  const endFields = byId("end-fields");
+  const endDateInput = byId<HTMLInputElement>("end-date");
+  const endTimeInput = byId<HTMLInputElement>("end-time");
+  const hasEnd = () => !endFields.hidden && !countingUp();
+
+  /** How long the event lasts (see Countdown.duration), or what's wrong with the end; 0 with no end. */
+  function readEnd(): { duration: number; problem?: [HTMLInputElement, string] } {
+    if (!hasEnd() || !dateInput.value) return { duration: 0 };
+    if (timeInput.value) {
+      if (!endTimeInput.value) return { duration: 0, problem: [endTimeInput, "Pick an end time."] };
+      const start = new Date(`${dateInput.value}T${timeInput.value}`);
+      const end = new Date(`${endDateInput.value || dateInput.value}T${endTimeInput.value}`);
+      const minutes = Math.round((end.getTime() - start.getTime()) / 60_000);
+      if (!(minutes > 0)) return { duration: 0, problem: [endTimeInput, "The end must be after the start."] };
+      return { duration: minutes };
+    }
+    if (!endDateInput.value) return { duration: 0, problem: [endDateInput, "Pick an end date."] };
+    const days = Math.round((utcDay(endDateInput.value) - utcDay(dateInput.value)) / 86_400_000);
+    if (!(days > 0)) return { duration: 0, problem: [endDateInput, "The end date must be after the start date."] };
+    return { duration: days };
+  }
+
+  addEnd.addEventListener("click", () => {
+    endFields.hidden = false;
+    // Start from the start date, and an hour after the start time
+    if (!endDateInput.value) endDateInput.value = dateInput.value;
+    if (timeInput.value && !endTimeInput.value && dateInput.value) {
+      const later = new Date(new Date(`${dateInput.value}T${timeInput.value}`).getTime() + 3_600_000);
+      endDateInput.value = localDate(later);
+      endTimeInput.value = later.toTimeString().slice(0, 5);
+    }
+    update();
+    endDateInput.focus();
+  });
+  byId("remove-end").addEventListener("click", () => {
+    endFields.hidden = true;
+    endDateInput.value = endTimeInput.value = "";
+    update();
+    addEnd.focus();
+  });
+
   function readForm(): Countdown | null {
     const date = dateInput.value;
     if (!date) return null;
@@ -59,6 +103,7 @@ function showCreate(): void {
       theme: themeById(themeSelect.value),
       countUp: countingUp(),
       yearly: repeating(),
+      duration: readEnd().duration,
     };
   }
 
@@ -98,6 +143,17 @@ function showCreate(): void {
     applyTheme(themeById(themeSelect.value));
     clearTime.hidden = !timeInput.value;
     yearlyInput.disabled = countingUp();
+
+    // An end doesn't apply to count-ups; a date-only countdown ends on a date
+    addEnd.hidden = !endFields.hidden;
+    addEnd.disabled = endDateInput.disabled = endTimeInput.disabled = countingUp();
+    endTimeInput.hidden = !timeInput.value;
+    endDateInput.min = dateInput.value;
+    endDateInput.setCustomValidity("");
+    endTimeInput.setCustomValidity("");
+    const problem = readEnd().problem;
+    if (problem) problem[0].setCustomValidity(problem[1]);
+
     const countdown = readForm();
     validate(countdown);
     display.set(countdown);
@@ -119,6 +175,12 @@ function showCreate(): void {
     if (!countdown) return;
     location.assign(`${location.pathname}?c=${await encodeToken(countdown)}`);
   });
+}
+
+/** A date input's YYYY-MM-DD as a UTC day, for counting whole days between dates. */
+function utcDay(value: string): number {
+  const [y, m, d] = value.split("-").map(Number);
+  return Date.UTC(y, m - 1, d);
 }
 
 /** YYYY-MM-DD in local time, the format date inputs use. */

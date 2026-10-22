@@ -51,6 +51,7 @@ describe("links already shared", () => {
       expect(c!.theme.id).toBe(link.theme);
       expect(c!.countUp).toBe(link.countUp);
       expect(c!.yearly).toBe(false);
+      expect(c!.duration).toBe(0);
     });
   }
 
@@ -84,6 +85,9 @@ describe("encode and decode", () => {
     "count-up with a theme": countdown({ countUp: true, theme: themeById("zen"), msg: "Calm" }),
     "a yearly repeat": countdown({ yearly: true, dateOnly: true, target: new Date(1990, 4, 3), msg: "Sam's birthday" }),
     "a yearly repeat with a theme and time": countdown({ yearly: true, theme: themeById("birthday") }),
+    "an end (4 hours)": countdown({ duration: 240, msg: "Concert" }),
+    "a long end, with every option": countdown({ duration: 60 * 24 * 3, theme: themeById("party"), yearly: true, msg: "Festival" }),
+    "a multi-day date-only event": countdown({ dateOnly: true, target: new Date(2027, 5, 12), duration: 7, msg: "Trip" }),
   };
 
   for (const [name, original] of Object.entries(cases)) {
@@ -189,5 +193,23 @@ describe("theme letters", () => {
     expect(peekTheme("hud96P.SGk").id).toBe("party");
     expect(peekTheme("hud96UD").id).toBe("doomsday");
     expect(peekTheme("not a token").id).toBe("generic");
+  });
+});
+
+describe("ends in links", () => {
+  it("add a short length after the date", async () => {
+    expect(await encodeToken(countdown({ duration: 240 }))).toMatch(/^hud7i_6o$/);
+    expect(await encodeToken(countdown({ duration: 240, theme: themeById("party"), msg: "Hi" }))).toBe("hud7i_6oP.SGk");
+  });
+
+  it("read back alongside theme letters and a message", async () => {
+    const c = await decodeToken("_g24_7RY.SGk");
+    expect(c).toMatchObject({ dateOnly: true, duration: 7, yearly: true, msg: "Hi" });
+    expect(c!.theme.id).toBe("romantic");
+    expect(peekTheme("_g24_7RY.SGk").id).toBe("romantic");
+  });
+
+  it("reject a malformed length", async () => {
+    for (const token of ["hud7i_", "hud7i__6o", "hud7i_6o_7", "hud7i_-6"]) expect(await decodeToken(token), token).toBeNull();
   });
 });

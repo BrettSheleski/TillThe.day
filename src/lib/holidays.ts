@@ -210,5 +210,7 @@ export function holidayCountdown(
     countUp: false,
     // Holidays roll over by their own rule, not as yearly countdowns
     yearly: false,
+    // Holidays are whole days (or, for seasons, a moment)
+    duration: 0,
   };
 }

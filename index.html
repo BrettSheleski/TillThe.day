@@ -30,6 +30,19 @@ script: index
     </div>
     <input id="time" type="time">
 
+    <!-- Optional end, for events that last a while (src/pages/index.ts) -->
+    <button id="add-end" type="button" class="link-button add-end">+ Add end</button>
+    <div id="end-fields" hidden>
+      <div class="label-row">
+        <label for="end-date">Ends</label>
+        <button id="remove-end" type="button" class="link-button">Remove</button>
+      </div>
+      <div class="end-row">
+        <input id="end-date" type="date" aria-label="End date">
+        <input id="end-time" type="time" aria-label="End time">
+      </div>
+    </div>
+
     <label class="checkbox">
       <input id="yearly" type="checkbox">
       Repeat every year <span class="hint">(birthdays, anniversaries)</span>

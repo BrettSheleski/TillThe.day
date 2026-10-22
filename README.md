@@ -5,12 +5,13 @@ A static countdown page you can host on GitHub Pages. Pick a date, add an option
 Nothing is stored on a server. The date and message are packed into a single `c` parameter in the URL:
 
 ```
-https://<user>.github.io/<repo>/?c=<when>[<letters>][.<message> | ~<compressed message>]
+https://<user>.github.io/<repo>/?c=<when>[_<length>][<letters>][.<message> | ~<compressed message>]
 ```
 
 - `<when>` is one of:
   - `<minutes>`: when a time was picked. The exact moment as minutes since 1970 (UTC), in base 36. The creator's time zone is applied when the link is made, so everyone counts down to the same moment, and each viewer sees it converted to their own time zone.
   - `_<days>`: when no time was picked. Days since 1970, in base 36. It counts down to midnight at the start of that date in each viewer's own time zone.
+- `_<length>`: how long the event lasts, in base 36: minutes after the start for a countdown with a time, or extra days for a date-only one (e.g. `_7` for an 8-day trip). Left out when it has no end. With an end, the page counts down to the start, then shows "happening now" counting down to the end, then "ended"; calendar events get the real end.
 - `<letters>`: uppercase letters, in any order:
   - the theme's one-letter code, from `_data/themes.json`. Left out for the default (generic) theme.
   - `U` for a count-up (time since the date).

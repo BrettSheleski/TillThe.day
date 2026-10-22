@@ -34,6 +34,7 @@ export function countdown(overrides: Partial<Countdown> = {}): Countdown {
     theme: themeById("generic"),
     countUp: false,
     yearly: false,
+    duration: 0,
     ...overrides,
   };
 }

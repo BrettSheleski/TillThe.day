@@ -1,8 +1,11 @@
 // A countdown is packed into a single URL parameter: ?c=<token>
 //
-// token   = <when>[<letters>][<message>]
+// token   = <when>[_<length>][<letters>][<message>]
 // when    = <minutes since epoch, base36>     exact moment (a time was picked)
 //         | _<days since epoch, base36>       date only: midnight in each viewer's own time zone
+// length  = how long the event lasts, base36: minutes for an exact moment,
+//           extra days for a date-only one (e.g. 7 for a week-long trip);
+//           omitted when it has no end
 // letters = uppercase letters, in any order:
 //           the theme's code (see _data/themes.json); omitted for the default theme
 //           U for count-up mode (time since the date)
@@ -27,6 +30,12 @@ export interface Countdown {
   countUp: boolean;
   /** Repeats every year; target is the original date (see ./yearly.ts). */
   yearly: boolean;
+  /**
+   * How long the event lasts: minutes after `target` for an exact moment, or
+   * extra days after the first for a date-only one. 0 for no end. See
+   * ./schedule.ts.
+   */
+  duration: number;
 }
 
 const MINUTE = 60_000;
@@ -35,11 +44,12 @@ const YEARLY = "Y";
 const FLAGS = [COUNT_UP, YEARLY];
 const DAY = 86_400_000;
 
-export async function encodeToken({ target, dateOnly, msg, theme, countUp, yearly }: Countdown): Promise<string> {
+export async function encodeToken({ target, dateOnly, msg, theme, countUp, yearly, duration }: Countdown): Promise<string> {
   const when = dateOnly
     ? "_" + (Date.UTC(target.getFullYear(), target.getMonth(), target.getDate()) / DAY).toString(36)
     : Math.round(target.getTime() / MINUTE).toString(36);
-  const prefix = when + theme.code + (countUp ? COUNT_UP : "") + (yearly ? YEARLY : "");
+  const length = duration > 0 ? `_${Math.round(duration).toString(36)}` : "";
+  const prefix = when + length + theme.code + (countUp ? COUNT_UP : "") + (yearly ? YEARLY : "");
   if (!msg) return prefix;
 
   const bytes = new TextEncoder().encode(msg);
@@ -51,7 +61,8 @@ export async function encodeToken({ target, dateOnly, msg, theme, countUp, yearl
   return prefix + best;
 }
 
-const TOKEN = /^(_?)(-?[0-9a-z]+)([A-Z]*)(?:([.~])([A-Za-z0-9_-]*))?$/;
+// Groups: 1 date-only marker, 2 when, 3 length, 4 letters, 5 message marker, 6 message
+const TOKEN = /^(_?)(-?[0-9a-z]+)(?:_([0-9a-z]+))?([A-Z]*)(?:([.~])([A-Za-z0-9_-]*))?$/;
 
 /** The theme among a token's letters; the default if none (or none known). */
 function themeFromLetters(letters: string): Theme {
@@ -64,7 +75,7 @@ function themeFromLetters(letters: string): Theme {
  * (possibly async) message decode and avoid flashing the default theme.
  */
 export function peekTheme(token: string): Theme {
-  return themeFromLetters(token.match(TOKEN)?.[3] ?? "");
+  return themeFromLetters(token.match(TOKEN)?.[4] ?? "");
 }
 
 /** Returns null if the token is malformed. */
@@ -84,10 +95,10 @@ export async function decodeToken(token: string): Promise<Countdown | null> {
   if (isNaN(target.getTime())) return null;
 
   let msg = "";
-  if (m[5]) {
+  if (m[6]) {
     try {
-      let bytes = fromBase64Url(m[5]);
-      if (m[4] === "~") bytes = await transform(bytes, new DecompressionStream("deflate-raw"));
+      let bytes = fromBase64Url(m[6]);
+      if (m[5] === "~") bytes = await transform(bytes, new DecompressionStream("deflate-raw"));
       msg = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
     } catch {
       return null;
@@ -97,9 +108,10 @@ export async function decodeToken(token: string): Promise<Countdown | null> {
     target,
     dateOnly,
     msg,
-    theme: themeFromLetters(m[3]),
-    countUp: m[3].includes(COUNT_UP),
-    yearly: m[3].includes(YEARLY),
+    theme: themeFromLetters(m[4]),
+    countUp: m[4].includes(COUNT_UP),
+    yearly: m[4].includes(YEARLY),
+    duration: m[3] ? parseInt(m[3], 36) : 0,
   };
 }
 
