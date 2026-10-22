@@ -2,11 +2,11 @@
 layout: page
 title: Privacy
 heading: Privacy policy
-description: What Time Until collects (very little) and who else is involved in running it.
+description: What Till the Day collects (very little) and who else is involved in running it.
 permalink: /privacy/
 last_updated: 2026-10-21
 ---
-Time Until is built to collect as little as possible. There are no accounts and no database, and the site sets no cookies.
+Till the Day is built to collect as little as possible. There are no accounts and no database, and the site sets no cookies.
 
 ## Your countdowns
 

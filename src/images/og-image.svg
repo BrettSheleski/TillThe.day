@@ -30,7 +30,7 @@
   <rect x="90" y="60" width="1020" height="510" rx="40" fill="#ffffff" fill-opacity="0.72" stroke="#ffffff" stroke-width="2" filter="url(#card-shadow)"/>
 
   <g font-family="Segoe UI, system-ui, sans-serif" text-anchor="middle">
-    <text x="600" y="165" font-size="76" font-weight="800" fill="url(#accent)" letter-spacing="-2">Time Until</text>
+    <text x="600" y="165" font-size="76" font-weight="800" fill="url(#accent)" letter-spacing="-2">Till the Day</text>
     <text x="600" y="218" font-size="29" fill="#5f6680">Count down to any date and share the link</text>
 
     <!-- Sample clock: four glass boxes -->

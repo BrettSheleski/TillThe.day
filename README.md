@@ -1,4 +1,4 @@
-# Time Until
+# Till the Day
 
 A static countdown page you can host on GitHub Pages. Pick a date, add an optional message, and share the link.
 

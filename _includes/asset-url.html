@@ -1,6 +1,6 @@
 {%- comment -%}
   A site-relative asset URL with the build time added, so browsers fetch the
   new file after each deploy instead of a cached one. Pass the path, e.g.
-  path='/assets/css/style.css' gives /TimeUntil/assets/css/style.css?v=1792600000
+  path='/assets/css/style.css' gives /assets/css/style.css?v=1792600000
 {%- endcomment -%}
 {{ include.path | relative_url }}?v={{ site.time | date: '%s' }}

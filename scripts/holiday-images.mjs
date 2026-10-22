@@ -244,7 +244,7 @@ function drawHoliday(name, themeId) {
     })
     .join("");
 
-  const pillText = "Live countdown · Time Until";
+  const pillText = "Live countdown · tillthe.day";
   const pillW = measure(pillText, t.pill, pillSize) + 64;
   const pill =
     `<rect x="${cx - pillW / 2}" y="${pillY}" width="${pillW}" height="${pillH}" rx="${t.pill.radius ?? pillH / 2}" fill="${t.pill.fill}"${t.pill.stroke ? ` stroke="${t.pill.stroke}" stroke-width="3"` : ""}/>` +

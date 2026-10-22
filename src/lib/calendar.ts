@@ -68,7 +68,7 @@ function icsFile(countdown: Countdown, title: string, details: string, url: stri
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Time Until//EN",
+    "PRODID:-//Till the Day//EN",
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
     `UID:${eventId(url)}@${location.host}`,
