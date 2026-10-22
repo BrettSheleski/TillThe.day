@@ -4,7 +4,7 @@ description: Count down to any date and share the link.
 # Cloudflare Web Analytics token (from the Cloudflare dashboard: Analytics &
 # Logs > Web Analytics). Leave empty to turn analytics off. See
 # _includes/analytics.html.
-cloudflare_analytics_token: "a0ec4b95c7c4443bb65ed232ff329f00"
+cloudflare_analytics_token: "d964511e4dd7472d991706760b09432e"
 
 # GitHub Pages fills in `url` and `baseurl` automatically from the repo's Pages
 # settings: with the custom domain set there (tillthe.day), the site is served
