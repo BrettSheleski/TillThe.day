@@ -24,7 +24,7 @@ The message is encoded, not encrypted: anyone with the link can decode it. When 
 
 ## Project layout
 
-This is a [Jekyll](https://jekyllrb.com/) site with TypeScript for page scripts. A GitHub Actions workflow compiles the TypeScript, builds the site and deploys it on every push to `main`.
+This is a [Jekyll](https://jekyllrb.com/) site with TypeScript for page scripts. A GitHub Actions workflow compiles the TypeScript, builds the site and deploys it on every push to `main`, and again daily so holiday pages' dates stay current.
 
 ```
 _config.yml              Site settings (title, description, excluded files)
@@ -56,6 +56,9 @@ src/lib/*.ts             Shared code, imported by page scripts: link format (tok
                          and buttons (countdown-view.ts), holiday dates (holidays.ts), sharing (share.ts,
                          qr.ts), calendar (calendar.ts), themes (themes.ts)
 assets/js/               Build output (git-ignored): one bundled <page>.js per page
+scripts/holiday-data.ts  Build step: writes each holiday's upcoming dates and FAQ to
+                         _data/holiday_facts.json and the soonest-first order to
+                         _data/holidays_soonest.json (both git-ignored)
 .github/workflows/pages.yml  Build and deploy workflow
 ```
 
@@ -117,9 +120,11 @@ The `rule` sets the date each year:
 
 Then run `npm run holiday-images` to draw the holiday's link-preview image (in its theme) and add the `image:` line to its front matter, and commit both. A test fails if a holiday has no image. Run it again after changing a theme's look; the looks are in `scripts/holiday-images.mjs`.
 
-Add `featured: true` to show a holiday in the quick links on the home and holiday pages; every holiday appears on `/holidays/`. `order` is the holiday's typical date as MMDD (e.g. `1225`), used to sort the quick links.
+Add `featured: true` to suggest a holiday: it then appears in the quick links on the home and 404 pages and in the "Coming up" card under holiday pages, soonest first, each with its next date. Keep it to the holidays most people count down to; every holiday appears on `/holidays/`. `order` is the holiday's typical date as MMDD (e.g. `1225`), used for the starting order of `/holidays/` before its script sorts it by date.
 
-The page counts down to the next date, celebrates on the day itself, and rolls over to next year the day after. Adding `?year=2028` counts down to that year's date instead (its "Upcoming dates" link there); a past year, a year with no listed date, or anything unreadable falls back to the next date, and the address is tidied to match. It also appears in the holiday links and on `/holidays/` automatically.
+The page counts down to the next date, celebrates on the day itself, and rolls over to next year the day after. Adding `?year=2028` counts down to that year's date instead (its "Upcoming dates" link there); a past year, a year with no listed date, or anything unreadable falls back to the next date, and the address is tidied to match. It appears on `/holidays/` automatically and, if featured, in the quick links and the "Coming up" card under other holiday pages (the next six featured holidays, from `_includes/coming-up.html`).
+
+Each holiday page also gets its next five dates and a short FAQ ("When is Easter 2027?", "Is Easter on the same date every year?") written into its HTML when the site is built, plus matching structured data (FAQ and breadcrumbs) for search engines. To keep the page to the countdown, the description, dates and FAQ are in an "About" section that starts closed; search engines still read it. The wording comes from the rule, in `src/lib/holiday-facts.ts`. Because the dates are worked out at build time, the deploy workflow also runs daily, so they move on once a holiday passes. The page script still rewrites the dates in the reader's own time zone and language.
 
 ### Link previews
 
@@ -155,6 +160,7 @@ The tests in `tests/` cover the parts where a silent break would hurt most:
 
 - `token.test.ts`: the link format. It includes real links that were already shared, which must always open the same countdown. **Never change those expectations to make a test pass:** fix the code instead, or old links break.
 - `holidays.test.ts`: holiday date rules, against known dates.
+- `holiday-facts.test.ts`: the holiday pages' upcoming dates and FAQ wording.
 - `calendar.test.ts`: the .ics file (checked with a real iCalendar parser) and the Google/Outlook links.
 - `site-data.test.ts`: that themes, Sass and holiday pages agree, e.g. unique theme letters, no theme using `U`, every holiday using a real theme.
 
@@ -173,6 +179,12 @@ Requires [Node.js](https://nodejs.org/) and [Ruby](https://www.ruby-lang.org/en/
 ```
 npm install
 bundle install
+```
+
+Write the holiday pages' dates and FAQ once (again after changing a holiday):
+
+```
+npm run build:data
 ```
 
 Then run these in two terminals:

@@ -6,6 +6,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Daily, after midnight across the US, so holiday pages' upcoming dates and
+  # FAQ (worked out at build time) move on once a holiday has passed
+  schedule:
+    - cron: "17 9 * * *"
 
 permissions:
   contents: read

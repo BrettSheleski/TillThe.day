@@ -1,6 +1,7 @@
 ---
 layout: default
 ---
+{%- assign facts = site.data.holiday_facts[page.slug] -%}
 <!-- A holiday page (_holidays/*.md). The page script counts down to the next
      date from the rule in front matter; the Markdown body is the "about" text. -->
 <div id="holiday" data-slug="{{ page.slug }}" data-name="{{ page.name }}" data-theme="{{ page.theme }}" data-rule="{{ page.rule | jsonify | escape }}">
@@ -11,16 +12,59 @@ layout: default
 
 {% include countdown.html %}
 
-<section class="about">
+<!-- About the holiday, its dates and questions: closed by default to keep the
+     page to the countdown. Search engines still read what's inside. -->
+<details class="about">
+  <summary>About {{ page.name }}: dates and questions</summary>
   {{ content }}
   <div id="upcoming-dates">
     <h2>Upcoming dates</h2>
-    <!-- Five lines reserved up front; the page script fills them in -->
-    <ul id="upcoming" class="upcoming">{% for i in (1..5) %}<li>&nbsp;</li>{% endfor %}</ul>
+    <!-- Five lines, filled in when the site is built (scripts/holiday-data.ts)
+         so they're in the page for search engines. The page script then
+         rewrites them in the reader's own time zone and language. -->
+    <ul id="upcoming" class="upcoming">
+      {%- for i in (0..4) -%}
+      {%- assign date = facts.dates[i] -%}
+      <li>{% if date %}<a href="{{ page.url | relative_url }}{% unless forloop.first %}?year={{ date.year }}{% endunless %}">{{ date.text }}</a>{% else %}&nbsp;{% endif %}</li>
+      {%- endfor -%}
+    </ul>
   </div>
-</section>
 
-<nav class="holiday-links" aria-labelledby="holiday-links-title">
-  <h2 id="holiday-links-title">More holiday countdowns</h2>
-  {% include holiday-links.html %}
-</nav>
+  {% if facts.faq %}
+  <div class="faq">
+    <h2>Common questions</h2>
+    {% for item in facts.faq %}
+    <h3>{{ item.q }}</h3>
+    <p>{{ item.a }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+</details>
+
+<!-- Structured data for search engines: the FAQ above and where this page sits
+     in the site. Text is JSON-escaped with jsonify. -->
+<script type="application/ld+json">
+[
+  {% if facts.faq %}{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {% for item in facts.faq %}{
+        "@type": "Question",
+        "name": {{ item.q | jsonify }},
+        "acceptedAnswer": { "@type": "Answer", "text": {{ item.a | jsonify }} }
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  },{% endif %}
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": {{ site.title | jsonify }}, "item": {{ '/' | absolute_url | jsonify }} },
+      { "@type": "ListItem", "position": 2, "name": "Holidays", "item": {{ '/holidays/' | absolute_url | jsonify }} },
+      { "@type": "ListItem", "position": 3, "name": {{ page.name | jsonify }}, "item": {{ page.url | absolute_url | jsonify }} }
+    ]
+  }
+]
+</script>

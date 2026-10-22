@@ -1,6 +1,9 @@
 # --- Build output ---
 # TypeScript bundles, compiled from src/ by `npm run build`
 assets/js/
+# Holiday dates, FAQ and order, written by `npm run build` (scripts/holiday-data.ts)
+_data/holiday_facts.json
+_data/holidays_soonest.json
 # Jekyll
 _site/
 .jekyll-cache/

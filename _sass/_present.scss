@@ -10,7 +10,8 @@ html.presenting {
   .present-toggle,
   #holiday,
   .about,
-  .holiday-links { display: none; }
+  .holiday-links,
+  .card-secondary { display: none; }
 
   body {
     justify-content: center;

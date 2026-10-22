@@ -29,11 +29,30 @@ h2 { font-size: 1.15rem; margin: 28px 0 10px; }
 
 .holiday-links { margin-top: 32px; }
 
-// The explanation under a holiday countdown
+// The "Coming up" card under holiday pages (_includes/coming-up.html)
+.coming-up h2 { margin-top: 0; }
+
+.chip-date { color: var(--muted); font-size: 0.8rem; }
+
+// The explanation, dates and questions under a holiday countdown, closed by
+// default: one quiet line until opened
 .about {
-  margin-top: 32px;
+  margin-top: 24px;
   text-align: left;
   line-height: 1.6;
+
+  > summary {
+    width: fit-content;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible { color: var(--accent); }
+  }
+
+  &[open] > summary { margin-bottom: 16px; }
 
   p { margin: 0 0 12px; }
 }
@@ -64,11 +83,8 @@ h2 { font-size: 1.15rem; margin: 28px 0 10px; }
   .date { color: var(--muted); font-size: 0.9rem; }
 }
 
-// "All holidays" at the end of the holiday links
-.chip-all {
-  border-style: dashed;
-  font-weight: 600;
-}
+// "All holidays", the quiet link under the holiday chips
+.all-holidays { margin: 12px 0 0; }
 
 // Each upcoming date links to its own countdown; the one shown is marked
 .upcoming {
@@ -79,4 +95,10 @@ h2 { font-size: 1.15rem; margin: 28px 0 10px; }
     font-weight: 600;
     text-decoration: none;
   }
+}
+
+// Questions and answers under a holiday's upcoming dates (_layouts/holiday.html)
+.faq {
+  h3 { font-size: 1rem; margin: 16px 0 4px; }
+  p { margin: 0; color: var(--muted); }
 }

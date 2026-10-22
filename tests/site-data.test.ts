@@ -97,7 +97,11 @@ describe("privacy policy", () => {
   const templates = ["_includes", "_layouts"].flatMap((dir) =>
     fs.readdirSync(path.join(root, dir)).map((f) => fs.readFileSync(path.join(root, dir, f), "utf8"))
   );
-  const hosts = new Set(templates.flatMap((t) => [...t.matchAll(/https?:\/\/([a-z0-9.-]+)/gi)].map((m) => m[1])));
+  // Addresses that only name something and are never loaded, e.g. the
+  // vocabulary of the structured data in _layouts/holiday.html
+  const namesOnly = new Set(["schema.org"]);
+  const hosts = new Set(templates.flatMap((t) => [...t.matchAll(/https?:\/\/([a-z0-9.-]+)/gi)].map((m) => m[1]))
+    .filter((host) => !namesOnly.has(host)));
 
   it("finds the outside services the templates load", () => {
     expect(hosts.size).toBeGreaterThan(0);

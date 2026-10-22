@@ -49,6 +49,8 @@ defaults:
       mode: view
       # Loads assets/js/holiday.js, compiled from src/pages/holiday.ts
       script: holiday
+      # The "Coming up" card under the countdown (_includes/coming-up.html)
+      coming_up: true
 
 # Both are supported by GitHub Pages (part of the github-pages gem):
 # - jekyll-sitemap generates sitemap.xml listing every page, for search engines

@@ -1,0 +1,14 @@
+{
+  "//": "Type checking for the build scripts written in TypeScript, which run in Node",
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "node"
+    ],
+    "skipLibCheck": true
+  },
+  "include": [
+    "../src",
+    "*.ts"
+  ]
+}

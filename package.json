@@ -3,12 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run typecheck && npm run build:pages && npm run build:early",
+    "build": "npm run typecheck && npm run build:pages && npm run build:early && npm run build:data",
     "build:pages": "esbuild \"src/pages/*.ts\" --bundle --splitting --chunk-names=chunks/[name]-[hash] --format=esm --target=es2022 --minify --sourcemap --outdir=assets/js",
     "build:early": "esbuild src/head/early.ts --bundle --format=iife --target=es2022 --minify --outfile=assets/js/early.js",
+    "build:data": "esbuild scripts/holiday-data.ts --bundle --platform=node --format=esm --log-level=warning | node --input-type=module",
     "watch": "npm run build:early && esbuild \"src/pages/*.ts\" --bundle --splitting --chunk-names=chunks/[name]-[hash] --format=esm --target=es2022 --sourcemap --outdir=assets/js --watch",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit && tsc --noEmit -p tests",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tests && tsc --noEmit -p scripts",
     "fonts": "node scripts/self-host-fonts.mjs",
     "holiday-images": "node scripts/holiday-images.mjs"
   },

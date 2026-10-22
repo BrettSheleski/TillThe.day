@@ -1,0 +1,20 @@
+<!-- The next few featured holidays (`featured: true` in _holidays/*.md), soonest
+     first, leaving out the page's own, then a link to the full list. The order
+     is worked out when the site is built (scripts/holiday-data.ts). Shown in its own card under holiday pages
+     (`coming_up` in _config.yml, placed by _layouts/default.html). -->
+<nav class="coming-up" aria-labelledby="coming-up-title">
+  <h2 id="coming-up-title">Coming up</h2>
+  <ul class="chips">
+    {%- assign shown = 0 -%}
+    {%- for next in site.data.holidays_soonest -%}
+    {%- if shown == 6 -%}{%- break -%}{%- endif -%}
+    {%- if next.slug == page.slug -%}{%- continue -%}{%- endif -%}
+    {%- assign holiday = site.holidays | where: "slug", next.slug | first -%}
+    {%- if holiday.featured -%}
+    {%- assign shown = shown | plus: 1 %}
+    <li><a class="chip" href="{{ holiday.url | relative_url }}">{{ holiday.name }} <span class="chip-date">{{ next.date }}</span></a></li>
+    {%- endif -%}
+    {%- endfor %}
+  </ul>
+  <p class="all-holidays"><a class="quiet-link" href="{{ '/holidays/' | relative_url }}">All holidays &rarr;</a></p>
+</nav>

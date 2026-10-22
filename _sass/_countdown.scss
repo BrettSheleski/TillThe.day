@@ -156,12 +156,3 @@ html[data-mode="view"]:not(.presenting) {
   button.present-toggle { display: inline-flex; }
   .card:has(> .present-toggle) { padding-top: $present-gap * 2 + $present-size; }
 }
-
-.make-own {
-  color: var(--muted);
-  font-size: 0.9rem;
-  text-decoration: none;
-
-  &:hover,
-  &:focus-visible { color: var(--accent); text-decoration: underline; }
-}

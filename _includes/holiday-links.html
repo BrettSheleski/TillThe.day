@@ -1,9 +1,12 @@
-<!-- A chip for each featured holiday page, in calendar order, then a link to
-     the full list -->
+<!-- A chip for each featured holiday page with its next date, soonest first
+     (worked out at build time, see scripts/holiday-data.ts), then a link to
+     the full list (styled like the one in _includes/coming-up.html) -->
 <ul class="chips">
-  {% assign holidays = site.holidays | where: "featured", true | sort: "order" %}
-  {% for holiday in holidays %}
-  <li><a class="chip" href="{{ holiday.url | relative_url }}">{{ holiday.name }}</a></li>
-  {% endfor %}
-  <li><a class="chip chip-all" href="{{ '/holidays/' | relative_url }}">All {{ site.holidays | size }} holidays &rarr;</a></li>
+  {%- for next in site.data.holidays_soonest -%}
+  {%- assign holiday = site.holidays | where: "slug", next.slug | first -%}
+  {%- if holiday.featured %}
+  <li><a class="chip" href="{{ holiday.url | relative_url }}">{{ holiday.name }} <span class="chip-date">{{ next.date }}</span></a></li>
+  {%- endif -%}
+  {%- endfor %}
 </ul>
+<p class="all-holidays"><a class="quiet-link" href="{{ '/holidays/' | relative_url }}">All holidays &rarr;</a></p>
