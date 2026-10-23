@@ -1,0 +1,66 @@
+---
+layout: default
+title: My Days
+description: The countdowns and holidays you've saved in this browser.
+permalink: /my-days/
+# Different for everyone, and empty to a search engine
+sitemap: false
+# Loads assets/js/my-days.js, compiled from src/pages/my-days.ts
+script: my-days
+---
+<h1>My Days</h1>
+<p class="sub">The countdowns and holidays you've saved, kept only in this browser.</p>
+
+{%- comment -%} Each occasion's emoji, to show beside countdowns made on its page {%- endcomment -%}
+{%- capture occasion_emoji -%}
+{ {%- for occasion in site.occasions -%}{{ occasion.slug | jsonify }}: {{ occasion.emoji | jsonify }}{% unless forloop.last %}, {% endunless %}{%- endfor -%} }
+{%- endcapture %}
+
+<!-- Filled by the page script from what's saved (src/lib/my-days.ts), grouped
+     and sorted like the holidays page: coming up, counting up, ended -->
+<div id="saved-groups" data-home="{{ '/' | relative_url }}" data-emoji="{{ occasion_emoji | escape }}"></div>
+
+<div id="saved-empty" hidden>
+  <p>Nothing saved yet. Open a countdown or a holiday and press its bookmark icon to keep it here.</p>
+  <a href="{{ '/' | relative_url }}" class="button">Make a countdown</a>
+</div>
+
+<p id="saved-unavailable" hidden>
+  This browser isn't letting the site save anything, so nothing can be kept here.
+  That's usual in private browsing, or when site data is blocked.
+</p>
+
+<div id="saved-note" class="hint saved-note" hidden>
+  <p>Clearing this browser's site data removes them.</p>
+  <!-- Only in Safari, which clears what sites save after a week without a
+       visit, except for sites added to the Home Screen or Dock. Shows the
+       line for this device (src/lib/my-days.ts, safariClears) -->
+  <p id="safari-note" hidden>
+    Safari deletes them if you don't visit for a week. To keep them,
+    <span data-safari="ios">add this site to your Home Screen</span><span data-safari="mac">add this site to your Dock (File &rsaquo; Add to Dock)</span>.
+  </p>
+</div>
+
+{% include holiday-data.html %}
+
+<!-- One saved countdown or holiday: its card (the holidays page's look), then Remove -->
+<template id="saved-item">
+  <li class="saved-item">
+    <a class="holiday-card">
+      <span class="holiday-emoji" aria-hidden="true"></span>
+      <span class="holiday-text">
+        <span class="holiday-name"></span>
+        <span class="holiday-summary"></span>
+      </span>
+      <span class="holiday-when">
+        <span class="days"></span>
+        <span class="date"></span>
+      </span>
+    </a>
+    <span class="saved-actions">
+      <button type="button" class="icon-button remove" title="Remove">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+      </button>
+    </span>
+  </li>
+</template>

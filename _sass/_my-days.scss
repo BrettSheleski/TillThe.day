@@ -1,0 +1,34 @@
+// The My Days page (my-days.html): saved countdowns as the holidays page's cards
+// (_sass/_holidays.scss), each with Remove beside it.
+
+.saved-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px;
+}
+
+.saved-actions { display: flex; }
+
+// Where a removed countdown was, until the page is left: "Removed ... Undo"
+.saved-removed {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: left;
+
+  .link-button { font-size: inherit; }
+}
+
+#saved-empty .button { margin-top: 8px; }
+
+.saved-note {
+  margin-top: 24px;
+  font-size: 0.85rem;
+
+  p { margin: 0 0 4px; }
+}

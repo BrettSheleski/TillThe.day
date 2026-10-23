@@ -18,6 +18,9 @@
   nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 16px; }
 }
 
+// The "My Days" link, only once something is saved (see src/head/early.ts)
+html:not([data-saved]) .saved-link { display: none; }
+
 // The logo and name: the same font and size on every theme (themes leave it
 // alone), in the header's text color. Holiday sets that color for its dark
 // background via `.site-header a`.

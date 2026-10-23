@@ -4,6 +4,7 @@
 import { createDisplay, formatTarget, showActions } from "../lib/countdown-view";
 import { byId, setHomeScreenName } from "../lib/dom";
 import { holidayCountdown, nextHoliday, parseYear, upcomingHolidays, type HolidayRule } from "../lib/holidays";
+import { setUpSaveButton } from "../lib/save-button";
 import { themeById } from "../lib/themes";
 
 const page = byId("holiday");
@@ -33,6 +34,8 @@ if (countdown) {
   // which has it in its About section)
   const withNotes = { ...countdown, notes: page.dataset.summary };
   showActions(withNotes, pageUrl, { holiday: page.dataset.slug!, ...(isNext ? {} : { year }) });
+  // Saves the holiday itself, which counts down to its next date whichever year is shown
+  setUpSaveButton({ holiday: page.dataset.slug! });
 
   // Fill the lines the page reserved with links to each occurrence; drop any left over
   const items = [...byId("upcoming").children];

@@ -15,6 +15,7 @@ import {
   type EndFields,
   type FormDates,
 } from "../lib/form-dates";
+import { setUpSaveButton } from "../lib/save-button";
 import { applyTheme, themeById } from "../lib/themes";
 import { decodeToken, encodeToken, peekTheme, type Countdown } from "../lib/token";
 
@@ -41,6 +42,7 @@ function showView(countdown: Countdown, token: string): void {
   // The tab shows the time left, e.g. "12d 4h · Christmas"
   display.set(countdown, { celebrate: true, tabTitle: "always" });
   showActions(countdown, location.href, { token });
+  setUpSaveButton({ token });
 }
 
 /** A link that can't be read: the error instead of the countdown and its buttons. */

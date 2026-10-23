@@ -181,8 +181,10 @@ html.elapsed .fx { display: block; }
 $present-size: 28px;
 $present-gap: 10px;
 
-// "html button" outranks button.icon-button's display (_forms.scss)
-html button.present-toggle {
+// "html button" outranks button.icon-button's display (_forms.scss). Save
+// (save-toggle) is the same, just to its left.
+html button.present-toggle,
+html button.save-toggle {
   position: absolute;
   top: $present-gap;
   right: $present-gap;
@@ -197,7 +199,16 @@ html button.present-toggle {
   &:focus-visible { opacity: 1; }
 }
 
+// Save, left of Full screen: the bookmark fills in once saved
+html button.save-toggle {
+  right: $present-gap + $present-size + 4px;
+
+  &[aria-pressed="true"] { opacity: 1; color: var(--accent); }
+  &[aria-pressed="true"] .icon { fill: currentColor; }
+}
+
 html[data-mode="view"]:not(.presenting) {
-  button.present-toggle { display: inline-flex; }
+  button.present-toggle,
+  button.save-toggle { display: inline-flex; }
   .card:has(> .present-toggle) { padding-top: $present-gap * 2 + $present-size; }
 }

@@ -12,6 +12,9 @@
     <span>{{ site.title }}</span>
   </a>
   <nav>
+    <!-- Shown only once something is saved in this browser (data-saved, from
+         src/head/early.ts), so it never leads to an empty page -->
+    <a class="saved-link" href="{{ '/my-days/' | relative_url }}">My Days</a>
     <a href="{{ '/occasions/' | relative_url }}">Occasions</a>
     <a href="{{ '/holidays/' | relative_url }}">Holidays</a>
   </nav>

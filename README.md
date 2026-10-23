@@ -22,6 +22,8 @@ https://<user>.github.io/<repo>/?c=<when>[_<length>][<letters>][.<text> | ~<comp
 
 The message, location and notes are encoded, not encrypted: anyone with the link can decode them. The location and notes show under the countdown's date (the location as a map link: Apple Maps on iPhone and iPad, the default maps app on Android, Google Maps elsewhere) and go into calendar events; the embed widget leaves them out. When the date has passed, the page counts the time since it.
 
+A countdown or holiday can also be **saved** in the viewer's browser with the bookmark icon in its card's corner, and found again on the My Days page (`/my-days/`). Only a countdown's token, or a holiday's page name, is kept, in `localStorage` under `saved-countdowns` (see `src/lib/my-days.ts`), so they stay on that device. A saved holiday always counts down to its next date. The header's "My Days" link shows only once something is saved.
+
 ## Project layout
 
 This is a [Jekyll](https://jekyllrb.com/) site with TypeScript for page scripts. A GitHub Actions workflow compiles the TypeScript, builds the site and deploys it on every push to `main`, and again daily so holiday pages' dates stay current.
@@ -35,6 +37,7 @@ _includes/footer.html    Site footer
 index.html               Home page: create a countdown, or view one from a link
 holidays.html            Holiday list page, soonest first (/holidays/)
 occasions.html           Occasion list page (/occasions/): countdowns, then count-ups
+my-days.html             Countdowns and holidays saved in this browser (/my-days/): coming up, counting up, ended
 _holidays/<name>.md      One holiday countdown page each (/<name>/), laid out by _layouts/holiday.html
 _occasions/<name>.md     One occasion page each (/<name>/, e.g. /wedding/), laid out by _layouts/occasion.html
 _includes/create-form.html  The create form, shared by the home and occasion pages
@@ -60,7 +63,9 @@ src/head/early.ts        Tiny script that runs before the first paint: sets the 
                          nothing jumps or flashes while loading
 src/lib/*.ts             Shared code, imported by page scripts: link format (token.ts), countdown display
                          and buttons (countdown-view.ts), holiday dates (holidays.ts), sharing (share.ts,
-                         qr.ts), calendar (calendar.ts), themes (themes.ts)
+                         qr.ts), calendar (calendar.ts), themes (themes.ts), My Days
+                         (my-days.ts for what's saved, my-days-list.ts for how it's listed,
+                         save-button.ts for the bookmark icon)
 assets/js/               Build output (git-ignored): one bundled <page>.js per page
 scripts/holiday-data.ts  Build step: writes each holiday's upcoming dates and FAQ to
                          _data/holiday_facts.json and the soonest-first order to

@@ -1,0 +1,7 @@
+<!-- Each holiday's details, for pages that show holidays by name: the embed
+     widget (?holiday=<name>) and the My Days page -->
+<ul id="holiday-data" hidden>
+  {% for holiday in site.holidays %}
+  <li data-slug="{{ holiday.slug }}" data-name="{{ holiday.name }}" data-emoji="{{ holiday.emoji }}" data-theme="{{ holiday.theme }}" data-rule="{{ holiday.rule | jsonify | escape }}" data-url="{{ holiday.url | relative_url }}"></li>
+  {% endfor %}
+</ul>

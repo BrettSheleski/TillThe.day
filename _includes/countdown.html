@@ -8,6 +8,13 @@
   <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
 </button>
 
+<!-- Save: beside Full screen, filled once saved. Keeps the countdown on the
+     My Days page (src/lib/my-days.ts). Shown by pages whose countdowns can be
+     saved, if the browser allows it -->
+<button id="save-countdown" type="button" class="icon-button save-toggle" aria-pressed="false" aria-label="Save" title="Save" hidden>
+  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v17l-6-4-6 4z"/></svg>
+</button>
+
 <div id="view-actions" class="view-actions" data-embed="{{ '/embed/' | relative_url }}">
   <div class="primary-actions">
     <details id="share-menu" class="dropdown">

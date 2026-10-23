@@ -18,9 +18,4 @@ script: embed
 
 {% include fx.html %}
 
-<!-- Each holiday's details, for ?holiday=<name> -->
-<ul id="holiday-data" hidden>
-  {% for holiday in site.holidays %}
-  <li data-slug="{{ holiday.slug }}" data-name="{{ holiday.name }}" data-theme="{{ holiday.theme }}" data-rule="{{ holiday.rule | jsonify | escape }}" data-url="{{ holiday.url | relative_url }}"></li>
-  {% endfor %}
-</ul>
+{% include holiday-data.html %}
