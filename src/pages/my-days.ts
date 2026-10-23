@@ -3,7 +3,18 @@
 // date, and lets each be removed, leaving an Undo in its place.
 import { byId } from "../lib/dom";
 import { holidayCountdown, type HolidayRule } from "../lib/holidays";
-import { canSave, removeSaved, safariClears, saveCountdown, savedCountdowns, type SavedCountdown } from "../lib/my-days";
+import {
+  backupFileName,
+  backupText,
+  canSave,
+  readBackup,
+  removeSaved,
+  restoreSaved,
+  safariClears,
+  saveCountdown,
+  savedCountdowns,
+  type SavedCountdown,
+} from "../lib/my-days";
 import { listStatus, shortWhen, type Group, type ListStatus } from "../lib/my-days-list";
 import { themeById } from "../lib/themes";
 import { decodeToken, type Countdown } from "../lib/token";
@@ -80,6 +91,9 @@ async function render(): Promise<void> {
   byId("saved-unavailable").hidden = available;
   byId("saved-empty").hidden = !available || rows.length > 0;
   byId("saved-note").hidden = rows.length === 0;
+  // Restoring works on an empty list too, e.g. on a new device
+  byId("backup").hidden = !available;
+  byId("backup-download").hidden = entries.length === 0;
   // The header's "My Days" link (see src/head/early.ts)
   if (entries.length) document.documentElement.dataset.saved = "";
   else delete document.documentElement.dataset.saved;
@@ -179,6 +193,52 @@ function showStatus(now = new Date()): void {
     row.item.querySelector(".days")!.textContent = status.amount;
     row.item.querySelector(".date")!.textContent = status.label;
   }
+}
+
+// --- Backup files
+
+const backupResult = byId("backup-result");
+
+byId("backup-download").addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob([backupText(savedCountdowns())], { type: "application/json" }));
+  link.download = backupFileName();
+  link.click();
+  // After the download has had time to start
+  setTimeout(() => URL.revokeObjectURL(link.href), 10_000);
+  backupResult.textContent = "";
+});
+
+const fileInput = byId<HTMLInputElement>("backup-file");
+byId("backup-restore").addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", async () => {
+  const file = fileInput.files?.[0];
+  fileInput.value = ""; // so choosing the same file again still restores
+  if (file) backupResult.textContent = await restoreFile(file);
+});
+
+/** Restores a backup file, and says what happened. */
+async function restoreFile(file: File): Promise<string> {
+  // Backups are small; anything this big isn't one
+  if (file.size > 1_000_000) return "That file isn't a My Days backup.";
+  const entries = readBackup(await file.text());
+  if (!entries) return "That file isn't a My Days backup.";
+  // Leave out what this site can't show: links that can't be read, or holidays it no longer has
+  const now = new Date();
+  const usable = (await Promise.all(entries.map(async (e) => ((await listingFor(e, now)) ? e : null)))).filter(
+    (e): e is SavedCountdown => e !== null,
+  );
+  const result = restoreSaved(usable);
+  if (!result) return "Couldn't restore: this browser didn't allow it.";
+  await render();
+
+  const { added, alreadySaved } = result;
+  const skipped = entries.length - usable.length;
+  const days = (n: number) => (n === 1 ? "1 day" : `${n} days`);
+  const parts = [added ? `Added ${days(added)}.` : "Nothing new to add."];
+  if (alreadySaved) parts.push(`${days(alreadySaved)} ${alreadySaved === 1 ? "was" : "were"} already here.`);
+  if (skipped) parts.push(`${days(skipped)} couldn't be read.`);
+  return parts.join(" ");
 }
 
 // In Safari, how to keep them from being cleared, for this device

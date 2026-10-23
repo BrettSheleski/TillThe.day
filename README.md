@@ -22,7 +22,7 @@ https://<user>.github.io/<repo>/?c=<when>[_<length>][<letters>][.<text> | ~<comp
 
 The message, location and notes are encoded, not encrypted: anyone with the link can decode them. The location and notes show under the countdown's date (the location as a map link: Apple Maps on iPhone and iPad, the default maps app on Android, Google Maps elsewhere) and go into calendar events; the embed widget leaves them out. When the date has passed, the page counts the time since it.
 
-A countdown or holiday can also be **saved** in the viewer's browser with the bookmark icon in its card's corner, and found again on the My Days page (`/my-days/`). Only a countdown's token, or a holiday's page name, is kept, in `localStorage` under `saved-countdowns` (see `src/lib/my-days.ts`), so they stay on that device. A saved holiday always counts down to its next date. The header's "My Days" link shows only once something is saved.
+A countdown or holiday can also be **saved** in the viewer's browser with the bookmark icon in its card's corner, and found again on the My Days page (`/my-days/`). Only a countdown's token, or a holiday's page name, is kept, in `localStorage` under `saved-countdowns` (see `src/lib/my-days.ts`), so they stay on that device. A saved holiday always counts down to its next date. My Days can download everything saved as a backup file (`till-the-day-<date>.json`) and restore one, adding to what's already saved, to move them to another browser or device. The header's "My Days" link shows only once something is saved.
 
 ## Project layout
 

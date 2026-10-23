@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  backupFileName,
+  backupText,
   canSave,
+  readBackup,
+  restoreSaved,
   isSaved,
   removeSaved,
   safariClears,
@@ -99,6 +103,50 @@ describe("saved countdowns", () => {
     expect(canSave(full)).toBe(false);
     expect(saveCountdown(entry("a"), full)).toBe(false);
     expect(canSave(memoryStorage())).toBe(true);
+  });
+});
+
+describe("backup files", () => {
+  it("restores what it was made from", () => {
+    const list = [entry("_kx8B"), holiday("christmas")];
+    expect(readBackup(backupText(list))).toEqual(list);
+  });
+
+  it("is dated in its file name", () => {
+    expect(backupFileName(new Date(2026, 9, 3))).toBe("till-the-day-2026-10-03.json");
+  });
+
+  it("refuses files that aren't a backup, or are from a newer version", () => {
+    expect(readBackup("not json")).toBeNull();
+    expect(readBackup("[]")).toBeNull();
+    expect(readBackup(JSON.stringify({ days: [entry("a")] }))).toBeNull();
+    expect(readBackup(JSON.stringify({ kind: "till-the-day/my-days", version: 2, days: [entry("a")] }))).toBeNull();
+    expect(readBackup(JSON.stringify({ kind: "till-the-day/my-days", version: 1, days: "a" }))).toBeNull();
+  });
+
+  it("leaves out entries it can't read, keeping the rest", () => {
+    const text = JSON.stringify({ kind: "till-the-day/my-days", version: 1, days: [entry("a"), { token: 5 }, null] });
+    expect(readBackup(text)).toEqual([entry("a")]);
+  });
+
+  it("adds to what's saved, skipping what's already there", () => {
+    const storage = memoryStorage();
+    saveCountdown(entry("a"), storage);
+    const result = restoreSaved([entry("a", 1), holiday("easter"), entry("b"), entry("b")], storage);
+    expect(result).toEqual({ added: 2, alreadySaved: 2 });
+    expect(savedCountdowns(storage)).toEqual([entry("a"), holiday("easter"), entry("b")]);
+  });
+
+  it("keeps only the fields it uses", () => {
+    const storage = memoryStorage();
+    restoreSaved([{ ...entry("a"), extra: "<script>" } as unknown as SavedCountdown], storage);
+    expect(JSON.parse(storage.getItem(STORAGE_KEY)!)).toEqual([entry("a")]);
+  });
+
+  it("says so when the browser won't save", () => {
+    expect(restoreSaved([entry("a")], memoryStorage(true))).toBeNull();
+    // Nothing new needs no write, so it can't fail
+    expect(restoreSaved([], memoryStorage(true))).toEqual({ added: 0, alreadySaved: 0 });
   });
 });
 

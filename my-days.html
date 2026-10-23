@@ -41,6 +41,18 @@ script: my-days
   </p>
 </div>
 
+<!-- A backup file, to move them to another browser or device, or keep in
+     case this one clears them. Download only once something is saved;
+     restoring adds to what's here (src/lib/my-days.ts, restoreSaved). -->
+<div id="backup" class="backup" hidden>
+  <div class="backup-actions">
+    <button id="backup-download" type="button" class="link-button">Download backup</button>
+    <button id="backup-restore" type="button" class="link-button">Restore from file</button>
+    <input id="backup-file" type="file" accept=".json,application/json" hidden>
+  </div>
+  <p id="backup-result" class="hint backup-result" role="status"></p>
+</div>
+
 {% include holiday-data.html %}
 
 <!-- One saved countdown or holiday: its card (the holidays page's look), then Remove -->

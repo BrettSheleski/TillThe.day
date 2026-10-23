@@ -26,6 +26,24 @@
 
 #saved-empty .button { margin-top: 8px; }
 
+.backup { margin-top: 20px; font-size: 0.9rem; }
+
+.backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 20px;
+
+  .link-button { font-size: inherit; }
+}
+
+.backup-result {
+  margin: 8px 0 0;
+
+  // Kept in the page while empty, so screen readers still hear it change
+  &:empty { margin: 0; }
+}
+
 .saved-note {
   margin-top: 24px;
   font-size: 0.85rem;

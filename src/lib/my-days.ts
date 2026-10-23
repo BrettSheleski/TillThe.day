@@ -89,6 +89,71 @@ export function removeSaved(source: SavedSource, storage = browserStorage()): bo
   return write(savedCountdowns(storage).filter((s) => !same(s, source)), storage);
 }
 
+// --- Backup files: everything saved, to move to another browser or device,
+// or keep in case the browser clears it
+
+/** Marks a file as a My Days backup, and its format's version */
+const BACKUP_KIND = "till-the-day/my-days";
+const BACKUP_VERSION = 1;
+
+/** The backup file's text: what's saved, marked so a restore can recognize it. */
+export function backupText(list: SavedCountdown[], now = new Date()): string {
+  return JSON.stringify(
+    { kind: BACKUP_KIND, version: BACKUP_VERSION, exported: now.toISOString(), days: list },
+    null,
+    2,
+  );
+}
+
+/** The backup's file name, named for the site and dated so several don't overwrite each other: till-the-day-2026-10-23.json */
+export function backupFileName(now = new Date()): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `till-the-day-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.json`;
+}
+
+/**
+ * What's in a backup file, or null if the text isn't one. Entries it can't
+ * read are left out, so one bad entry doesn't lose the rest.
+ */
+export function readBackup(text: string): SavedCountdown[] | null {
+  let data: unknown;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    return null;
+  }
+  const backup = data as { kind?: unknown; version?: unknown; days?: unknown } | null;
+  if (typeof backup !== "object" || backup === null || backup.kind !== BACKUP_KIND) return null;
+  // A newer format than this page knows: better refused than half read
+  if (typeof backup.version !== "number" || backup.version > BACKUP_VERSION) return null;
+  return Array.isArray(backup.days) ? backup.days.filter(isSavedCountdown) : null;
+}
+
+/**
+ * Adds a backup's countdowns and holidays to what's saved, keeping their
+ * saved dates. Ones already here are skipped, and nothing is removed.
+ * Null if storage refused the write.
+ */
+export function restoreSaved(
+  entries: SavedCountdown[],
+  storage = browserStorage(),
+): { added: number; alreadySaved: number } | null {
+  const list = savedCountdowns(storage);
+  const added: SavedCountdown[] = [];
+  for (const entry of entries) {
+    if (![...list, ...added].some((s) => same(s, entry))) added.push(clean(entry));
+  }
+  if (added.length && !write([...list, ...added], storage)) return null;
+  return { added: added.length, alreadySaved: entries.length - added.length };
+}
+
+/** Just the fields this page uses, whatever else a file had in it */
+function clean(entry: SavedCountdown): SavedCountdown {
+  return "token" in entry
+    ? { token: entry.token, savedAt: entry.savedAt }
+    : { holiday: entry.holiday, savedAt: entry.savedAt };
+}
+
 function write(list: SavedCountdown[], storage: Storage | null): boolean {
   if (!storage) return false;
   try {

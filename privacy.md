@@ -19,7 +19,7 @@ Two things to know:
 
 ## My Days (saved countdowns)
 
-If you save a countdown or holiday (the bookmark icon on its page), its link or the holiday's name is kept in your browser's local storage so you can find it again on the My Days page. It stays on your device and is never sent to us or anyone else. Nothing is saved unless you choose to save it. Remove countdowns on the My Days page, or clear this site's data in your browser settings to remove them all. Browsers may also clear it on their own: Safari does after about a week without a visit, unless the site is on your home screen.
+If you save a countdown or holiday (the bookmark icon on its page), its link or the holiday's name is kept in your browser's local storage so you can find it again on the My Days page. It stays on your device and is never sent to us or anyone else. Nothing is saved unless you choose to save it. Remove countdowns on the My Days page, or clear this site's data in your browser settings to remove them all. **Download backup** on that page saves the list as a file on your device, and **Restore from file** reads one back; both happen in your browser, and the file is never uploaded. Browsers may also clear it on their own: Safari does after about a week without a visit, unless the site is on your home screen.
 
 QR codes and calendar files are created in your browser and never leave your device. Fonts and everything else the pages need are served from this site too, so loading a countdown doesn't contact any other service except the visit counter below.
 
