@@ -10,7 +10,11 @@ html {
 
 body {
   margin: 0;
+  // The height that's actually visible: on phones, 100vh assumes the address
+  // bar is hidden, so a page that just fits would still scroll by the bar's
+  // height. 100vh stays as the fallback for browsers without dvh.
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
